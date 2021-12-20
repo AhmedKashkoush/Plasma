@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   const SystemUiOverlayStyle overlay = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.white,
+    systemNavigationBarIconBrightness: Brightness.light,
   );
   SystemChrome.setSystemUIOverlayStyle(overlay);
   runApp(const MyApp());
@@ -20,10 +22,12 @@ class MyApp extends StatelessWidget {
       title: 'Plasma',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-        accentColor: Colors.amber,
-        primarySwatch: Colors.amber,
-      )),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.amber,
+          primarySwatch: Colors.amber,
+        ),
+      ),
       home: const HomePage(),
     );
   }
