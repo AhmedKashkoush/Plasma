@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'View/Before_login.dart';
+import 'View/before_login.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +21,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Before_login(),
+      home: const BeforeLogin(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        highlightColor: Colors.transparent,
+        splashFactory: InkRipple.splashFactory,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.amber,
           primarySwatch: Colors.amber,

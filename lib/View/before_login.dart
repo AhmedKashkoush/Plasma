@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/View/login.dart';
+import 'package:plasma/View/sign_up.dart';
 
 import 'login.dart';
 
-class Before_login extends StatelessWidget {
-  const Before_login({Key? key}) : super(key: key);
+class BeforeLogin extends StatelessWidget {
+  const BeforeLogin({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,22 +13,19 @@ class Before_login extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const
-            Image(
+            const Image(
               width: double.infinity,
               height: 400.0,
               image: AssetImage(
-                'images/plsma.png',
+                'images/plasma.png',
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-
-
                   color: Colors.amber,
                   height: 40.0,
                   width: double.infinity,
@@ -37,13 +34,12 @@ mainAxisAlignment: MainAxisAlignment.center,
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => login(
-                          ),
+                          builder: (context) => const LoginScreen(),
                         ),
                       );
                     },
                     child: const Text(
-                      'LOGIN',
+                      'Login',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
@@ -59,9 +55,16 @@ mainAxisAlignment: MainAxisAlignment.center,
                   height: 40.0,
                   width: double.infinity,
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUp(),
+                        ),
+                      );
+                    },
                     child: const Text(
-                      'SIGN UP',
+                      'Sign Up',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
