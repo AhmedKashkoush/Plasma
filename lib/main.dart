@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plasma/View/main_screen.dart';
 import 'View/before_login.dart';
+
+bool isLogined = true;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,18 +18,19 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const BeforeLogin(),
+      home: isLogined ? const MainScreen() : const BeforeLogin(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         highlightColor: Colors.transparent,
         splashFactory: InkRipple.splashFactory,
+        scaffoldBackgroundColor: Colors.grey.shade200,
+        primaryColor: Colors.amber,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.amber,
           primarySwatch: Colors.amber,
