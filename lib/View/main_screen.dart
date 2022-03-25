@@ -12,7 +12,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _index = 2;
-  final List<IconData> _itemIcons = [
+  static const List<IconData> _itemIcons = [
     Icons.account_circle_rounded,
     Icons.notifications,
     Icons.home_rounded,
@@ -21,8 +21,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: CustomDrawer(
-        checkWidgetType: widget,
+      endDrawer: const CustomDrawer(
+        screenIndex: 0,
       ),
       body: MainScreenItems(
         index: _index,

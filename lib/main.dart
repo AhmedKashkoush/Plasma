@@ -31,9 +31,11 @@ class MyApp extends StatelessWidget {
         splashFactory: InkRipple.splashFactory,
         scaffoldBackgroundColor: Colors.grey.shade200,
         primaryColor: Colors.amber,
+        brightness: Brightness.light,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.amber,
           primarySwatch: Colors.amber,
+          brightness: Brightness.light,
         ),
       ),
     );
