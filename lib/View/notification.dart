@@ -24,11 +24,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
          // centerTitle: true,
           elevation: 0.0,
         ),
-        body: Center(
-          child:
-                Text('There are no notifications', style: TextStyle(fontWeight: FontWeight.bold),)
-              ),
-          ),
+        body: Container(
+          width: double.infinity,
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+           children: [
+               Opacity(
+                 opacity: 0.6,
+                child:Image(image: AssetImage('images/noNotification.png'),
+              width: 220,
+               ) ,),
+                Text('No new notifications', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0),)
+           ],),
+          ),),
           );
       
     
