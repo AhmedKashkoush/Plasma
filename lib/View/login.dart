@@ -134,8 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (formKey.currentState!.validate()) {
                           FocusScope.of(context).unfocus();
                         }
-                        // print(emailcontroller.text);
-                        // print(passcontroller.text);
+                      
                       },
                       child: const Text(
                         'Login',

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plasma/View/home.dart';
+import 'package:plasma/View/information.dart';
+import 'View/Conditions.dart';
 import 'View/before_login.dart';
 
 void main() {
@@ -21,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const BeforeLogin(),
+      // home:  home(),
+            home: Conditions(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
