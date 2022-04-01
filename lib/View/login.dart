@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:plasma/View/forget_password.dart';
 import 'package:plasma/View/sign_up.dart';
 
+import 'main_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -117,8 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextButton(
                         onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => ForgetPasswordScreen())),
+                          MaterialPageRoute(
+                            builder: (context) => ForgetPasswordScreen(),
+                          ),
+                        ),
                         child: const Text(
                           'Forgot Password..?',
                         ),
@@ -133,6 +137,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           FocusScope.of(context).unfocus();
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const MainScreen(),
+                            ),
+                          );
                         }
                       },
                       child: const Text(

@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Widgets/custom_drawer.dart';
+
 class PlasmaInformationScreen extends StatelessWidget {
+  const PlasmaInformationScreen({Key? key}): super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const CustomDrawer(
+        screenIndex: 1,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

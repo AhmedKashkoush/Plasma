@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Widgets/custom_drawer.dart';
+
 class BenefitsScreen extends StatelessWidget {
   const BenefitsScreen({Key? key}) : super(key: key);
 
@@ -10,6 +12,9 @@ class BenefitsScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Benefits Of Plasma Donation'),
           foregroundColor: Colors.white,
+        ),
+        endDrawer: const CustomDrawer(
+          screenIndex: 2,
         ),
         body: SafeArea(
             child: Padding(

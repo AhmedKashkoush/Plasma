@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:plasma/View/home.dart';
-import 'package:plasma/View/information.dart';
-import 'View/conditions.dart';
+import 'package:plasma/View/main_screen.dart';
 import 'View/before_login.dart';
+
+bool isLogined = false;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,17 +23,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      // home:  home(),
-            //home: ConditionsScreen(),
+      home: isLogined ? const MainScreen() : const BeforeLoginScreen(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         highlightColor: Colors.transparent,
         splashFactory: InkRipple.splashFactory,
+        scaffoldBackgroundColor: Colors.grey.shade200,
+        primaryColor: Colors.amber,
+        brightness: Brightness.light,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.amber,
           primarySwatch: Colors.amber,
+          brightness: Brightness.light,
         ),
       ),
     );

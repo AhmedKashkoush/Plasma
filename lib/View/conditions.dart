@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'Widgets/custom_drawer.dart';
+
 class ConditionsScreen extends StatelessWidget {
+  const ConditionsScreen({Key? key}): super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const CustomDrawer(
+        screenIndex: 3,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 40.0),
