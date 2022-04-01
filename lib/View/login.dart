@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                         onPressed: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => ForgetPassword())),
+                                builder: (context) => ForgetPasswordScreen())),
                         child: const Text(
                           'Forgot Password..?',
                         ),
@@ -134,7 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (formKey.currentState!.validate()) {
                           FocusScope.of(context).unfocus();
                         }
-                      
                       },
                       child: const Text(
                         'Login',
@@ -158,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignUp(),
+                              builder: (context) => const SignUpScreen(),
                             ),
                           );
                         },

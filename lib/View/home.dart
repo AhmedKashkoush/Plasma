@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class home extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +26,7 @@ class home extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w500,
-                     fontSize: 20.0,
+                    fontSize: 20.0,
                   ),
                 ),
               ),
@@ -53,7 +52,6 @@ class home extends StatelessWidget {
             Image(
               image: AssetImage(
                 'images/imgHome.png',
-                
               ),
               width: double.maxFinite,
             ),

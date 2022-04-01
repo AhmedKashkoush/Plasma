@@ -1,17 +1,15 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 
 import 'forget_password_verification_page.dart';
 
-class ForgetPassword extends StatefulWidget {
-  const ForgetPassword({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<ForgetPassword> createState() => _ForgetPassword();
+  State<ForgetPasswordScreen> createState() => _ForgetPassword();
 }
 
-class _ForgetPassword extends State<ForgetPassword> {
+class _ForgetPassword extends State<ForgetPasswordScreen> {
   var emailController = TextEditingController();
 
   var passController = TextEditingController();
@@ -93,7 +91,7 @@ class _ForgetPassword extends State<ForgetPassword> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    ForgotPasswordVerificationPage()),
+                                    ForgotPasswordVerificationScreen()),
                           );
                         }
                       },

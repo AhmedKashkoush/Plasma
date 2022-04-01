@@ -4,8 +4,8 @@ import 'package:plasma/View/sign_up.dart';
 
 import 'login.dart';
 
-class BeforeLogin extends StatelessWidget {
-  const BeforeLogin({Key? key}) : super(key: key);
+class BeforeLoginScreen extends StatelessWidget {
+  const BeforeLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class BeforeLogin extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SignUp(),
+                          builder: (context) => const SignUpScreen(),
                         ),
                       );
                     },

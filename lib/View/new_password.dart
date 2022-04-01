@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 //import 'package:plasma/View/sign_up.dart';
 
-import '../login.dart';
+import 'login.dart';
 
-class NewPassword extends StatefulWidget {
-  const NewPassword({Key? key}) : super(key: key);
+class NewPasswordScreen extends StatefulWidget {
+  const NewPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewPassword> createState() => _NewPassword();
+  State<NewPasswordScreen> createState() => _NewPassword();
 }
 
-class _NewPassword extends State<NewPassword> {
+class _NewPassword extends State<NewPasswordScreen> {
   var emailController = TextEditingController();
 
   var passController = TextEditingController();

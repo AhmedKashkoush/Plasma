@@ -5,18 +5,18 @@ import 'package:otp_text_field/otp_field.dart';
 
 import 'package:hexcolor/hexcolor.dart';
 
-import 'Widgets/new_password.dart';
+import 'new_password.dart';
 
-class ForgotPasswordVerificationPage extends StatefulWidget {
-  const ForgotPasswordVerificationPage({Key? key}) : super(key: key);
+class ForgotPasswordVerificationScreen extends StatefulWidget {
+  const ForgotPasswordVerificationScreen({Key? key}) : super(key: key);
 
   @override
-  _ForgotPasswordVerificationPageState createState() =>
-      _ForgotPasswordVerificationPageState();
+  _ForgotPasswordVerificationScreenState createState() =>
+      _ForgotPasswordVerificationScreenState();
 }
 
-class _ForgotPasswordVerificationPageState
-    extends State<ForgotPasswordVerificationPage> {
+class _ForgotPasswordVerificationScreenState
+    extends State<ForgotPasswordVerificationScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _pinSuccess = false;
 
@@ -118,7 +118,7 @@ class _ForgotPasswordVerificationPageState
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                NewPassword()),
+                                                NewPasswordScreen()),
                                         (Route<dynamic> route) => false);
                                   }
                                 : null,

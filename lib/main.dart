@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plasma/View/home.dart';
 import 'package:plasma/View/information.dart';
-import 'View/Conditions.dart';
+import 'View/conditions.dart';
 import 'View/before_login.dart';
 
 void main() {
@@ -18,14 +18,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       // home:  home(),
-            home: Conditions(),
+            //home: ConditionsScreen(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
