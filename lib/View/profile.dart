@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/View/login.dart';
 
+import 'Widgets/custom_text_field.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -9,9 +11,9 @@ class ProfileScreen extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 70),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 70),
             child: Column(children: [
               Icon(
                 Icons.account_circle,
@@ -19,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
                 color: Colors.amber,
               ),
               Text(
-                'User Name',
+                'Username',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
               ),
               SizedBox(
@@ -28,6 +30,8 @@ class ProfileScreen extends StatelessWidget {
               CustomTextField(
                 hint: 'Phone Number',
                 icon: Icons.phone_android_outlined,
+                isEditable: true,
+                readOnly: true,
               ),
               SizedBox(
                 height: height * .02,
@@ -35,6 +39,8 @@ class ProfileScreen extends StatelessWidget {
               CustomTextField(
                 hint: 'Mail',
                 icon: Icons.email_outlined,
+                isEditable: true,
+                readOnly: true,
               ),
               SizedBox(
                 height: height * .02,
@@ -42,69 +48,37 @@ class ProfileScreen extends StatelessWidget {
               CustomTextField(
                 hint: 'Blood Type',
                 icon: Icons.bloodtype_outlined,
+                readOnly: true,
               ),
               SizedBox(
                 height: height * .1,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 120),
-                child: FlatButton(
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => LoginScreen(),),);
-                  },
-                  color: Colors.red,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Icon(Icons.logout,color: Colors.white,),
-                        Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ]),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+                label: Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ]),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final String hint;
-  final IconData icon;
-  CustomTextField({
-    required this.icon,
-    required this.hint,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: hint,
-          prefixIcon: Icon(
-            icon,
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.mode_edit),
-            onPressed: () {},
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.amber)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.amber)),
-        ),
-        readOnly: true,
       ),
     );
   }

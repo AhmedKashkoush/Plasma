@@ -12,7 +12,7 @@ class PlasmaInformationScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      endDrawer: const CustomDrawer(
+      drawer: const CustomDrawer(
         screenIndex: 1,
       ),
       body: SingleChildScrollView(

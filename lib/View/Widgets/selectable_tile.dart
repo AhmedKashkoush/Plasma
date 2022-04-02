@@ -24,7 +24,7 @@ class SelectableTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(right: 20),
       child: Container(
         height: 60,
         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -33,8 +33,8 @@ class SelectableTile extends StatelessWidget {
           color:
               isSelected ? Theme.of(context).primaryColor : Colors.transparent,
           borderRadius: BorderRadius.only(
-            topLeft: _radius,
-            bottomLeft: _radius,
+            topRight: _radius,
+            bottomRight: _radius,
           ),
         ),
         child: Center(

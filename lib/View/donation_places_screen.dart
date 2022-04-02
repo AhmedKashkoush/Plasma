@@ -14,7 +14,7 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const CustomDrawer(
+      drawer: const CustomDrawer(
         screenIndex: 4,
       ),
       body: CustomScrollView(
@@ -78,14 +78,14 @@ class PlacesHeader extends SliverAppBar {
               ),
             ),
           ),
-          leading: Builder(builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-              icon: const Icon(Icons.menu),
-            );
-          }),
+          // leading: Builder(builder: (context) {
+          //   return IconButton(
+          //     onPressed: () {
+          //       Scaffold.of(context).openEndDrawer();
+          //     },
+          //     icon: const Icon(Icons.menu),
+          //   );
+          // }),
           foregroundColor: Colors.white,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(

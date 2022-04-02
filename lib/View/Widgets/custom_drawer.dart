@@ -77,7 +77,11 @@ class DrawerContent extends StatelessWidget {
                 leadingIcon: _itemIcons[_items.indexOf(item)],
                 contentSize: 15,
                 onTap: index == itemSelected
-                    ? null
+                    ? Scaffold.of(context).isDrawerOpen
+                        ? () {
+                            Navigator.pop(context);
+                          }
+                        : null
                     : () {
                         Navigator.pop(context);
                         Navigator.pushReplacement(

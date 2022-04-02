@@ -11,7 +11,7 @@ class ConditionsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      endDrawer: const CustomDrawer(
+      drawer: const CustomDrawer(
         screenIndex: 3,
       ),
       body: SingleChildScrollView(

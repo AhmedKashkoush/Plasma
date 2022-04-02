@@ -14,26 +14,29 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _index = 2;
+  int _index = 1;
+  final GlobalKey<CurvedNavigationBarState> _curvedBarKey = GlobalKey<CurvedNavigationBarState>();
   static const List<IconData> _itemIcons = [
-    Icons.account_circle_rounded,
-    Icons.notifications,
-    Icons.home_rounded,
     Icons.list,
+    Icons.home_rounded,
+    Icons.notifications,
+    Icons.account_circle_rounded,
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const CustomDrawer(
+      drawer: const CustomDrawer(
         screenIndex: 0,
       ),
       body: MainScreenItems(
         index: _index,
+        bottomBarKey: _curvedBarKey,
       ),
       bottomNavigationBar: Builder(builder: (context) {
         return CurvedNavigationBar(
+          key: _curvedBarKey,
           onTap: (index) {
-            if (index == 3) return;
+            if (index == 0) return;
 
             if (index != _index)
               setState(() {
@@ -41,14 +44,14 @@ class _MainScreenState extends State<MainScreen> {
               });
           },
           animationDuration: const Duration(milliseconds: 300),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: Colors.transparent,
           index: _index,
-          letIndexChange: (index) => index != 3,
+          letIndexChange: (index) => index != 0,
           items: _itemIcons
               .map(
                 (icon) => GestureDetector(
-                  onTap: _itemIcons.indexOf(icon) == 3
-                      ? () => Scaffold.of(context).openEndDrawer()
+                  onTap: _itemIcons.indexOf(icon) == 0
+                      ? () => Scaffold.of(context).openDrawer()
                       : null,
                   child: Icon(
                     icon,
@@ -68,16 +71,17 @@ class _MainScreenState extends State<MainScreen> {
 
 class MainScreenItems extends StatelessWidget {
   final int index;
-  const MainScreenItems({Key? key, required this.index}) : super(key: key);
-
-  static const List<Widget> _screens = [
-    ProfileScreen(),
-    NotificationScreen(),
-    HomeScreen(),
-  ];
+  final GlobalKey<CurvedNavigationBarState> bottomBarKey;
+  const MainScreenItems({Key? key, required this.index, required this.bottomBarKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screens = [
+      const SizedBox(),
+      HomeScreen(bottomBarKey: bottomBarKey,),
+      NotificationScreen(bottomBarKey: bottomBarKey,),
+      const ProfileScreen(),
+    ];
     return IndexedStack(
       children: _screens,
       index: index,

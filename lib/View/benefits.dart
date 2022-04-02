@@ -14,7 +14,7 @@ class BenefitsScreen extends StatelessWidget {
         title: Text('Benefits Of Plasma Donation'),
         foregroundColor: Colors.white,
       ),
-      endDrawer: const CustomDrawer(
+      drawer: const CustomDrawer(
         screenIndex: 2,
       ),
       body: SafeArea(
