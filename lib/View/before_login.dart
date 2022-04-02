@@ -31,7 +31,7 @@ class BeforeLoginScreen extends StatelessWidget {
                   width: double.infinity,
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const LoginScreen(),
@@ -56,7 +56,7 @@ class BeforeLoginScreen extends StatelessWidget {
                   width: double.infinity,
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const SignUpScreen(),

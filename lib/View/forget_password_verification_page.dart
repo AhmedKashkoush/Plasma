@@ -25,107 +25,114 @@ class _ForgotPasswordVerificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-                child: SingleChildScrollView(
-                    //to make scroll
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                  const Image(
-                    image: AssetImage(
-                      'images/plasma_img.png',
-                    ),
-                    width: 100.0,
-                    height: 100.0,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: SingleChildScrollView(
+            //to make scroll
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Image(
+                  image: AssetImage(
+                    'images/plasma_img.png',
                   ),
-                  const Text(
-                    'Verification',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w500, fontSize: 36.0),
-                  ),
-                  SizedBox(height: 40.0),
-                  Form(
-                      key: _formKey,
-                      child: Column(children: <Widget>[
-                        OTPTextField(
-                          length: 4,
-                          width: 300,
-                          fieldWidth: 50,
-                          style: TextStyle(fontSize: 30),
-                          textFieldAlignment: MainAxisAlignment.spaceAround,
-                          //fieldStyle: FieldStyle.underline,
-                          onCompleted: (pin) {
-                            setState(() {
-                              _pinSuccess = true;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 50.0),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "If you didn't receive a code! ",
-                                style: TextStyle(
-                                  color: Colors.black38,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'Resend',
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return ThemeHelper().alartDialog(
-                                            "Successful",
-                                            "Verification code resend successful.",
-                                            context);
-                                      },
-                                    );
-                                  },
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 40.0),
-                        Container(
-                          decoration: _pinSuccess
-                              ? ThemeHelper().buttonBoxDecoration(context)
-                              : ThemeHelper().buttonBoxDecoration(
-                                  context, "#AAAAAA", "#757575"),
-                          child: ElevatedButton(
-                            style: ThemeHelper().buttonStyle(),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                              child: Text(
-                                "Verify".toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                  width: 100.0,
+                  height: 100.0,
+                ),
+                const Text(
+                  'Verification',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 36.0),
+                ),
+                SizedBox(height: 40.0),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      OTPTextField(
+                        length: 4,
+                        width: 300,
+                        fieldWidth: 50,
+                        style: TextStyle(fontSize: 30),
+                        textFieldAlignment: MainAxisAlignment.spaceAround,
+                        //fieldStyle: FieldStyle.underline,
+                        onCompleted: (pin) {
+                          setState(() {
+                            _pinSuccess = true;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 50.0),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "If you didn't receive a code! ",
+                              style: TextStyle(
+                                color: Colors.black38,
                               ),
                             ),
-                            onPressed: _pinSuccess
-                                ? () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                NewPasswordScreen()),
-                                        (Route<dynamic> route) => false);
-                                  }
-                                : null,
-                          ),
+                            TextSpan(
+                              text: 'Resend',
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ThemeHelper().alartDialog(
+                                          "Successful",
+                                          "Verification code resend successful.",
+                                          context);
+                                    },
+                                  );
+                                },
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange),
+                            ),
+                          ],
                         ),
-                      ]))
-                ])))));
+                      ),
+                      SizedBox(height: 40.0),
+                      Container(
+                        decoration: _pinSuccess
+                            ? ThemeHelper().buttonBoxDecoration(context)
+                            : ThemeHelper().buttonBoxDecoration(
+                                context, "#AAAAAA", "#757575"),
+                        child: ElevatedButton(
+                          style: ThemeHelper().buttonStyle(),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                            child: Text(
+                              "Verify".toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onPressed: _pinSuccess
+                              ? () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            NewPasswordScreen(),
+                                      ),
+                                      (Route<dynamic> route) => false);
+                                }
+                              : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

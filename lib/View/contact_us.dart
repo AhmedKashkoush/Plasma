@@ -10,13 +10,6 @@ class ContactUsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.amber,
         foregroundColor: Color.fromARGB(255, 255, 255, 255),
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.arrow_back,
-            size: 25.0,
-          ),
-        ),
         title: Text(
           "Contact Us ",
           style: TextStyle(

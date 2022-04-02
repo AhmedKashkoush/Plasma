@@ -10,16 +10,10 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_back),
-          ),
           title: Text(
             "Notifications",
             style: TextStyle(
@@ -30,6 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           // centerTitle: true,
           elevation: 0.0,
         ),
+        extendBody: true,
         body: Container(
           width: double.infinity,
           child: Column(
@@ -49,7 +44,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

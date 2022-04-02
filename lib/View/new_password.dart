@@ -96,9 +96,11 @@ class _NewPassword extends State<NewPasswordScreen> {
                     height: 40.0,
                     width: double.infinity,
                     child: MaterialButton(
-                      onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen())),
+                      onPressed: () => Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      ),
                       // print(emailcontroller.text);
                       // print(passcontroller.text);
 

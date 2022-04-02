@@ -90,13 +90,14 @@ class _ForgetPassword extends State<ForgetPasswordScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ForgotPasswordVerificationScreen()),
+                              builder: (context) =>
+                                  ForgotPasswordVerificationScreen(),
+                            ),
                           );
                         }
                       },
                       child: const Text(
-                        'SEND',
+                        'Send',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w900,

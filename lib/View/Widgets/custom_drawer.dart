@@ -80,7 +80,7 @@ class DrawerContent extends StatelessWidget {
                     ? null
                     : () {
                         Navigator.pop(context);
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => _pages[index],

@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       TextButton(
-                        onPressed: () => Navigator.of(context).push(
+                        onPressed: () => Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (context) => ForgetPasswordScreen(),
                           ),
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           FocusScope.of(context).unfocus();
-                          Navigator.of(context).push(
+                          Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) => const MainScreen(),
                             ),
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                         onPressed: () {
                           FocusScope.of(context).unfocus();
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const SignUpScreen(),

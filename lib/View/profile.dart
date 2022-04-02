@@ -52,17 +52,17 @@ class ProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => LoginScreen(),),);
                   },
                   color: Colors.red,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Icon(Icons.logout),
+                        Icon(Icons.logout,color: Colors.white,),
                         Text(
-                          'logout',
-                          style: TextStyle(color: Colors.black),
+                          'Logout',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ]),
                 ),

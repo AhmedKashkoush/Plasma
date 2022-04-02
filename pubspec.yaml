@@ -56,7 +56,7 @@ flutter_native_splash:
   color_dark: "#1a1918"
   image: images/light logo.png
   image_dark: images/dark logo.png
-  android_gravity: fill
+  android_gravity: center
   android: true
   ios: true
   web: false
