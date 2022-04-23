@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/View/login.dart';
 
+import 'Widgets/blood_loading.dart';
 import 'Widgets/custom_text_field.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 70),
+            padding: const EdgeInsets.only(top: 70, right: 10, left: 10),
             child: Column(children: [
               Icon(
                 Icons.account_circle,
@@ -29,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               CustomTextField(
                 hint: 'Phone Number',
-                icon: Icons.phone_android_outlined,
+                icon: Icon(Icons.phone_android_outlined),
                 isEditable: true,
                 readOnly: true,
               ),
@@ -38,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               CustomTextField(
                 hint: 'Mail',
-                icon: Icons.email_outlined,
+                icon: Icon(Icons.email_outlined),
                 isEditable: true,
                 readOnly: true,
               ),
@@ -47,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               CustomTextField(
                 hint: 'Blood Type',
-                icon: Icons.bloodtype_outlined,
+                icon: Icon(Icons.bloodtype_outlined),
                 readOnly: true,
               ),
               SizedBox(
@@ -60,7 +61,48 @@ class ProfileScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => WillPopScope(
+                      onWillPop: () async {
+                        return false;
+                      },
+                      child: AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        content: Container(
+                          padding: const EdgeInsets.all(50),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              BloodLoadingIndicator(),
+                              const SizedBox(
+                                width: 32,
+                              ),
+                              Text(
+                                'Logging Out...',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                  await Future.delayed(
+                    const Duration(seconds: 3),(){
+                      Navigator.pop(context);
+                  }
+                  );
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => LoginScreen(),

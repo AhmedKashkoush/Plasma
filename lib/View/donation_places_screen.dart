@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:plasma/View/Widgets/custom_drawer.dart';
 import 'package:plasma/View/Widgets/rounded_header.dart';
 
@@ -91,11 +92,18 @@ class PlacesHeader extends SliverAppBar {
             background: Container(
               color: Colors.blueGrey,
               child: Center(
-                child: Icon(
-                  Icons.map_rounded,
-                  color: Colors.white.withOpacity(0.3),
-                  size: 80,
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(37.42796133580664, -122.085749655962),
+                    zoom: 14,
+                  ),
                 ),
+                // child: Icon(
+                //   Icons.map_rounded,
+                //   color: Colors.white.withOpacity(0.3),
+                //   size: 80,
+                // ),
               ),
             ),
           ),

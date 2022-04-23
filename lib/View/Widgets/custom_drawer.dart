@@ -10,7 +10,8 @@ import 'package:plasma/View/main_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
   final int screenIndex;
-  const CustomDrawer({Key? key, required this.screenIndex}) : super(key: key);
+  final int homeNotifications;
+  const CustomDrawer({Key? key, required this.screenIndex, this.homeNotifications = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class CustomDrawer extends StatelessWidget {
         child: SingleChildScrollView(
           child: DrawerContent(
             itemSelected: screenIndex,
+            homeNotifications: homeNotifications,
           ),
         ),
       ),
@@ -29,7 +31,8 @@ class CustomDrawer extends StatelessWidget {
 
 class DrawerContent extends StatelessWidget {
   final int itemSelected;
-  const DrawerContent({Key? key, required this.itemSelected}) : super(key: key);
+  final int? homeNotifications;
+  const DrawerContent({Key? key, required this.itemSelected, this.homeNotifications}) : super(key: key);
 
   static const List<String> _items = [
     'Home Page',
@@ -71,10 +74,12 @@ class DrawerContent extends StatelessWidget {
           ..._items.map(
             (item) {
               final int index = _items.indexOf(item);
+              final List<int> _notifications = [homeNotifications!,0,0,0,0,0];
               return SelectableTile(
                 isSelected: index == itemSelected,
                 title: item,
                 leadingIcon: _itemIcons[_items.indexOf(item)],
+                notifications: _notifications[index],
                 contentSize: 15,
                 onTap: index == itemSelected
                     ? Scaffold.of(context).isDrawerOpen

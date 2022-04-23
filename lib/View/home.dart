@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/View/questions_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<CurvedNavigationBarState> bottomBarKey;
@@ -99,7 +100,13 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.amber,
                 height: 40.0,
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const QuestionsScreen(),
+                      ),
+                    );
+                  },
                   child: const Text(
                     ' Donate Now',
                     style: TextStyle(

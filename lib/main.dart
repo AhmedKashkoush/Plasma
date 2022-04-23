@@ -1,12 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plasma/View/main_screen.dart';
 import 'View/before_login.dart';
 
-bool isLogined = false;
-
-void main() {
+bool isLogined = true;
+//map api key: AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   const SystemUiOverlayStyle overlay = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.white,
