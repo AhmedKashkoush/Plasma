@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:plasma/View/questions_screen.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 
-class selectDateTime extends StatefulWidget {
-  const selectDateTime({Key? key}) : super(key: key);
+class SelectDateTimeScreen extends StatefulWidget {
+  final PageController pageController;
+
+  const SelectDateTimeScreen({Key? key, required this.pageController})
+      : super(key: key);
 
   @override
-  State<selectDateTime> createState() => _selectDateTimeState();
+  State<SelectDateTimeScreen> createState() => _SelectDateTimeScreenState();
 }
 
-class _selectDateTimeState extends State<selectDateTime> {
+class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
   var timeController = TextEditingController();
   var dateController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
+  final GlobalKey<QuestionsScreenState> _questionScreenKey =
+      GlobalKey<QuestionsScreenState>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,13 @@ class _selectDateTimeState extends State<selectDateTime> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(
+                    '${_questionScreenKey.currentState?.selectedCenter}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 15.0,
+                    ),
+                  ),
                   TextFormField(
                     controller: timeController,
                     keyboardType: TextInputType.datetime,
@@ -114,6 +128,13 @@ class _selectDateTimeState extends State<selectDateTime> {
           ),
         ),
       ),
+    );
+  }
+
+  void _moveToPreviousPage() {
+    widget.pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
   }
 }

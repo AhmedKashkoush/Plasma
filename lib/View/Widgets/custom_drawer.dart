@@ -89,6 +89,7 @@ class DrawerContent extends StatelessWidget {
                         : null
                     : () {
                         Navigator.pop(context);
+                        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

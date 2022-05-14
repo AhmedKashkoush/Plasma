@@ -114,9 +114,10 @@ class MainScreenItems extends StatelessWidget {
       ),
       const ProfileScreen(),
     ];
-    return IndexedStack(
-      children: _screens,
-      index: index,
-    );
+    // return IndexedStack(
+    //   children: _screens,
+    //   index: index,
+    // );
+    return _screens[index];
   }
 }

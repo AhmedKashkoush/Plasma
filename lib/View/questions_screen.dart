@@ -4,16 +4,18 @@ import 'package:plasma/Model/Models/question_model.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/custom_text_field.dart';
 import 'package:plasma/View/Widgets/question_number_dot.dart';
+import 'package:plasma/View/select_date_time.dart';
+import 'package:plasma/View/select_place.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({Key? key}) : super(key: key);
 
   @override
-  _QuestionsScreenState createState() => _QuestionsScreenState();
+  QuestionsScreenState createState() => QuestionsScreenState();
 }
 
-class _QuestionsScreenState extends State<QuestionsScreen> {
+class QuestionsScreenState extends State<QuestionsScreen> {
   final ItemScrollController _controller = ItemScrollController();
   final PageController _pageController = PageController();
   final PageController _questionPageController = PageController();
@@ -72,6 +74,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   ];
 
   int currentQuestion = 0;
+  String selectedCenter = '';
 
   @override
   void dispose() {
@@ -303,6 +306,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               ),
             ),
           ),
+          SelectPlaceScreen(pageController: _pageController),
+          SelectDateTimeScreen(pageController: _pageController),
         ],
       ),
     );

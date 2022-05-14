@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plasma/View/main_screen.dart';
-import 'package:plasma/View/plase.dart';
+import 'package:plasma/View/select_place.dart';
 import 'View/before_login.dart';
 
 bool isLogined = true;
@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      //home: plaseSection(),
       home: isLogined ? const MainScreen() : const BeforeLoginScreen(),
       title: 'Plasma',
       theme: ThemeData(

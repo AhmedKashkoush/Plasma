@@ -14,7 +14,7 @@ class RoundedHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height?? double.infinity,
-      margin: const EdgeInsets.only(bottom: 20),
+      //margin: const EdgeInsets.only(bottom: 20),
       //padding: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
         color: color ?? Theme.of(context).primaryColor,
@@ -27,7 +27,7 @@ class RoundedHeader extends StatelessWidget {
         //crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (icon != null) icon!,
-          Text(
+          if (text != '')Text(
             text,
             style: TextStyle(
               color: Colors.white,
