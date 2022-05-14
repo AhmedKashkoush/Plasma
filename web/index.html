@@ -27,15 +27,40 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="logo.png"/>
 
-  <title>plasma</title>
+  <title>Plasma</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<!--  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/cloud-firestore.js"></script>
+<!--  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>-->
+<!--  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>-->
+
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs",
+    authDomain: "plasma-fecd2.firebaseapp.com",
+    projectId: "plasma-fecd2",
+    storageBucket: "plasma-fecd2.appspot.com",
+    messagingSenderId: "951530390148",
+    appId: "1:951530390148:web:05340ef570b71e7cc038d1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

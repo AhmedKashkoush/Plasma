@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/View/questions_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
+
+import 'Providers/question_screen_provider.dart';
 
 class SelectDateTimeScreen extends StatefulWidget {
   final PageController pageController;
@@ -18,111 +21,198 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
   var dateController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
-  final GlobalKey<QuestionsScreenState> _questionScreenKey =
-      GlobalKey<QuestionsScreenState>();
-
   @override
   Widget build(BuildContext context) {
+    final QuestionScreenProvider _provider =
+        Provider.of<QuestionScreenProvider>(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: formKey,
-          child: Container(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${_questionScreenKey.currentState?.selectedCenter}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: timeController,
-                    keyboardType: TextInputType.datetime,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return ('time must not be empty');
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'donate time',
-                      prefixIcon: const Icon(
-                        Icons.watch_later_outlined,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
+          reverse: true,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: formKey,
+                  child: Container(
+                    clipBehavior: Clip.none,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Select Date And Time',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 32.0,
+                            ),
+                          ),
+                          const SizedBox(height: 24,),
+                          Text(
+                            'All Centers Are Available 14 Hours Daily',
+                            maxLines: 4,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                          const SizedBox(height: 24,),
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Material(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20.0),
+                                  ),
+                                ),
+                                elevation: 2.0,
+                                // minWidth: 200.0,
+                                // height: 35,
+                                color: Colors.amber,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 204, 194, 194),
+                                        radius: 20,
+                                        backgroundImage: AssetImage(
+                                          'images/place.png',
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            '${_provider.selectedCenter}',
+                                            maxLines: 4,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 15.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                right: -22,
+                                top: -22,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(primary: Colors.teal,shape: CircleBorder(),),
+                                  child: Icon(Icons.edit,color: Colors.white70,),
+                                  onPressed: (){
+                                    _moveToPreviousPage();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 64,
+                          ),
+                          TextFormField(
+                            controller: timeController,
+                            keyboardType: TextInputType.datetime,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return ('Time must not be empty');
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Donation Time',
+                              prefixIcon: const Icon(
+                                Icons.watch_later_outlined,
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            readOnly: true,
+                            onTap: () {
+                              showCustomTimePicker(
+                                  context: context,
+                                  onFailValidation: (context) =>
+                                      print('Unavailable selection'),
+                                  initialTime: TimeOfDay(hour: 8, minute: 0),
+                                  selectableTimePredicate: (time) =>
+                                      time!.hour > 7 && time.hour < 21).then((value) {
+                                timeController.text = value!.format(context);
+                                print(value.format(context));
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            height: 30.0,
+                          ),
+                          TextFormField(
+                            controller: dateController,
+                            keyboardType: TextInputType.datetime,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return ('Date must not be empty');
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Donation Date',
+                              prefixIcon: const Icon(
+                                Icons.calendar_today,
+                              ),
+                              border: OutlineInputBorder(),
+                            ),
+                            readOnly: true,
+                            onTap: () {
+                              showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(DateTime.now().year + 5))
+                                  .then((value) {
+                                print(DateFormat.yMMMd().format(value!));
+                                dateController.text = DateFormat.yMMMd().format(value);
+                              });
+                            },
+                          ),
+                          SizedBox(
+                            height: 60.0,
+                          ),
+                          Container(
+                            color: Colors.amber,
+                            height: 40.0,
+                            width: double.infinity,
+                            child: MaterialButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  FocusScope.of(context).unfocus();
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text(
+                                'Reservation',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    onTap: () {
-                      showCustomTimePicker(
-                          context: context,
-                          onFailValidation: (context) =>
-                              print('Unavailable selection'),
-                          initialTime: TimeOfDay(hour: 8, minute: 0),
-                          selectableTimePredicate: (time) =>
-                              time!.hour > 7 && time.hour < 21).then((value) {
-                        timeController.text = value!.format(context);
-                        print(value.format(context));
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  TextFormField(
-                    controller: dateController,
-                    keyboardType: TextInputType.datetime,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return ('date must not be empty');
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'donate date',
-                      prefixIcon: const Icon(
-                        Icons.calendar_today,
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    onTap: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(DateTime.now().year + 5))
-                          .then((value) {
-                        print(DateFormat.yMMMd().format(value!));
-                        dateController.text = DateFormat.yMMMd().format(value);
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 60.0,
-                  ),
-                  Container(
-                    color: Colors.amber,
-                    height: 40.0,
-                    width: double.infinity,
-                    child: MaterialButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          FocusScope.of(context).unfocus();
-                        }
-                      },
-                      child: const Text(
-                        'Reservation',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),

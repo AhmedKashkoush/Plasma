@@ -1,15 +1,25 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plasma/View/main_screen.dart';
-import 'package:plasma/View/select_place.dart';
 import 'View/before_login.dart';
 
 bool isLogined = true;
-//map api key: AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: 'plasma',
+    options:FirebaseOptions(
+      apiKey: "AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs",
+      authDomain: "plasma-fecd2.firebaseapp.com",
+      projectId: "plasma-fecd2",
+      storageBucket: "plasma-fecd2.appspot.com",
+      messagingSenderId: "951530390148",
+      appId: "1:951530390148:web:05340ef570b71e7cc038d1",
+    ),
+  );
   const SystemUiOverlayStyle overlay = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.white,
@@ -21,6 +31,7 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

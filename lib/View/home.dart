@@ -1,10 +1,14 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/questions_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   final GlobalKey<CurvedNavigationBarState> bottomBarKey;
+
   const HomeScreen({Key? key, required this.bottomBarKey}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +107,11 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const QuestionsScreen(),
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              QuestionScreenProvider(),
+                          child: const QuestionsScreen(),
+                        ),
                       ),
                     );
                   },

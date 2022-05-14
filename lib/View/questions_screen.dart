@@ -1,21 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/Models/question_model.dart';
+import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/custom_text_field.dart';
 import 'package:plasma/View/Widgets/question_number_dot.dart';
 import 'package:plasma/View/select_date_time.dart';
 import 'package:plasma/View/select_place.dart';
+import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class QuestionsScreen extends StatefulWidget {
   const QuestionsScreen({Key? key}) : super(key: key);
 
   @override
-  QuestionsScreenState createState() => QuestionsScreenState();
+  _QuestionsScreenState createState() => _QuestionsScreenState();
 }
 
-class QuestionsScreenState extends State<QuestionsScreen> {
+class _QuestionsScreenState extends State<QuestionsScreen> {
   final ItemScrollController _controller = ItemScrollController();
   final PageController _pageController = PageController();
   final PageController _questionPageController = PageController();
@@ -74,7 +76,6 @@ class QuestionsScreenState extends State<QuestionsScreen> {
   ];
 
   int currentQuestion = 0;
-  String selectedCenter = '';
 
   @override
   void dispose() {
@@ -86,6 +87,7 @@ class QuestionsScreenState extends State<QuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final QuestionScreenProvider _provider = Provider.of<QuestionScreenProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         return await _confirmDialog(context) ?? false;
@@ -285,6 +287,7 @@ class QuestionsScreenState extends State<QuestionsScreen> {
                                     );
                                     await Future.delayed(
                                         const Duration(seconds: 5), () {
+                                      _moveToNextPage();
                                       Navigator.pop(context);
                                     });
                                   }
@@ -295,7 +298,7 @@ class QuestionsScreenState extends State<QuestionsScreen> {
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                             ),
-                            onPressed: () {},
+                            onPressed: _moveToNextPage,
                             child: const Text('Skip This Step'),
                           ),
                         ],
@@ -313,13 +316,16 @@ class QuestionsScreenState extends State<QuestionsScreen> {
     );
   }
 
+  void _moveToNextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void _moveToNextQuestion() {
     if (currentQuestion >= _questions.length - 1) {
-      _pageController.animateToPage(
-        1,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      _moveToNextPage();
       return;
     }
     currentQuestion++;
