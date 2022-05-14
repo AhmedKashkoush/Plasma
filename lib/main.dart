@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: plaseSection(),
-      // home: isLogined ? const MainScreen() : const BeforeLoginScreen(),
+      //home: plaseSection(),
+      home: isLogined ? const MainScreen() : const BeforeLoginScreen(),
       title: 'Plasma',
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
