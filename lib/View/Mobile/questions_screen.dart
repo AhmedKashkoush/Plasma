@@ -5,8 +5,8 @@ import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/custom_text_field.dart';
 import 'package:plasma/View/Widgets/question_number_dot.dart';
-import 'package:plasma/View/select_date_time.dart';
-import 'package:plasma/View/select_place.dart';
+import 'package:plasma/View/Mobile/select_date_time.dart';
+import 'package:plasma/View/Mobile/select_place.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -260,7 +260,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                                           content: Container(
                                             padding: const EdgeInsets.all(50),
                                             decoration: BoxDecoration(
-                                              color: Colors.white,
+                                              color: Theme.of(context).scaffoldBackgroundColor,
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                             ),

@@ -1,10 +1,12 @@
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
-import '../Model/APIs/Dummy/dummy_places.dart';
+import '../../Model/APIs/Dummy/dummy_places.dart';
+import '../../Utils/utils.dart';
 
 class VoiceSearchPage extends StatefulWidget {
   const VoiceSearchPage({Key? key}) : super(key: key);
@@ -199,6 +201,14 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
   }
 
   void _listen() async {
+    ConnectivityResult _connectivity = await Connectivity().checkConnectivity();
+    if (_connectivity == ConnectivityResult.none){
+      Utils.showConnectionError(context);
+      return;
+    }
+    PermissionStatus status = await Permission.microphone.status;
+    if (status == PermissionStatus.denied)
+      _handleMicPermission();
     if (!_isListening) {
       if (_recognizedText.isNotEmpty && !_isSearching) {
         setState(() {
@@ -223,6 +233,16 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           setState(() {
             _isListening = false;
           });
+        }
+        else{
+          _connectivity = await Connectivity().checkConnectivity();
+          if (_connectivity == ConnectivityResult.none) {
+            Utils.showConnectionError(context);
+            await _speech.stop();
+            setState(() {
+              _isListening = false;
+            });
+          }
         }
       });
       if (available) {
@@ -273,30 +293,8 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
       case PermissionStatus.granted:
         return;
       case PermissionStatus.denied:
-        bool? dismiss = await showDialog(
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text('Permission Error'),
-            content: const Text('Microphone Access Is Denied'),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, false);
-                },
-                child: const Text('Request Permission'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(primary: Colors.red),
-                onPressed: () async {
-                  Navigator.pop(context, true);
-                },
-                child: const Text('Dismiss'),
-              ),
-            ],
-          ),
-          context: context,
-        );
-        if (dismiss == null || dismiss)
+        bool? request = await Utils.showPermissionErrorAndRequest(context,permissionType: 'Microphone');
+        if (request == null || !request)
           Navigator.pop(context);
         else {
           PermissionStatus newStatus = await Permission.microphone.request();

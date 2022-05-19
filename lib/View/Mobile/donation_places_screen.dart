@@ -9,12 +9,12 @@ import 'package:geolocator/geolocator.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
-import 'package:plasma/View/Widgets/custom_drawer.dart';
+import 'package:plasma/View/Widgets/mobile_custom_drawer.dart';
 import 'package:plasma/View/Widgets/rounded_header.dart';
-import 'package:plasma/View/voice_search.dart';
+import 'package:plasma/View/Mobile/voice_search.dart';
 import 'package:plasma/Utils/utils.dart';
 
-import '../Model/APIs/Dummy/dummy_places.dart';
+import '../../Model/APIs/Dummy/dummy_places.dart';
 
 class DonationPlacesScreen extends StatefulWidget {
   const DonationPlacesScreen({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CustomDrawer(
+      drawer: const MobileCustomDrawer(
         screenIndex: 4,
       ),
       extendBodyBehindAppBar: true,
@@ -71,27 +71,18 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
             foregroundColor: Colors.white,
             child: const Icon(Icons.location_searching_rounded),
             onPressed: () async {
+              if (await Connectivity().checkConnectivity() ==
+                  ConnectivityResult.none) {
+                await Utils.showConnectionError(context);
+                return;
+              }
               if (await Permission.location.status == PermissionStatus.denied) {
                 PermissionStatus newStatus =
                     await Permission.location.request();
-                if (newStatus == PermissionStatus.denied) {
-                  await showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Permission Error'),
-                      content: const Text(
-                          'Cannot Access Location Services In Your Device.Please Enable Service From App Settings To Continue'),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Ok'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
+                if (newStatus == PermissionStatus.denied)
+                  await Utils.showPermissionError(context,
+                      permissionType: 'Location');
+
                 return;
               }
               if (await _getLocationService()) {
@@ -272,7 +263,7 @@ class PlacesSearchDelegate extends SearchDelegate {
   PlacesSearchDelegate({required this.mapKey})
       : super(
           searchFieldStyle: TextStyle(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.grey.shade500,
             fontWeight: FontWeight.w500,
           ),
         );
@@ -447,23 +438,10 @@ class MapBodyState extends State<MapBody> {
 
   void _initConnectivity() async {
     ConnectivityResult result = await Connectivity().checkConnectivity();
-    if (result == ConnectivityResult.none) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Connection Error'),
-          content: const Text('Check Your Internet Connection'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
+    if (result == ConnectivityResult.none)
+      Utils.showConnectionError(
+        context,
       );
-    }
     subscription =
         Connectivity().onConnectivityChanged.listen((connectivity) async {
       if (connectivity != ConnectivityResult.none) {
@@ -486,23 +464,10 @@ class MapBodyState extends State<MapBody> {
         }
         _initiateMarkers();
       } else {
-        if (result != ConnectivityResult.none) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Connection Error'),
-              content: const Text('Check Your Internet Connection'),
-              actions: [
-                TextButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'),
-                ),
-              ],
-            ),
+        if (result != ConnectivityResult.none)
+          Utils.showConnectionError(
+            context,
           );
-        }
         // setState(() {
         //   _markers.clear();
         // });
@@ -612,20 +577,8 @@ class MapBodyState extends State<MapBody> {
       setState(() {
         _markers = {};
       });
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Connection Error'),
-          content: const Text('Check Your Internet Connection'),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        ),
+      Utils.showConnectionError(
+        context,
       );
     }
   }

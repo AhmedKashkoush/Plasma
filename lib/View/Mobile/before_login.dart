@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:plasma/View/login.dart';
-import 'package:plasma/View/sign_up.dart';
+import 'package:plasma/View/Mobile/login.dart';
+import 'package:plasma/View/Mobile/sign_up.dart';
 
 import 'login.dart';
 

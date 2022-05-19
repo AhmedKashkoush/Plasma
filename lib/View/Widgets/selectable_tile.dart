@@ -31,7 +31,7 @@ class SelectableTile extends StatelessWidget {
       padding: const EdgeInsets.only(right: 20),
       child: Container(
         height: 60,
-        margin: const EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.symmetric(vertical: 4),
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color:
@@ -48,7 +48,7 @@ class SelectableTile extends StatelessWidget {
               title: Text(
                 title,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : null,
+                  color: isSelected ? Theme.of(context).scaffoldBackgroundColor : null,
                   fontSize: contentSize,
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,13 +56,13 @@ class SelectableTile extends StatelessWidget {
               subtitle: Text(subTitle ?? ''),
               leading: Icon(
                 leadingIcon,
-                color: isSelected ? Colors.white : null,
+                color: isSelected ?  Theme.of(context).scaffoldBackgroundColor : null,
                 size: contentSize + 10,
               ),
               trailing: notifications == null || notifications == 0
                   ? Icon(
                       trailingIcon,
-                      color: isSelected ? Colors.white : null,
+                      color: isSelected ?  Theme.of(context).scaffoldBackgroundColor : null,
                       size: contentSize + 10,
                     )
                   : Container(

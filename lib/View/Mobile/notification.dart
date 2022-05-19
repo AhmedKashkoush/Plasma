@@ -30,8 +30,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: Theme.of(context).brightness == Brightness.light? Colors.white:Colors.grey.shade800,
+          foregroundColor: Theme.of(context).brightness == Brightness.light? Colors.black:Colors.white,
           title: Text(
             "Notifications",
             style: TextStyle(
@@ -43,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             child: Icon(
               Icons.account_circle,
               size: 32,
-              color: Colors.amber,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],

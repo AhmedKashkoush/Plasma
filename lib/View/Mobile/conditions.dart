@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Widgets/custom_drawer.dart';
+import '../Widgets/mobile_custom_drawer.dart';
 
 class ConditionsScreen extends StatelessWidget {
   const ConditionsScreen({Key? key}): super(key: key);
@@ -11,7 +11,7 @@ class ConditionsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      drawer: const CustomDrawer(
+      drawer: const MobileCustomDrawer(
         screenIndex: 3,
       ),
       body: SingleChildScrollView(
@@ -25,7 +25,7 @@ class ConditionsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                     30.0,
                   ),
-                  color: Colors.amber,
+                  color: Theme.of(context).primaryColor,
                 ),
                 child: Row(
                   children: [
@@ -69,7 +69,7 @@ class ConditionsScreen extends StatelessWidget {
                 indent: 50,
                 endIndent: 50,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(
@@ -87,7 +87,7 @@ class ConditionsScreen extends StatelessWidget {
                 indent: 50,
                 endIndent: 50,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(
@@ -105,7 +105,7 @@ class ConditionsScreen extends StatelessWidget {
                 indent: 50,
                 endIndent: 50,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(
@@ -123,7 +123,7 @@ class ConditionsScreen extends StatelessWidget {
                 indent: 50,
                 endIndent: 50,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(
@@ -146,7 +146,7 @@ class ConditionsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                     30.0,
                   ),
-                  color: Colors.amber,
+                  color: Theme.of(context).primaryColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),

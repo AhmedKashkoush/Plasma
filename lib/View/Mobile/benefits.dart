@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Widgets/custom_drawer.dart';
+import '../Widgets/mobile_custom_drawer.dart';
 
 class BenefitsScreen extends StatelessWidget {
   const BenefitsScreen({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class BenefitsScreen extends StatelessWidget {
         title: Text('Benefits Of Plasma Donation'),
         foregroundColor: Colors.white,
       ),
-      drawer: const CustomDrawer(
+      drawer: const MobileCustomDrawer(
         screenIndex: 2,
       ),
       body: SafeArea(
@@ -26,17 +26,19 @@ class BenefitsScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.amber),
-                        color: Colors.amber),
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Text(
                       'Benefits For The Donor',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          color: Colors.white),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -46,7 +48,7 @@ class BenefitsScreen extends StatelessWidget {
                 Container(
                   //width: 500,
                   //height: 220,
-                  color: Colors.white,
+                  //color: Colors.white,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -64,22 +66,30 @@ class BenefitsScreen extends StatelessWidget {
                                   '* Doing the analysis of acquired immunodeficiency (AIDS) and syphilis on a regular basis.',
                                   style: TextStyle(fontSize: 18),
                                 ),
-                                const SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
                                   '* Blood protein analysis every 4 months',
                                   style: TextStyle(fontSize: 18),
                                 ),
-                                const SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
                                   '* Hepatitis A,B, C virus analysis',
                                   style: TextStyle(fontSize: 18),
                                 ),
-                                const SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
                                   '* Bone marrow activation',
                                   style: TextStyle(fontSize: 18),
                                 ),
-                                const SizedBox(height: 10,),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Text(
                                   '* Strengthen the immune system',
                                   style: TextStyle(fontSize: 18),
@@ -116,15 +126,17 @@ class BenefitsScreen extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.amber),
-                        color: Colors.amber),
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Text(
                       'Benefits For Patients',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          color: Colors.white),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -134,7 +146,7 @@ class BenefitsScreen extends StatelessWidget {
                 Container(
                   //width: 500,
                   //height: 220,
-                  color: Colors.white,
+                  //color: Colors.white,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -154,7 +166,9 @@ class BenefitsScreen extends StatelessWidget {
                         child: Container(
                           //width: 160,
                           child: Image(
-                            image: AssetImage('images/heart.jpeg',),
+                            image: AssetImage(
+                              'images/heart.jpeg',
+                            ),
                           ),
                         ),
                       ),

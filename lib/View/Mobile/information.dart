@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Widgets/custom_drawer.dart';
+import '../Widgets/mobile_custom_drawer.dart';
 
 class PlasmaInformationScreen extends StatelessWidget {
   const PlasmaInformationScreen({Key? key}): super(key: key);
@@ -12,7 +12,7 @@ class PlasmaInformationScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      drawer: const CustomDrawer(
+      drawer: const MobileCustomDrawer(
         screenIndex: 1,
       ),
       body: SingleChildScrollView(
@@ -26,7 +26,7 @@ class PlasmaInformationScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                     30.0,
                   ),
-                  color: Colors.amber,
+                  color: Theme.of(context).primaryColor,
                 ),
                 child: Row(
                   children: [
@@ -71,7 +71,7 @@ class PlasmaInformationScreen extends StatelessWidget {
                 indent: 35,
                 endIndent: 35,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(
@@ -90,7 +90,7 @@ class PlasmaInformationScreen extends StatelessWidget {
                 indent: 35,
                 endIndent: 35,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme.of(context).primaryColor,
               ),
               ListTile(
                 title: Text(

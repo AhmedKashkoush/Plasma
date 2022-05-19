@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:plasma/View/forget_password.dart';
-import 'package:plasma/View/sign_up.dart';
+import 'package:plasma/View/Mobile/forget_password.dart';
+import 'package:plasma/View/Mobile/sign_up.dart';
 
 import 'main_screen.dart';
 

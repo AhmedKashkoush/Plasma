@@ -1,10 +1,10 @@
 import 'package:badges/badges.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:plasma/View/notification.dart';
-import 'package:plasma/View/profile.dart';
+import 'package:plasma/View/Mobile/notification.dart';
+import 'package:plasma/View/Mobile/profile.dart';
 
-import 'Widgets/custom_drawer.dart';
+import '../Widgets/mobile_custom_drawer.dart';
 import 'home.dart';
 
 class MainScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(
+      drawer: MobileCustomDrawer(
         screenIndex: 0,
         homeNotifications: _notificationsNumber,
       ),
@@ -50,6 +50,7 @@ class _MainScreenState extends State<MainScreen> {
           },
           animationDuration: const Duration(milliseconds: 300),
           backgroundColor: Colors.transparent,
+          color: Theme.of(context).brightness == Brightness.light? Colors.white:Colors.grey.shade800,
           index: _index,
           letIndexChange: (index) => index != 0,
           items: _itemIcons
@@ -76,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
                                 size: 32,
                                 color: _index == _itemIcons.indexOf(icon)
                                     ? Theme.of(context).primaryColor
-                                    : Colors.black26,
+                                    : null,
                               ),
                             )
                           : Icon(
@@ -84,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
                               size: 32,
                               color: _index == _itemIcons.indexOf(icon)
                                   ? Theme.of(context).primaryColor
-                                  : Colors.black26,
+                                  : null,
                             ),
                 ),
               )

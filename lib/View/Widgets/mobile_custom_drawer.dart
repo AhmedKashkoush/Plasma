@@ -1,17 +1,25 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:plasma/View/Widgets/selectable_tile.dart';
-import 'package:plasma/View/benefits.dart';
-import 'package:plasma/View/conditions.dart';
-import 'package:plasma/View/contact_us.dart';
-import 'package:plasma/View/donation_places_screen.dart';
-import 'package:plasma/View/information.dart';
-import 'package:plasma/View/main_screen.dart';
+import 'dart:io';
 
-class CustomDrawer extends StatelessWidget {
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:plasma/Utils/utils.dart';
+import 'package:plasma/View/Mobile/settings_screen.dart';
+import 'package:plasma/View/Widgets/selectable_tile.dart';
+import 'package:plasma/View/Mobile/benefits.dart';
+import 'package:plasma/View/Mobile/conditions.dart';
+import 'package:plasma/View/Mobile/contact_us.dart';
+import 'package:plasma/View/Mobile/donation_places_screen.dart';
+import 'package:plasma/View/Mobile/information.dart';
+import 'package:plasma/View/Mobile/main_screen.dart';
+
+class MobileCustomDrawer extends StatelessWidget {
   final int screenIndex;
   final int homeNotifications;
-  const CustomDrawer({Key? key, required this.screenIndex, this.homeNotifications = 0}) : super(key: key);
+
+  const MobileCustomDrawer(
+      {Key? key, required this.screenIndex, this.homeNotifications = 0})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +40,10 @@ class CustomDrawer extends StatelessWidget {
 class DrawerContent extends StatelessWidget {
   final int itemSelected;
   final int? homeNotifications;
-  const DrawerContent({Key? key, required this.itemSelected, this.homeNotifications}) : super(key: key);
+
+  const DrawerContent(
+      {Key? key, required this.itemSelected, this.homeNotifications})
+      : super(key: key);
 
   static const List<String> _items = [
     'Home Page',
@@ -41,6 +52,8 @@ class DrawerContent extends StatelessWidget {
     'Plasma Donation Conditions',
     'Plasma Donation Places',
     'Contact Us',
+    'Settings',
+    'About',
   ];
 
   static const List<IconData> _itemIcons = [
@@ -50,6 +63,8 @@ class DrawerContent extends StatelessWidget {
     Icons.paste_sharp,
     Icons.place_rounded,
     Icons.phone,
+    Icons.settings,
+    Icons.info_outline,
   ];
 
   static const List<Widget> _pages = [
@@ -59,6 +74,7 @@ class DrawerContent extends StatelessWidget {
     ConditionsScreen(),
     DonationPlacesScreen(),
     ContactUsScreen(),
+    SettingsScreen(),
   ];
 
   @override
@@ -74,7 +90,16 @@ class DrawerContent extends StatelessWidget {
           ..._items.map(
             (item) {
               final int index = _items.indexOf(item);
-              final List<int> _notifications = [homeNotifications!,0,0,0,0,0];
+              final List<int> _notifications = [
+                homeNotifications!,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+              ];
               return SelectableTile(
                 isSelected: index == itemSelected,
                 title: item,
@@ -89,7 +114,12 @@ class DrawerContent extends StatelessWidget {
                         : null
                     : () {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+                        if (index == _items.length - 1) {
+                          Utils.showAboutInfoDialog(context);
+                          return;
+                        }
+                        ScaffoldMessenger.of(context)
+                            .removeCurrentMaterialBanner();
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

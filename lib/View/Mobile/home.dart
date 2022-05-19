@@ -1,7 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/View/Providers/question_screen_provider.dart';
-import 'package:plasma/View/questions_screen.dart';
+import 'package:plasma/View/Mobile/questions_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,17 +16,19 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: GestureDetector(
-            onTap: () => bottomBarKey.currentState?.setPage(3),
-            child: Text(
-              'Username',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal),
-            )),
+          onTap: () => bottomBarKey.currentState?.setPage(3),
+          child: Text(
+            'Username',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal,),
+          ),),
         leading: GestureDetector(
           onTap: () => bottomBarKey.currentState?.setPage(3),
           child: Icon(
             Icons.account_circle,
             size: 32,
-            color: Colors.amber,
+            color: Theme
+                .of(context)
+                .primaryColor,
           ),
         ),
       ),
@@ -50,7 +52,9 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(
                     15.0,
                   ),
-                  color: Colors.amber,
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -69,18 +73,20 @@ class HomeScreen extends StatelessWidget {
                 height: 5,
               ),
               const Text(
-                'data:- the date for benefit of Donaciones',
+                'data:- the date for benefit of Donations',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 18.0,
                 ),
               ),
-              const Divider(
+              Divider(
                 indent: 35,
                 endIndent: 35,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
               ),
 
               const Image(
@@ -89,11 +95,13 @@ class HomeScreen extends StatelessWidget {
                 ),
                 width: 420,
               ),
-              const Divider(
+              Divider(
                 indent: 70,
                 endIndent: 70,
                 thickness: 2,
-                color: Colors.amber,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
               ),
 
               const SizedBox(
@@ -101,22 +109,25 @@ class HomeScreen extends StatelessWidget {
               ),
               // اتبرع الان !!!!!!
               Container(
-                color: Colors.amber,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
                 height: 40.0,
                 child: MaterialButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              QuestionScreenProvider(),
-                          child: const QuestionsScreen(),
-                        ),
+                        builder: (context) =>
+                            ChangeNotifierProvider(
+                              create: (BuildContext context) =>
+                                  QuestionScreenProvider(),
+                              child: const QuestionsScreen(),
+                            ),
                       ),
                     );
                   },
                   child: const Text(
-                    ' Donate Now',
+                    'Donate Now',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w300,

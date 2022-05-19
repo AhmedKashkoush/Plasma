@@ -16,7 +16,7 @@ class QuestionNumberDot extends StatelessWidget {
       child: Text(
         '${numberIndex + 1}',
         style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold,),
       ),
     );
   }

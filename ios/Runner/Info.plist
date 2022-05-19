@@ -54,5 +54,10 @@
 			<key>YourPurposeKey</key>
 			<string>The example App requires temporary access to the device's precise location.</string>
 		</dict>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>https</string>
+			<string>http</string>
+		</array>
 	</dict>
 </plist>

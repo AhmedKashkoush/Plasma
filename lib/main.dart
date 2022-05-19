@@ -1,17 +1,17 @@
-import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:plasma/View/main_screen.dart';
-import 'View/before_login.dart';
+import 'package:plasma/Utils/themes.dart';
+import 'package:plasma/View/Mobile/mobile_root_screen.dart';
+import 'package:provider/provider.dart';
 
-bool isLogined = true;
+import 'Utils/shared_preferences_api.dart';
+import 'View/Providers/theme_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     name: 'plasma',
-    options:FirebaseOptions(
+    options: FirebaseOptions(
       apiKey: "AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs",
       authDomain: "plasma-fecd2.firebaseapp.com",
       projectId: "plasma-fecd2",
@@ -20,13 +20,18 @@ void main() async {
       appId: "1:951530390148:web:05340ef570b71e7cc038d1",
     ),
   );
-  const SystemUiOverlayStyle overlay = SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.white,
-    systemNavigationBarIconBrightness: Brightness.light,
+  await SharedPreferencesApi.init();
+  await ThemeHelper.loadTheme();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
   );
-  SystemChrome.setSystemUIOverlayStyle(overlay);
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,23 +40,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Provider.of<ThemeProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: isLogined ? const MainScreen() : const BeforeLoginScreen(),
+      home: const MobileRootScreen(),
       title: 'Plasma',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        highlightColor: Colors.transparent,
-        splashFactory: InkRipple.splashFactory,
-        scaffoldBackgroundColor: Colors.grey.shade200,
-        primaryColor: Colors.amber,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSwatch(
-          accentColor: Colors.amber,
-          primarySwatch: Colors.amber,
-          brightness: Brightness.light,
-        ),
-      ),
+      theme: ThemeHelper.lightTheme,
+      darkTheme: ThemeHelper.darkTheme,
+      themeMode: ThemeHelper.themeMode,
     );
   }
 }

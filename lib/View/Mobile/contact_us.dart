@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Widgets/custom_drawer.dart';
+import '../Widgets/mobile_custom_drawer.dart';
 
 class ContactUsScreen extends StatelessWidget {
   const ContactUsScreen({Key? key}) : super(key: key);
@@ -9,17 +9,17 @@ class ContactUsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        //backgroundColor: Colors.amber,
         foregroundColor: Color.fromARGB(255, 255, 255, 255),
         title: Text(
           "Contact Us ",
-          style: TextStyle(
-            fontSize: 25.0,
-          ),
+          // style: TextStyle(
+          //   fontSize: 25.0,
+          // ),
         ),
         elevation: 0.0,
       ),
-      drawer: const CustomDrawer(
+      drawer: const MobileCustomDrawer(
         screenIndex: 5,
       ),
       body: OrientationBuilder(
