@@ -2,8 +2,11 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 
+import '../Widgets/translated_text_widget.dart';
+
 class NotificationScreen extends StatefulWidget {
   final GlobalKey<CurvedNavigationBarState> bottomBarKey;
+
   const NotificationScreen({Key? key, required this.bottomBarKey})
       : super(key: key);
 
@@ -13,11 +16,13 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
   Future? _future;
+
   @override
   void initState() {
-    if (mounted) _future = Future.delayed(
-      const Duration(seconds: 5),
-    );
+    if (mounted)
+      _future = Future.delayed(
+        const Duration(seconds: 5),
+      );
     super.initState();
   }
 
@@ -26,14 +31,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
     // TODO: implement dispose
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).brightness == Brightness.light? Colors.white:Colors.grey.shade800,
-          foregroundColor: Theme.of(context).brightness == Brightness.light? Colors.black:Colors.white,
-          title: Text(
-            "Notifications",
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.white
+              : Colors.grey.shade800,
+          foregroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.black
+              : Colors.white,
+          title: TranslatedTextWidget(
+            text: "Notifications",
             style: TextStyle(
               fontSize: 20.0,
             ),
@@ -58,20 +68,25 @@ class _NotificationScreenState extends State<NotificationScreen> {
               return Center(
                 child: BloodLoadingIndicator(),
               );
-            return NoNotificationsPage(onCall: ()async {
-              await _cacheImage(AssetImage('images/noNotification.png'),context);
-            },);
+            return NoNotificationsPage(
+              onCall: () async {
+                await _cacheImage(
+                    AssetImage('assets/images/noNotification.png'), context);
+              },
+            );
           },
         ));
   }
 
-  Future <void> _cacheImage(ImageProvider imageProvider,BuildContext context) async {
+  Future<void> _cacheImage(
+      ImageProvider imageProvider, BuildContext context) async {
     await precacheImage(imageProvider, context);
   }
 }
 
 class NoNotificationsPage extends StatelessWidget {
   final VoidCallback onCall;
+
   const NoNotificationsPage({Key? key, required this.onCall}) : super(key: key);
 
   @override
@@ -88,12 +103,12 @@ class NoNotificationsPage extends StatelessWidget {
               Opacity(
                 opacity: 0.6,
                 child: Image(
-                  image: AssetImage('images/noNotification.png'),
+                  image: AssetImage('assets/images/noNotification.png'),
                   width: 220,
                 ),
               ),
-              Text(
-                'No new notifications',
+              TranslatedTextWidget(
+                text: 'No New Notifications',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               )
             ],

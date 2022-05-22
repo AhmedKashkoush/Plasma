@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'Utils/shared_preferences_api.dart';
+import 'View/Providers/localeProvider.dart';
 import 'View/Providers/theme_provider.dart';
 
 void main() async {
@@ -22,11 +25,15 @@ void main() async {
   );
   await SharedPreferencesApi.init();
   await ThemeHelper.loadTheme();
+  await LocaleHelper.loadLocale();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocaleProvider(),
         ),
       ],
       child: const MyApp(),
@@ -41,6 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Provider.of<ThemeProvider>(context);
+    Provider.of<LocaleProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const MobileRootScreen(),
@@ -48,6 +56,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeHelper.lightTheme,
       darkTheme: ThemeHelper.darkTheme,
       themeMode: ThemeHelper.themeMode,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      locale: LocaleHelper.currentLocale,
+      supportedLocales: LocaleHelper.supportedLocales,
+      localeResolutionCallback: (current, supported) {
+        for (Locale locale in supported) {
+          if (locale.languageCode == current?.languageCode) return locale;
+        }
+        return supported.first;
+      },
     );
   }
 }

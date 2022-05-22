@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+import 'package:otp_text_field/otp_field_style.dart';
 
+import '../../Utils/utils.dart';
+import '../Widgets/translated_text_widget.dart';
 import 'new_password.dart';
 
 class ForgotPasswordVerificationScreen extends StatefulWidget {
@@ -22,112 +25,132 @@ class _ForgotPasswordVerificationScreenState
 
   var formKey;
 
+  int otpLength = 4;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: SingleChildScrollView(
-            //to make scroll
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Image(
-                  image: AssetImage(
-                    'images/plasma_img.png',
+    return WillPopScope(
+      onWillPop: () => Utils.confirmExit(context),
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Center(
+            child: SingleChildScrollView(
+              //to make scroll
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Image(
+                    image: AssetImage(
+                      'assets/images/plasma_img.png',
+                    ),
+                    width: 100.0,
+                    height: 100.0,
                   ),
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                const Text(
-                  'Verification',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 36.0),
-                ),
-                SizedBox(height: 40.0),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      OTPTextField(
-                        length: 4,
-                        width: 300,
-                        fieldWidth: 50,
-                        style: TextStyle(fontSize: 30),
-                        textFieldAlignment: MainAxisAlignment.spaceAround,
-                        //fieldStyle: FieldStyle.underline,
-                        onCompleted: (pin) {
-                          setState(() {
-                            _pinSuccess = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 50.0),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "If you didn't receive a code! ",
-                              style: TextStyle(
-                                color: Colors.black38,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'Resend',
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return ThemeHelper().alartDialog(
-                                          "Successful",
-                                          "Verification code resend successful.",
-                                          context);
-                                    },
-                                  );
-                                },
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.orange),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 40.0),
-                      Container(
-                        decoration: _pinSuccess
-                            ? ThemeHelper().buttonBoxDecoration(context)
-                            : ThemeHelper().buttonBoxDecoration(
-                                context, "#AAAAAA", "#757575"),
-                        child: ElevatedButton(
-                          style: ThemeHelper().buttonStyle(),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                            child: Text(
-                              "Verify".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+                  TranslatedTextWidget(
+                    text: 'Verification',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 36.0),
+                  ),
+                  const SizedBox(height: 40.0),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        OTPTextField(
+                          length: otpLength,
+                          width: 300,
+                          fieldWidth: 50,
+                          style: const TextStyle(fontSize: 30),
+                          textFieldAlignment: MainAxisAlignment.spaceAround,
+                          otpFieldStyle: OtpFieldStyle(
+                            enabledBorderColor:
+                                Theme.of(context).iconTheme.color!,
+                            focusBorderColor: Theme.of(context).primaryColor,
                           ),
-                          onPressed: _pinSuccess
-                              ? () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            NewPasswordScreen(),
-                                      ),
-                                      (Route<dynamic> route) => false);
-                                }
-                              : null,
+                          //fieldStyle: FieldStyle.underline,
+                          onCompleted: (pin) {
+                            setState(() {
+                              _pinSuccess = true;
+                            });
+                          },
+                          onChanged: (string) {
+                            setState(() {
+                              _pinSuccess = string.length == otpLength;
+                            });
+                          },
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+                        const SizedBox(height: 50.0),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: TranslatedTextWidget.translate(
+                                    "If you didn't receive a code!"),
+                              ),
+                              const TextSpan(text: ' '),
+                              TextSpan(
+                                text: TranslatedTextWidget.translate('Resend'),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return ThemeHelper().alartDialog(
+                                          TranslatedTextWidget.translate(
+                                              "Success"),
+                                          TranslatedTextWidget.translate(
+                                              "Verification code resent successfully"),
+                                          context,
+                                        );
+                                      },
+                                    );
+                                  },
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 40.0),
+                        Container(
+                          // decoration: _pinSuccess
+                          //     ? ThemeHelper().buttonBoxDecoration(context)
+                          //     : ThemeHelper().buttonBoxDecoration(
+                          //         context, "#AAAAAA", "#757575"),
+                          child: ElevatedButton(
+                            style: ThemeHelper().buttonStyle(),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                              child: TranslatedTextWidget(
+                                text: "Verify".toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            onPressed: _pinSuccess
+                                ? () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewPasswordScreen(),
+                                        ),
+                                        (Route<dynamic> route) => false);
+                                  }
+                                : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -167,15 +190,13 @@ class ThemeHelper {
   }
 
   ButtonStyle buttonStyle() {
-    return ButtonStyle(
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
+    return ElevatedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
       ),
-      minimumSize: MaterialStateProperty.all(Size(50, 50)),
-      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-      shadowColor: MaterialStateProperty.all(Colors.transparent),
+      minimumSize: Size(50, 50),
+      primary: Colors.blue.shade800,
+      shadowColor: Colors.transparent,
     );
   }
 
@@ -185,12 +206,13 @@ class ThemeHelper {
       content: Text(content),
       actions: [
         TextButton(
-          child: Text(
-            "OK",
+          child: TranslatedTextWidget(
+            text: "Ok",
             style: TextStyle(color: Colors.white),
           ),
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black38)),
+            backgroundColor: MaterialStateProperty.all(Colors.black12),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
           },

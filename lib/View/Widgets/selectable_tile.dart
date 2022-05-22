@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class SelectableTile extends StatelessWidget {
   final bool isSelected;
@@ -11,6 +12,7 @@ class SelectableTile extends StatelessWidget {
   final IconData? trailingIcon;
   final int? notifications;
   final double contentSize;
+
   const SelectableTile({
     Key? key,
     this.isSelected = false,
@@ -27,8 +29,9 @@ class SelectableTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLTR = Directionality.of(context) == TextDirection.ltr;
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: EdgeInsets.only(right: isLTR ? 20 : 0, left: isLTR ? 0 : 20),
       child: Container(
         height: 60,
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -36,19 +39,26 @@ class SelectableTile extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               isSelected ? Theme.of(context).primaryColor : Colors.transparent,
-          borderRadius: BorderRadius.only(
-            topRight: _radius,
-            bottomRight: _radius,
-          ),
+          borderRadius: isLTR
+              ? BorderRadius.only(
+                  topRight: _radius,
+                  bottomRight: _radius,
+                )
+              : BorderRadius.only(
+                  topLeft: _radius,
+                  bottomLeft: _radius,
+                ),
         ),
         child: Center(
           child: Material(
             color: Colors.transparent,
             child: ListTile(
-              title: Text(
-                title,
+              title: TranslatedTextWidget(
+                text: title,
                 style: TextStyle(
-                  color: isSelected ? Theme.of(context).scaffoldBackgroundColor : null,
+                  color: isSelected
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : null,
                   fontSize: contentSize,
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,13 +66,17 @@ class SelectableTile extends StatelessWidget {
               subtitle: Text(subTitle ?? ''),
               leading: Icon(
                 leadingIcon,
-                color: isSelected ?  Theme.of(context).scaffoldBackgroundColor : null,
+                color: isSelected
+                    ? Theme.of(context).scaffoldBackgroundColor
+                    : null,
                 size: contentSize + 10,
               ),
               trailing: notifications == null || notifications == 0
                   ? Icon(
                       trailingIcon,
-                      color: isSelected ?  Theme.of(context).scaffoldBackgroundColor : null,
+                      color: isSelected
+                          ? Theme.of(context).scaffoldBackgroundColor
+                          : null,
                       size: contentSize + 10,
                     )
                   : Container(

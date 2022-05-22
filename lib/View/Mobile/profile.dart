@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:plasma/View/Mobile/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../Utils/utils.dart';
 import '../Widgets/blood_loading.dart';
 import '../Widgets/custom_text_field.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   static bool isBloodTypeGranted = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -56,14 +59,19 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         TextButton.icon(
                           onPressed: () {},
-                          style: TextButton.styleFrom(primary: Colors.blueAccent),
-                          label: Text('Share My Code'),
+                          style:
+                              TextButton.styleFrom(primary: Colors.blueAccent),
+                          label: TranslatedTextWidget(
+                            text: 'Share My Code',
+                          ),
                           icon: Icon(Icons.adaptive.share),
                         ),
                         TextButton.icon(
                           onPressed: () {},
                           style: TextButton.styleFrom(primary: Colors.teal),
-                          label: Text('Save To Gallery'),
+                          label: TranslatedTextWidget(
+                            text: 'Save To Gallery',
+                          ),
                           icon: Icon(Icons.save_alt_rounded),
                         ),
                       ],
@@ -112,12 +120,13 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: height * .02,
                 ),
-                if (isBloodTypeGranted) CustomTextField(
-                  hint: 'Blood Type',
-                  icon: Icon(Icons.bloodtype_outlined),
-                  readOnly: true,
-                ),
-                if (isBloodTypeGranted) SizedBox(
+                if (isBloodTypeGranted)
+                  CustomTextField(
+                    hint: 'Blood Type',
+                    icon: Icon(Icons.bloodtype_outlined),
+                    readOnly: true,
+                  ),
+                SizedBox(
                   height: height * .1,
                 ),
                 ElevatedButton.icon(
@@ -128,41 +137,45 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) => WillPopScope(
-                        onWillPop: () async {
-                          return false;
-                        },
-                        child: AlertDialog(
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          content: Container(
-                            padding: const EdgeInsets.all(50),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: const [
-                                BloodLoadingIndicator(),
-                                const SizedBox(
-                                  width: 32,
-                                ),
-                                Text(
-                                  'Logging Out...',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                    // showDialog(
+                    //   context: context,
+                    //   barrierDismissible: false,
+                    //   builder: (context) => WillPopScope(
+                    //     onWillPop: () async {
+                    //       return false;
+                    //     },
+                    //     child: AlertDialog(
+                    //       backgroundColor: Colors.transparent,
+                    //       elevation: 0,
+                    //       content: Container(
+                    //         padding: const EdgeInsets.all(50),
+                    //         decoration: BoxDecoration(
+                    //           color: Theme.of(context).scaffoldBackgroundColor,
+                    //           borderRadius: BorderRadius.circular(25),
+                    //         ),
+                    //         child: Row(
+                    //           mainAxisSize: MainAxisSize.min,
+                    //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //           children: const [
+                    //             BloodLoadingIndicator(),
+                    //             const SizedBox(
+                    //               width: 32,
+                    //             ),
+                    //             Text(
+                    //               'Logging Out...',
+                    //               style: const TextStyle(
+                    //                 fontWeight: FontWeight.bold,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
+                    Utils.showBloodLoadingDialog(
+                      context,
+                      text: 'Logging Out...',
                     );
                     await Future.delayed(const Duration(seconds: 3), () {
                       Navigator.pop(context);
@@ -177,8 +190,8 @@ class ProfileScreen extends StatelessWidget {
                     Icons.logout,
                     color: Colors.white,
                   ),
-                  label: Text(
-                    'Logout',
+                  label: TranslatedTextWidget(
+                    text: 'Log Out',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

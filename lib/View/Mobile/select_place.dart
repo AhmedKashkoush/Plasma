@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
-import 'package:plasma/View/Mobile/questions_screen.dart';
+import 'package:plasma/View/Mobile/predonation_screen.dart';
 import 'package:plasma/View/Widgets/place_select_card.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +36,7 @@ class SelectPlaceScreen extends StatelessWidget {
                       backgroundColor: Color.fromARGB(255, 204, 194, 194),
                       radius: 30,
                       backgroundImage: AssetImage(
-                        'images/place.png',
+                        'assets/images/place.png',
                       ),
                     ),
                     SizedBox(

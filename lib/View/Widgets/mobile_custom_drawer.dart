@@ -83,7 +83,7 @@ class DrawerContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
-          Image.asset('images/logo.png', width: 120),
+          Image.asset('assets/images/logo.png', width: 120),
           const SizedBox(
             height: 44,
           ),

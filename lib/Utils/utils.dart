@@ -13,6 +13,8 @@ import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../View/Mobile/donation_places_screen.dart';
+import '../View/Widgets/blood_loading.dart';
+import '../View/Widgets/translated_text_widget.dart';
 
 class Utils {
   static Future<void> animateToAddress(String address,
@@ -207,13 +209,14 @@ class Utils {
         ),
       );
 
-  static void showAboutInfoDialog(BuildContext context) async{
+  static void showAboutInfoDialog(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
+    bool isTapped = false;
     showAboutDialog(
       context: context,
-      applicationIcon: Image.asset('images/logo.png', width: 120),
+      applicationIcon: Image.asset('assets/images/logo.png', width: 120),
       applicationName: 'Plasma',
       applicationVersion: 'v$version',
       applicationLegalese: 'Copyright© ${DateTime.now().year}',
@@ -242,7 +245,6 @@ class Utils {
         StatefulBuilder(
           builder:
               (BuildContext context, void Function(void Function()) setState) {
-            bool isTapped = false;
             return Text.rich(
               TextSpan(
                 children: [
@@ -255,13 +257,12 @@ class Utils {
                     style: TextStyle(
                       color: Colors.blue,
                       backgroundColor:
-                          // ignore: dead_code
                           isTapped ? Colors.blue.withOpacity(0.4) : null,
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
                         if (!await launchUrl(
-                          Uri.parse('plasma.mohp.gov.eg'),
+                          Uri.parse('http://plasma.mohp.gov.eg/'),
                         )) showUrlLaunchingError(context);
                       }
                       ..onTapDown = (details) {
@@ -273,6 +274,11 @@ class Utils {
                         setState(() {
                           isTapped = false;
                         });
+                      }
+                      ..onTapCancel = () {
+                        setState(() {
+                          isTapped = false;
+                        });
                       },
                   ),
                 ],
@@ -281,6 +287,75 @@ class Utils {
           },
         )
       ],
+    );
+  }
+
+  static void showBloodLoadingDialog(BuildContext context, {String? text}) =>
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: AlertDialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            content: Container(
+              padding: const EdgeInsets.all(50),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: text != null && text != ''
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const BloodLoadingIndicator(),
+                        const SizedBox(
+                          width: 32,
+                        ),
+                        TranslatedTextWidget(
+                          text: text,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Center(
+                      child: BloodLoadingIndicator(),
+                    ),
+            ),
+          ),
+        ),
+      );
+
+  static Future<bool> confirmExit(BuildContext context) async {
+    bool canPop = await Navigator.of(context).canPop();
+    if (canPop) return canPop;
+    return await showDialog(
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Text('Exit?'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, true);
+            },
+            child: const Text('Yes'),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(primary: Colors.red),
+            onPressed: () async {
+              Navigator.pop(context, false);
+            },
+            child: const Text('No'),
+          ),
+        ],
+      ),
+      context: context,
     );
   }
 }

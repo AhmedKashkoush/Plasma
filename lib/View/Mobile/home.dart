@@ -1,7 +1,8 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/View/Providers/question_screen_provider.dart';
-import 'package:plasma/View/Mobile/questions_screen.dart';
+import 'package:plasma/View/Mobile/predonation_screen.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -91,7 +92,7 @@ class HomeScreen extends StatelessWidget {
 
               const Image(
                 image: AssetImage(
-                  'images/imgHome.png',
+                  'assets/images/imgHome.png',
                 ),
                 width: 420,
               ),
@@ -109,11 +110,17 @@ class HomeScreen extends StatelessWidget {
               ),
               // اتبرع الان !!!!!!
               Container(
-                color: Theme
+                width: double.infinity,
+                height: 40.0,
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                margin: const EdgeInsets.symmetric(vertical: 16),
+                child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  color: Theme
                     .of(context)
                     .primaryColor,
-                height: 40.0,
-                child: MaterialButton(
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -121,13 +128,13 @@ class HomeScreen extends StatelessWidget {
                             ChangeNotifierProvider(
                               create: (BuildContext context) =>
                                   QuestionScreenProvider(),
-                              child: const QuestionsScreen(),
+                              child: const PreDonationScreen(),
                             ),
                       ),
                     );
                   },
-                  child: const Text(
-                    'Donate Now',
+                  child: TranslatedTextWidget(
+                    text:'Donate Now',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w300,

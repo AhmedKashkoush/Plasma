@@ -2,6 +2,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
@@ -229,25 +230,28 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           //finalTimeout: const Duration(minutes: 1),
           onStatus: (status) async {
         if (status != 'listening') {
-          await _speech.stop();
-          setState(() {
-            _isListening = false;
-          });
+          // await _speech.stop();
+          // setState(() {
+          //   _isListening = false;
+          // });
+          _stopListening();
         }
         else{
           _connectivity = await Connectivity().checkConnectivity();
           if (_connectivity == ConnectivityResult.none) {
             Utils.showConnectionError(context);
-            await _speech.stop();
-            setState(() {
-              _isListening = false;
-            });
+            // await _speech.stop();
+            // setState(() {
+            //   _isListening = false;
+            // });
+            _stopListening();
           }
         }
       });
       if (available) {
         setState(() {
           _isListening = true;
+          HapticFeedback.vibrate();
           //_recognizedText = '';
         });
         await _speech
@@ -259,18 +263,28 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           },
         )
             .timeout(const Duration(seconds: 3), onTimeout: () async {
-          await _speech.stop();
-          setState(() {
-            _isListening = false;
-          });
+          // await _speech.stop();
+          // setState(() {
+          //   _isListening = false;
+          // });
+          _stopListening();
         });
       }
     } else {
-      await _speech.stop();
-      setState(() {
-        _isListening = false;
-      });
+      // await _speech.stop();
+      // setState(() {
+      //   _isListening = false;
+      // });
+      _stopListening();
     }
+  }
+
+  void _stopListening() async{
+    await _speech.stop();
+    setState((){
+      _isListening = false;
+      HapticFeedback.vibrate();
+    });
   }
 
   void _filter() {

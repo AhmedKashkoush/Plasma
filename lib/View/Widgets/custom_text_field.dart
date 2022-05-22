@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
@@ -25,7 +26,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       decoration: InputDecoration(
-        hintText: hint,
+        hintText: TranslatedTextWidget.translate(hint),
         prefixIcon: icon,
         suffixIcon: isEditable
             ? IconButton(

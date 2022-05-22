@@ -29,7 +29,7 @@ class PlaceSelectCard extends StatelessWidget {
                 Color.fromARGB(255, 204, 194, 194),
                 radius: 20,
                 child: Image.asset(
-                  'images/plasma-marker.png',
+                  'assets/images/plasma-marker.png',
                   width: 22,
                 ),
               ),

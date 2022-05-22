@@ -35,112 +35,115 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const MobileCustomDrawer(
-        screenIndex: 4,
-      ),
-      extendBodyBehindAppBar: true,
-      appBar: PlacesAppBar(mapKey: mapKey),
-      body: MapBody(key: mapKey),
-      // body: CustomScrollView(
-      //   slivers: [
-      //     PlacesHeader(),
-      //     FloatingHeader(),
-      //     // SliverToBoxAdapter(
-      //     //   child:
-      //     // ),
-      //     PlacesBody(),
-      //   ],
-      // ),
-      // floatingActionButton:           FloatingActionButton(
-      //   backgroundColor: Colors.blue.shade800,
-      //   foregroundColor: Colors.white,
-      //   child: const Icon(Icons.location_searching_rounded),
-      //   onPressed: () {
-      //     setState(() {});
-      //   },
-      // ),
-      floatingActionButton: Wrap(
-        direction: Axis.vertical,
-        verticalDirection: VerticalDirection.up,
-        spacing: 8,
-        children: [
-          FloatingActionButton(
-            heroTag: 'current location',
-            backgroundColor: Colors.blue.shade800,
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.location_searching_rounded),
-            onPressed: () async {
-              if (await Connectivity().checkConnectivity() ==
-                  ConnectivityResult.none) {
-                await Utils.showConnectionError(context);
-                return;
-              }
-              if (await Permission.location.status == PermissionStatus.denied) {
-                PermissionStatus newStatus =
-                    await Permission.location.request();
-                if (newStatus == PermissionStatus.denied)
-                  await Utils.showPermissionError(context,
-                      permissionType: 'Location');
+    return WillPopScope(
+      onWillPop: () => Utils.confirmExit(context),
+      child: Scaffold(
+        drawer: const MobileCustomDrawer(
+          screenIndex: 4,
+        ),
+        extendBodyBehindAppBar: true,
+        appBar: PlacesAppBar(mapKey: mapKey),
+        body: MapBody(key: mapKey),
+        // body: CustomScrollView(
+        //   slivers: [
+        //     PlacesHeader(),
+        //     FloatingHeader(),
+        //     // SliverToBoxAdapter(
+        //     //   child:
+        //     // ),
+        //     PlacesBody(),
+        //   ],
+        // ),
+        // floatingActionButton:           FloatingActionButton(
+        //   backgroundColor: Colors.blue.shade800,
+        //   foregroundColor: Colors.white,
+        //   child: const Icon(Icons.location_searching_rounded),
+        //   onPressed: () {
+        //     setState(() {});
+        //   },
+        // ),
+        floatingActionButton: Wrap(
+          direction: Axis.vertical,
+          verticalDirection: VerticalDirection.up,
+          spacing: 8,
+          children: [
+            FloatingActionButton(
+              heroTag: 'current location',
+              backgroundColor: Colors.blue.shade800,
+              foregroundColor: Colors.white,
+              child: const Icon(Icons.location_searching_rounded),
+              onPressed: () async {
+                if (await Connectivity().checkConnectivity() ==
+                    ConnectivityResult.none) {
+                  await Utils.showConnectionError(context);
+                  return;
+                }
+                if (await Permission.location.status == PermissionStatus.denied) {
+                  PermissionStatus newStatus =
+                      await Permission.location.request();
+                  if (newStatus == PermissionStatus.denied)
+                    await Utils.showPermissionError(context,
+                        permissionType: 'Location');
 
-                return;
-              }
-              if (await _getLocationService()) {
-                geo.Position? position =
-                    await geo.Geolocator.getCurrentPosition();
-                mapKey.currentState?.controller?.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: LatLng(
-                        position.latitude,
-                        position.longitude,
+                  return;
+                }
+                if (await _getLocationService()) {
+                  geo.Position? position =
+                      await geo.Geolocator.getCurrentPosition();
+                  mapKey.currentState?.controller?.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        target: LatLng(
+                          position.latitude,
+                          position.longitude,
+                        ),
+                        zoom: 20,
                       ),
-                      zoom: 20,
                     ),
-                  ),
-                );
-              } else {
-                await showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    content: const Text('Enable Location To Access'),
-                    actions: [
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Ok'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-            },
-          ),
-          FloatingActionButton(
-            heroTag: 'original zoom',
-            backgroundColor: Colors.black87,
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.fit_screen),
-            onPressed: _zoomOutToInitial,
-          ),
-          FloatingActionButton(
-            heroTag: 'places',
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            child: const Icon(Icons.place),
-            onPressed: () {
-              setState(() {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) => PlacesBottomSheet(mapKey: mapKey),
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                );
-              });
-            },
-          ),
-        ],
+                  );
+                } else {
+                  await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: const Text('Enable Location To Access'),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Ok'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+            ),
+            FloatingActionButton(
+              heroTag: 'original zoom',
+              backgroundColor: Colors.black87,
+              foregroundColor: Colors.white,
+              child: const Icon(Icons.fit_screen),
+              onPressed: _zoomOutToInitial,
+            ),
+            FloatingActionButton(
+              heroTag: 'places',
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              child: const Icon(Icons.place),
+              onPressed: () {
+                setState(() {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => PlacesBottomSheet(mapKey: mapKey),
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                  );
+                });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -567,7 +570,7 @@ class MapBodyState extends State<MapBody> {
           //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
           icon: await BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty,
-            'images/plasma-marker.png',
+            'assets/images/plasma-marker.png',
           ),
         );
         _markers.add(_marker);
