@@ -5,6 +5,7 @@ import 'package:plasma/View/Widgets/place_select_card.dart';
 import 'package:provider/provider.dart';
 
 import '../Providers/question_screen_provider.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class SelectPlaceScreen extends StatelessWidget {
   final PageController pageController;
@@ -31,20 +32,20 @@ class SelectPlaceScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 child: Row(
-                  children: const [
-                    CircleAvatar(
+                  children: [
+                    const CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 204, 194, 194),
                       radius: 30,
                       backgroundImage: AssetImage(
                         'assets/images/place.png',
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      'Plasma Collection Centers in Egypt',
-                      style: TextStyle(
+                    TranslatedTextWidget(
+                      text: 'Plasma Collection Centers in Egypt',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
                         fontSize: 15.0,
@@ -56,11 +57,11 @@ class SelectPlaceScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              Text(
-                'Select Center From Below',
+              TranslatedTextWidget(
+                text: 'Select Center From Below',
                 maxLines: 4,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 15.0,
                 ),

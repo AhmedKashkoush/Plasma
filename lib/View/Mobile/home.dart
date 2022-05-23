@@ -20,16 +20,18 @@ class HomeScreen extends StatelessWidget {
           onTap: () => bottomBarKey.currentState?.setPage(3),
           child: Text(
             'Username',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal,),
-          ),),
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
         leading: GestureDetector(
           onTap: () => bottomBarKey.currentState?.setPage(3),
           child: Icon(
             Icons.account_circle,
             size: 32,
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
           ),
         ),
       ),
@@ -47,36 +49,32 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 40.0,
+                //height: 40.0,
                 width: double.infinity,
+                padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(
                     15.0,
                   ),
-                  color: Theme
-                      .of(context)
-                      .primaryColor,
+                  color: Theme.of(context).primaryColor,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: const Text(
-                    'Most Sick People Need Blood Plasma',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20.0,
-                    ),
+                child: TranslatedTextWidget(
+                  text: 'Most Sick People Need Blood Plasma',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20.0,
                   ),
                 ),
               ),
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                'data:- the date for benefit of Donations',
+              TranslatedTextWidget(
+                text: 'data:- the date for benefit of Donations',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 18.0,
                 ),
@@ -85,11 +83,8 @@ class HomeScreen extends StatelessWidget {
                 indent: 35,
                 endIndent: 35,
                 thickness: 2,
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
-
               const Image(
                 image: AssetImage(
                   'assets/images/imgHome.png',
@@ -100,11 +95,8 @@ class HomeScreen extends StatelessWidget {
                 indent: 70,
                 endIndent: 70,
                 thickness: 2,
-                color: Theme
-                    .of(context)
-                    .primaryColor,
+                color: Theme.of(context).primaryColor,
               ),
-
               const SizedBox(
                 height: 5,
               ),
@@ -115,29 +107,28 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 48),
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 child: MaterialButton(
+                  elevation: 0,
+                  highlightElevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  color: Theme
-                    .of(context)
-                    .primaryColor,
+                  color: Theme.of(context).primaryColor,
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ChangeNotifierProvider(
-                              create: (BuildContext context) =>
-                                  QuestionScreenProvider(),
-                              child: const PreDonationScreen(),
-                            ),
+                        builder: (context) => ChangeNotifierProvider(
+                          create: (BuildContext context) =>
+                              QuestionScreenProvider(),
+                          child: const PreDonationScreen(),
+                        ),
                       ),
                     );
                   },
                   child: TranslatedTextWidget(
-                    text:'Donate Now',
-                    style: TextStyle(
+                    text: 'Donate Now',
+                    style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w600,
                       fontSize: 20,
                     ),
                   ),

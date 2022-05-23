@@ -216,7 +216,8 @@ class Utils {
     bool isTapped = false;
     showAboutDialog(
       context: context,
-      applicationIcon: Image.asset('assets/images/logo.png', width: 120),
+      applicationIcon:
+          const Image(image: AssetImage('assets/images/logo.png'), width: 120),
       applicationName: 'Plasma',
       applicationVersion: 'v$version',
       applicationLegalese: 'Copyright© ${DateTime.now().year}',
@@ -225,20 +226,24 @@ class Utils {
           height: 20,
         ),
         Text(
-          'Build number: $buildNumber',
+          '${TranslatedTextWidget.translate('Build number:')} $buildNumber',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Text(
-          'Platform: ${Platform.operatingSystem}',
+          '${TranslatedTextWidget.translate('Platform:')} ${Platform.operatingSystem}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           height: 20,
         ),
-        const Text(
-            'The app purpose is to facilitate the donation process between users and the head organization.'),
-        const Text(
-            'We provide you with all information you need for donation and the right steps to follow to donate.'),
+        TranslatedTextWidget(
+          text:
+              'The app purpose is to facilitate the donation process between users and the head organization.',
+        ),
+        TranslatedTextWidget(
+          text:
+              'We provide you with all information you need for donation and the right steps to follow to donate.',
+        ),
         const SizedBox(
           height: 10,
         ),
@@ -250,7 +255,7 @@ class Utils {
                 children: [
                   TextSpan(
                     text:
-                        'For more info about the application,donation or organization visit: ',
+                        '${TranslatedTextWidget.translate('For more info about the application,donation or organization, visit:')} ',
                   ),
                   TextSpan(
                     text: 'plasma.mohp.gov.eg',
@@ -312,14 +317,21 @@ class Utils {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const BloodLoadingIndicator(),
-                        const SizedBox(
-                          width: 32,
+                        Expanded(
+                          child: const BloodLoadingIndicator(),
                         ),
-                        TranslatedTextWidget(
-                          text: text,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                        Expanded(
+                          child: const SizedBox(
+                              //width: 32,
+                              ),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: TranslatedTextWidget(
+                            text: text,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -336,26 +348,31 @@ class Utils {
     bool canPop = await Navigator.of(context).canPop();
     if (canPop) return canPop;
     return await showDialog(
-      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Exit?'),
+        title: TranslatedTextWidget(
+          text: 'Exit?',
+        ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context, true);
-            },
-            child: const Text('Yes'),
-          ),
           TextButton(
             style: TextButton.styleFrom(primary: Colors.red),
             onPressed: () async {
+              Navigator.pop(context, true);
+            },
+            child: TranslatedTextWidget(
+              text: 'Yes',
+            ),
+          ),
+          TextButton(
+            onPressed: () async {
               Navigator.pop(context, false);
             },
-            child: const Text('No'),
+            child: TranslatedTextWidget(
+              text: 'No',
+            ),
           ),
         ],
       ),
       context: context,
-    );
+    )??false;
   }
 }

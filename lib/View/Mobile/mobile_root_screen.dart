@@ -10,7 +10,7 @@ class MobileRootScreen extends StatelessWidget {
     // systemNavigationBarColor: Colors.white,
     // systemNavigationBarIconBrightness: Brightness.light,
   );
-  static bool isMobileSignedIn = false;
+  static bool isMobileSignedIn = true;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(overlay);

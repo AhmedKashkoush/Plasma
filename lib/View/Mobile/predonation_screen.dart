@@ -12,6 +12,8 @@ import 'package:plasma/View/Mobile/select_place.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../Widgets/translated_text_widget.dart';
+
 class PreDonationScreen extends StatefulWidget {
   const PreDonationScreen({Key? key}) : super(key: key);
 
@@ -116,13 +118,17 @@ class _PreDonationScreenState extends State<PreDonationScreen> {
   Future<bool?> _confirmDialog(BuildContext context) async => await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Go Back?'),
+          title: TranslatedTextWidget(
+            text: 'Go Back?',
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: const Text('Ok'),
+              child: TranslatedTextWidget(
+                text: 'Ok',
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -131,7 +137,9 @@ class _PreDonationScreenState extends State<PreDonationScreen> {
               style: TextButton.styleFrom(
                 primary: Colors.red,
               ),
-              child: const Text('Cancel'),
+              child: TranslatedTextWidget(
+                text: 'Cancel',
+              ),
             ),
           ],
         ),

@@ -72,14 +72,14 @@ class ProfileScreen extends StatelessWidget {
                           label: TranslatedTextWidget(
                             text: 'Save To Gallery',
                           ),
-                          icon: Icon(Icons.save_alt_rounded),
+                          icon: const Icon(Icons.save_alt_rounded),
                         ),
                       ],
                     ),
                   ),
                 );
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.qr_code_rounded,
               ),
             ),
@@ -97,14 +97,14 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Text(
                   'Username',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SizedBox(
                   height: height * .1,
                 ),
                 CustomTextField(
                   hint: 'Phone Number',
-                  icon: Icon(Icons.phone_android_outlined),
+                  icon: const Icon(Icons.phone_android_outlined),
                   isEditable: true,
                   readOnly: true,
                 ),
@@ -113,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 CustomTextField(
                   hint: 'Mail',
-                  icon: Icon(Icons.email_outlined),
+                  icon: const Icon(Icons.email_outlined),
                   isEditable: true,
                   readOnly: true,
                 ),
@@ -123,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
                 if (isBloodTypeGranted)
                   CustomTextField(
                     hint: 'Blood Type',
-                    icon: Icon(Icons.bloodtype_outlined),
+                    icon: const Icon(Icons.bloodtype_outlined),
                     readOnly: true,
                   ),
                 SizedBox(
@@ -182,17 +182,17 @@ class ProfileScreen extends StatelessWidget {
                     });
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.logout,
                     color: Colors.white,
                   ),
                   label: TranslatedTextWidget(
                     text: 'Log Out',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ]),

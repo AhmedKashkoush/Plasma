@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../Utils/utils.dart';
 import '../Widgets/mobile_custom_drawer.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class BenefitsScreen extends StatelessWidget {
   const BenefitsScreen({Key? key}) : super(key: key);
@@ -14,7 +15,9 @@ class BenefitsScreen extends StatelessWidget {
       onWillPop: () => Utils.confirmExit(context),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Benefits Of Plasma Donation'),
+          title: TranslatedTextWidget(
+            text: 'Benefits Of Plasma Donation',
+          ),
           foregroundColor: Colors.white,
         ),
         drawer: const MobileCustomDrawer(
@@ -34,10 +37,10 @@ class BenefitsScreen extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        'Benefits For The Donor',
+                      child: TranslatedTextWidget(
+                        text: 'Benefits For The Donor',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: Colors.white,
@@ -65,37 +68,39 @@ class BenefitsScreen extends StatelessWidget {
                                 //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '* Doing the analysis of acquired immunodeficiency (AIDS) and syphilis on a regular basis.',
-                                    style: TextStyle(fontSize: 18),
+                                  TranslatedTextWidget(
+                                    text:
+                                        '* Doing the analysis of acquired immunodeficiency (AIDS) and syphilis on a regular basis.',
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '* Blood protein analysis every 4 months',
-                                    style: TextStyle(fontSize: 18),
+                                  TranslatedTextWidget(
+                                    text:
+                                        '* Blood protein analysis every 4 months',
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '* Hepatitis A,B, C virus analysis',
-                                    style: TextStyle(fontSize: 18),
+                                  TranslatedTextWidget(
+                                    text: '* Hepatitis A,B, C virus analysis',
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '* Bone marrow activation',
-                                    style: TextStyle(fontSize: 18),
+                                  TranslatedTextWidget(
+                                    text: '* Bone marrow activation',
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
-                                    '* Strengthen the immune system',
-                                    style: TextStyle(fontSize: 18),
+                                  TranslatedTextWidget(
+                                    text: '* Strengthen the immune system',
+                                    style: const TextStyle(fontSize: 18),
                                   )
                                 ],
                               ),
@@ -107,9 +112,10 @@ class BenefitsScreen extends StatelessWidget {
                           child: Container(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
+                              children: const [
                                 Image(
-                                  image: AssetImage('assets/images/analyzing.jpeg'),
+                                  image: AssetImage(
+                                      'assets/images/analyzing.jpeg'),
                                 ),
                                 Image(
                                   image: AssetImage('assets/images/ph.jpeg'),
@@ -132,10 +138,10 @@ class BenefitsScreen extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        'Benefits For Patients',
+                      child: TranslatedTextWidget(
+                        text: 'Benefits For Patients',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: Colors.white,
@@ -158,9 +164,10 @@ class BenefitsScreen extends StatelessWidget {
                           child: Container(
                             //width: 250,
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              '* Providing safe treatment and avoiding complications that occur as a result of the lack of necessary treatment such as joint obstruction for bleeding patients, avoiding cirrhosis and kidney failure for chronic viral hepatitis patients.',
-                              style: TextStyle(fontSize: 18),
+                            child: TranslatedTextWidget(
+                              text:
+                                  '* Providing safe treatment and avoiding complications that occur as a result of the lack of necessary treatment such as joint obstruction for bleeding patients, avoiding cirrhosis and kidney failure for chronic viral hepatitis patients.',
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
                         ),
@@ -168,7 +175,7 @@ class BenefitsScreen extends StatelessWidget {
                           flex: 2,
                           child: Container(
                             //width: 160,
-                            child: Image(
+                            child: const Image(
                               image: AssetImage(
                                 'assets/images/heart.jpeg',
                               ),

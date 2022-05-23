@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../Utils/utils.dart';
 import '../Widgets/mobile_custom_drawer.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class PlasmaInformationScreen extends StatelessWidget {
   const PlasmaInformationScreen({Key? key}): super(key: key);
@@ -33,19 +34,19 @@ class PlasmaInformationScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Color.fromARGB(255, 204, 194, 194),
                         radius: 30,
                         backgroundImage: AssetImage(
                           'assets/images/Properties.png',
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'What is blood plasma?',
-                        style: TextStyle(
+                      TranslatedTextWidget(
+                        text: 'What is blood plasma?',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w900,
                           fontSize: 17.0,
@@ -54,14 +55,14 @@ class PlasmaInformationScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 ListTile(
-                  title: Text(
-                    'Plasma is the main source for the manufacture of derivatives such as clotting factors, which is the only treatment for patients with chronic bleeding, such as "hemophilia".',
+                  title: TranslatedTextWidget(
+                    text: 'Plasma is the main source for the manufacture of derivatives such as clotting factors, which is the only treatment for patients with chronic bleeding, such as "hemophilia".',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
                     ),
@@ -77,10 +78,10 @@ class PlasmaInformationScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 ListTile(
-                  title: Text(
-                    'Blood plasma is made from proteins that are important for the treatment of inflammatory patients, liver cancers and kidney patients.',
+                  title: TranslatedTextWidget(
+                    text: 'Blood plasma is made from proteins that are important for the treatment of inflammatory patients, liver cancers and kidney patients.',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
                     ),
@@ -96,10 +97,10 @@ class PlasmaInformationScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 ListTile(
-                  title: Text(
-                    'Plasma consists of 92% water and 8% blood plasma proteins.',
+                  title: TranslatedTextWidget(
+                    text: 'Plasma consists of 92% water and 8% blood plasma proteins.',
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
                     ),

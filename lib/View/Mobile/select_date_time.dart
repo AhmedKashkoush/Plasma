@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../Providers/question_screen_provider.dart';
 import '../Widgets/place_select_card.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class SelectDateTimeScreen extends StatefulWidget {
   final PageController pageController;
@@ -28,10 +29,11 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
         Provider.of<QuestionScreenProvider>(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: ()=> FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) => SingleChildScrollView(
+          builder: (BuildContext context, BoxConstraints constraints) =>
+              SingleChildScrollView(
             reverse: true,
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -46,35 +48,47 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              'Select Date And Time',
-                              style: TextStyle(
+                            TranslatedTextWidget(
+                              text: 'Select Date And Time',
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 32.0,
                               ),
                             ),
-                            const SizedBox(height: 24,),
-                            Text(
-                              'All Centers Are Available 14 Hours Daily',
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            TranslatedTextWidget(
+                              text: 'All Centers Are Available 14 Hours Daily',
                               maxLines: 4,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 15.0,
                               ),
                             ),
-                            const SizedBox(height: 24,),
+                            const SizedBox(
+                              height: 24,
+                            ),
                             Stack(
                               clipBehavior: Clip.none,
                               children: [
-                                PlaceSelectCard(placeName: _provider.selectedCenter,),
+                                PlaceSelectCard(
+                                  placeName: _provider.selectedCenter,
+                                ),
                                 Positioned(
                                   right: -22,
                                   top: -22,
                                   child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(primary: Colors.teal,shape: CircleBorder(),),
-                                    child: Icon(Icons.edit,color: Colors.white70,),
-                                    onPressed: (){
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.teal,
+                                      shape: const CircleBorder(),
+                                    ),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white70,
+                                    ),
+                                    onPressed: () {
                                       _moveToPreviousPage();
                                     },
                                   ),
@@ -89,16 +103,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                               keyboardType: TextInputType.datetime,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return ('Time must not be empty');
+                                  return TranslatedTextWidget.translate('Time must not be empty');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: 'Donation Time',
+                                labelText: TranslatedTextWidget.translate('Donation Time'),
                                 prefixIcon: const Icon(
                                   Icons.watch_later_outlined,
                                 ),
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                               ),
                               readOnly: true,
                               onTap: () {
@@ -108,13 +122,14 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                         print('Unavailable selection'),
                                     initialTime: TimeOfDay(hour: 8, minute: 0),
                                     selectableTimePredicate: (time) =>
-                                        time!.hour > 7 && time.hour < 21).then((value) {
+                                        time!.hour > 7 && time.hour < 21).then(
+                                    (value) {
                                   timeController.text = value!.format(context);
                                   print(value.format(context));
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 30.0,
                             ),
                             TextFormField(
@@ -122,16 +137,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                               keyboardType: TextInputType.datetime,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return ('Date must not be empty');
+                                  return TranslatedTextWidget.translate('Date must not be empty');
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: 'Donation Date',
+                                labelText: TranslatedTextWidget.translate('Donation Date'),
                                 prefixIcon: const Icon(
                                   Icons.calendar_today,
                                 ),
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
                               ),
                               readOnly: true,
                               onTap: () {
@@ -139,14 +154,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime.now(),
-                                        lastDate: DateTime(DateTime.now().year + 5))
+                                        lastDate:
+                                            DateTime(DateTime.now().year + 5))
                                     .then((value) {
                                   print(DateFormat.yMMMd().format(value!));
-                                  dateController.text = DateFormat.yMMMd().format(value);
+                                  dateController.text =
+                                      DateFormat.yMMMd().format(value);
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 60.0,
                             ),
                             Container(
@@ -160,9 +177,9 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                     Navigator.pop(context);
                                   }
                                 },
-                                child: const Text(
-                                  'Reservation',
-                                  style: TextStyle(
+                                child: TranslatedTextWidget(
+                                  text: 'Reservation',
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w900,
                                   ),

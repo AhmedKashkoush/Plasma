@@ -8,8 +8,10 @@ import 'package:plasma/Utils/locales.dart';
 class TranslatedTextWidget extends StatefulWidget {
   final String text;
   final TextStyle? style;
+  final TextAlign? textAlign;
+  final int? maxLines;
 
-  TranslatedTextWidget({Key? key, required this.text, this.style})
+  TranslatedTextWidget({Key? key, required this.text, this.style, this.textAlign, this.maxLines})
       : super(key: key);
 
   @override
@@ -45,6 +47,8 @@ class _TranslatedTextWidgetState extends State<TranslatedTextWidget> {
     return Text(
       TranslatedTextWidget.translate(widget.text),
       style: widget.style,
+      textAlign: widget.textAlign,
+      maxLines: widget.maxLines,
     );
   }
   // TranslatedTextWidget(
