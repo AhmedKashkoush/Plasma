@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +9,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 import '../../Model/APIs/Dummy/dummy_places.dart';
+import '../../Utils/locales.dart';
 import '../../Utils/utils.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class VoiceSearchPage extends StatefulWidget {
   const VoiceSearchPage({Key? key}) : super(key: key);
@@ -61,8 +65,8 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
               )
             : !_isSearching
                 ? Center(
-                    child: Text(
-                      _isListening ? 'Try Speaking...' : 'Tap To Speak',
+                    child: TranslatedTextWidget(
+                      text: _isListening ? 'Try Speaking...' : 'Tap To Speak',
                       style: TextStyle(
                         color: Colors.grey.shade600.withOpacity(
                           0.6,
@@ -94,20 +98,22 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
                                 color: Colors.red,
                                 size: 28,
                               ),
-                              title: Text(
-                                filterList[index]["name"]!,
+                              title: TranslatedTextWidget(
+                                text: filterList[index]["name"]!,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                  "${filterList[index]["address"]!}\n${filterList[index]["gov"]!}"),
+                                  "${TranslatedTextWidget.translate(filterList[index]["address"]!)}\n${TranslatedTextWidget.translate(filterList[index]["gov"]!)}"),
                               isThreeLine: true,
                             );
                           },
                         ),
                       )
-                    : const Center(
-                        child: Text('No Results'),
+                    : Center(
+                        child: TranslatedTextWidget(
+                          text: 'No Results',
+                        ),
                       ),
       ),
       // body: AnimatedSwitcher(
@@ -203,13 +209,12 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
 
   void _listen() async {
     ConnectivityResult _connectivity = await Connectivity().checkConnectivity();
-    if (_connectivity == ConnectivityResult.none){
+    if (_connectivity == ConnectivityResult.none) {
       Utils.showConnectionError(context);
       return;
     }
     PermissionStatus status = await Permission.microphone.status;
-    if (status == PermissionStatus.denied)
-      _handleMicPermission();
+    if (status == PermissionStatus.denied) _handleMicPermission();
     if (!_isListening) {
       if (_recognizedText.isNotEmpty && !_isSearching) {
         setState(() {
@@ -234,9 +239,8 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           // setState(() {
           //   _isListening = false;
           // });
-          _stopListening();
-        }
-        else{
+          await _stopListening();
+        } else {
           _connectivity = await Connectivity().checkConnectivity();
           if (_connectivity == ConnectivityResult.none) {
             Utils.showConnectionError(context);
@@ -244,7 +248,7 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
             // setState(() {
             //   _isListening = false;
             // });
-            _stopListening();
+            await _stopListening();
           }
         }
       });
@@ -254,12 +258,16 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           HapticFeedback.vibrate();
           //_recognizedText = '';
         });
+        String languageCode =
+            LocaleHelper.currentLocale?.languageCode.substring(0, 2) ??
+                Platform.localeName.substring(0, 2);
         await _speech
             .listen(
-          localeId: 'ar',
+          localeId: languageCode,
           onResult: (result) {
             _recognizedText = result.recognizedWords;
             setState(() {});
+            //_stopListening();
           },
         )
             .timeout(const Duration(seconds: 3), onTimeout: () async {
@@ -267,7 +275,7 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           // setState(() {
           //   _isListening = false;
           // });
-          _stopListening();
+          await _stopListening();
         });
       }
     } else {
@@ -275,13 +283,13 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
       // setState(() {
       //   _isListening = false;
       // });
-      _stopListening();
+      await _stopListening();
     }
   }
 
-  void _stopListening() async{
+  Future<void> _stopListening() async {
     await _speech.stop();
-    setState((){
+    setState(() {
       _isListening = false;
       HapticFeedback.vibrate();
     });
@@ -289,12 +297,22 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
 
   void _filter() {
     filterList = placesList.where((element) {
-      bool condition = element["name"]!.startsWith(_recognizedText) ||
-          element["address"]!.startsWith(_recognizedText) ||
-          element["gov"]!.startsWith(_recognizedText) ||
-          _recognizedText.contains(element["name"]!) ||
-          _recognizedText.contains(element["address"]!) ||
-          _recognizedText.contains(element["gov"]!);
+      bool condition = TranslatedTextWidget.translate(element["name"]!)
+              .toLowerCase()
+              .startsWith(_recognizedText.toLowerCase()) ||
+          TranslatedTextWidget.translate(element["address"]!)
+              .toLowerCase()
+              .startsWith(_recognizedText.toLowerCase()) ||
+          TranslatedTextWidget.translate(element["gov"]!)
+              .toLowerCase()
+              .startsWith(_recognizedText.toLowerCase()) ||
+          _recognizedText.contains(
+              TranslatedTextWidget.translate(element["name"]!).toLowerCase()) ||
+          _recognizedText.contains(
+              TranslatedTextWidget.translate(element["address"]!)
+                  .toLowerCase()) ||
+          _recognizedText.contains(
+              TranslatedTextWidget.translate(element["gov"]!).toLowerCase());
       return condition;
     }).toList();
   }
@@ -307,7 +325,8 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
       case PermissionStatus.granted:
         return;
       case PermissionStatus.denied:
-        bool? request = await Utils.showPermissionErrorAndRequest(context,permissionType: 'Microphone');
+        bool? request = await Utils.showPermissionErrorAndRequest(context,
+            permissionType: 'Microphone');
         if (request == null || !request)
           Navigator.pop(context);
         else {
@@ -316,22 +335,28 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
         }
         break;
       case PermissionStatus.permanentlyDenied:
-        await showDialog(
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text('Permission Error'),
-            content: const Text(
-                'Cannot Access Microphone Services In Your Device.Please Enable Service From App Settings To Continue'),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  Navigator.pop(context, true);
-                },
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-          context: context,
+        // await showDialog(
+        //   barrierDismissible: false,
+        //   builder: (context) => AlertDialog(
+        //     title: Text('Permission Error'),
+        //     content: const Text(
+        //         'Cannot Access Microphone Services In Your Device.Please Enable Service From App Settings To Continue'),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () async {
+        //           Navigator.pop(context, true);
+        //         },
+        //         child: TranslatedTextWidget(
+        //           text: 'Ok',
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        //   context: context,
+        // );
+        await Utils.showPermissionError(
+          context,
+          permissionType: 'Microphone',
         );
         Navigator.pop(context);
     }

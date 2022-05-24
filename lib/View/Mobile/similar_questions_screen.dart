@@ -67,7 +67,7 @@ class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
                     ),
                     CustomTextField(
                       controller: textController,
-                      hint: 'Write Question',
+                      hint: 'Write a Question',
                       onChanged: (s) {
                         setState(() {});
                       },
@@ -121,13 +121,16 @@ class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
                               //     ),
                               //   ),
                               // );
-                              Utils.showBloodLoadingDialog(context,
-                                  text: 'Submitting...');
+                              FocusScope.of(context).unfocus();
+                              Utils.showBloodLoadingDialog(
+                                context,
+                                text: 'Submitting...',
+                              );
                               await Future.delayed(const Duration(seconds: 5),
                                   () {
-                                _moveToNextPage(context);
                                 Navigator.pop(context);
                               });
+                              _moveToNextPage(context);
                             }
                           : null,
                       child: TranslatedTextWidget(

@@ -14,11 +14,30 @@ class LocaleHelper {
   ];
 
   static String? englishFile;
+  static String? arabicFile;
+  static String? frenchFile;
+
+  static Map<String, dynamic>? englishMap;
+  static Map<String, dynamic>? arabicMap;
+  static Map<String, dynamic>? frenchMap;
+
+  static Map<String, dynamic>? localeMap;
 
   static Map<String, dynamic>? activeLocale;
 
   static Future<void> loadLocale() async {
     englishFile = await rootBundle.loadString('assets/languages/en.json');
+    arabicFile = await rootBundle.loadString('assets/languages/ar.json');
+    frenchFile = await rootBundle.loadString('assets/languages/ar.json');
+
+    englishMap = jsonDecode(englishFile!);
+    arabicMap = jsonDecode(arabicFile!);
+    frenchMap = jsonDecode(frenchFile!);
+    localeMap = {
+      'en': englishMap,
+      'ar': arabicMap,
+      'fr': frenchMap,
+    };
     String languageCode =
         await SharedPreferencesApi.getString('locale') ?? 'system';
     setLocale(languageCode);

@@ -11,18 +11,22 @@ class TranslatedTextWidget extends StatefulWidget {
   final TextAlign? textAlign;
   final int? maxLines;
 
-  TranslatedTextWidget({Key? key, required this.text, this.style, this.textAlign, this.maxLines})
+  TranslatedTextWidget(
+      {Key? key, required this.text, this.style, this.textAlign, this.maxLines})
       : super(key: key);
 
   @override
   State<TranslatedTextWidget> createState() => _TranslatedTextWidgetState();
 
-  static Map<String, dynamic>? _englishMap;
-  static String translate(String text){
+  ///Matches the given text with the default english json file values then translates to the current locale.
+  ///
+  ///The optional parameter [locale] if not null the method translates the text to this locale, active locale otherwise.
+  static String translate(String text, [String? locale]) {
     String? _key;
     final Map<String, dynamic>? _locale = LocaleHelper.activeLocale;
-    String? englishFile =
-        LocaleHelper.englishFile;
+    final Map<String, dynamic>? _allLocales = LocaleHelper.localeMap;
+    Map<String, dynamic>? _englishMap;
+    String? englishFile = LocaleHelper.englishFile;
     _englishMap = jsonDecode(englishFile!);
     _englishMap?.keys.forEach((key) {
       if (_englishMap![key] == text) {
@@ -30,13 +34,14 @@ class TranslatedTextWidget extends StatefulWidget {
         return;
       }
     });
-    String _translatedText = _locale![_key]??'Error translating text';
+    String _translatedText = locale != null
+        ? _allLocales
+        : _locale![_key] ?? 'Error translating text';
     return _translatedText;
   }
 }
 
 class _TranslatedTextWidgetState extends State<TranslatedTextWidget> {
-
   @override
   void initState() {
     super.initState();
@@ -51,6 +56,6 @@ class _TranslatedTextWidgetState extends State<TranslatedTextWidget> {
       maxLines: widget.maxLines,
     );
   }
-  // TranslatedTextWidget(
-  // text:
+// TranslatedTextWidget(
+// text:
 }

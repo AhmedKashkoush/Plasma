@@ -115,33 +115,35 @@ class _PreDonationScreenState extends State<PreDonationScreen> {
     );
   }
 
-  Future<bool?> _confirmDialog(BuildContext context) async => await showDialog(
+  Future<bool?> _confirmDialog(BuildContext context) async =>
+      await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: TranslatedTextWidget(
-            text: 'Go Back?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: TranslatedTextWidget(
-                text: 'Ok',
+        builder: (context) =>
+            AlertDialog(
+              title: TranslatedTextWidget(
+                text: 'Go Back?',
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  style: TextButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  child: TranslatedTextWidget(
+                    text: 'Ok',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: TranslatedTextWidget(
+                    text: 'Cancel',
+                  ),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: TextButton.styleFrom(
-                primary: Colors.red,
-              ),
-              child: TranslatedTextWidget(
-                text: 'Cancel',
-              ),
-            ),
-          ],
-        ),
       );
 }

@@ -12,9 +12,9 @@ import '../Widgets/mobile_custom_drawer.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
-  static bool _notificationsEnabled = false;
+  //static bool _notificationsEnabled = false;
 
-  static Map<String,String> _locales = {
+  static Map<String, String> _locales = {
     'en': 'English',
     'ar': 'العربية',
     'fr': 'Français',
@@ -27,13 +27,14 @@ class SettingsScreen extends StatelessWidget {
     ThemeProvider _themeProvider = Provider.of<ThemeProvider>(context);
     Brightness _brightness = Theme.of(context).brightness;
     LocaleProvider _localeProvider = Provider.of<LocaleProvider>(context);
-    String languageCode = LocaleHelper.currentLocale?.languageCode.substring(0,2)??'system';
-    String _lang = _locales[languageCode]??'System';
+    String languageCode =
+        LocaleHelper.currentLocale?.languageCode.substring(0, 2) ?? 'system';
+    String _lang = _locales[languageCode] ?? 'System';
     return WillPopScope(
       onWillPop: () => Utils.confirmExit(context),
       child: Scaffold(
         appBar: AppBar(
-          title: TranslatedTextWidget(text: 'Settings'),//Text('Settings'),
+          title: TranslatedTextWidget(text: 'Settings'), //Text('Settings'),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -42,24 +43,15 @@ class SettingsScreen extends StatelessWidget {
           children: [
             ListTile(
               title: TranslatedTextWidget(
-                text:'Notifications',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                text: 'Notifications',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              leading: _notificationsEnabled
-                  ? Icon(Icons.notifications)
-                  : Icon(Icons.notifications_off_sharp),
+              leading: Icon(Icons.notifications),
               onTap: () {},
-              trailing: Switch.adaptive(
-                value: _notificationsEnabled,
-                onChanged: (value) {
-                  _notificationsEnabled = value;
-                },
-                activeColor: Theme.of(context).colorScheme.secondary,
-              ),
             ),
             ExpansionTile(
               title: TranslatedTextWidget(
-                text:'Themes',
+                text: 'Themes',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: TranslatedTextWidget(text: _theme),
@@ -70,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
                 RadioListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
                   title: TranslatedTextWidget(
-                    text:'System',
+                    text: 'System',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   value: 'System',
@@ -82,7 +74,7 @@ class SettingsScreen extends StatelessWidget {
                 RadioListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
                   title: TranslatedTextWidget(
-                    text:'Light',
+                    text: 'Light',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   value: 'Light',
@@ -94,7 +86,7 @@ class SettingsScreen extends StatelessWidget {
                 RadioListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
                   title: TranslatedTextWidget(
-                    text:'Dark',
+                    text: 'Dark',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   value: 'Dark',
@@ -107,16 +99,18 @@ class SettingsScreen extends StatelessWidget {
             ),
             ExpansionTile(
               title: TranslatedTextWidget(
-                text:'Language',
+                text: 'Language',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: _lang != 'System'?Text(_lang):TranslatedTextWidget(text: 'System'),
+              subtitle: _lang != 'System'
+                  ? Text(_lang)
+                  : TranslatedTextWidget(text: 'System'),
               leading: const Icon(Icons.translate_rounded),
               children: [
                 RadioListTile(
                   activeColor: Theme.of(context).colorScheme.secondary,
                   title: TranslatedTextWidget(
-                    text:'System',
+                    text: 'System',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   value: 'system',

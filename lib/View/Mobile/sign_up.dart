@@ -41,9 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 10.0,
                       ),
                       TranslatedTextWidget(
-                        text:'Registration',
+                        text: 'Registration',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 40.0,),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 40.0,
+                        ),
                       ),
                       const SizedBox(
                         height: 30.0,
@@ -62,7 +64,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                         },
                         decoration: InputDecoration(
-                          labelText: TranslatedTextWidget.translate('Enter your Name'),
+                          labelText:
+                              TranslatedTextWidget.translate('Enter your Name'),
                           prefixIcon: const Icon(
                             Icons.person,
                           ),
@@ -86,7 +89,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                         },
                         decoration: InputDecoration(
-                          labelText: TranslatedTextWidget.translate('Enter your phone number'),
+                          labelText: TranslatedTextWidget.translate(
+                              'Enter your phone number'),
                           prefixIcon: const Icon(
                             Icons.phone,
                           ),
@@ -110,12 +114,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return TranslatedTextWidget.translate('Empty');
                           }
                           if (!value.contains('@')) {
-                            return TranslatedTextWidget.translate('It is not a valid email address');
+                            return TranslatedTextWidget.translate(
+                                'It is not a valid email address');
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                          labelText: TranslatedTextWidget.translate('Enter your Email Address'),
+                          labelText: TranslatedTextWidget.translate(
+                              'Enter your Email Address'),
                           prefixIcon: const Icon(
                             Icons.mail,
                           ),
@@ -139,7 +145,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return TranslatedTextWidget.translate('Empty');
                           }
                           if (value.length < 8) {
-                            return TranslatedTextWidget.translate('Password must contain at least 8 characters');
+                            return TranslatedTextWidget.translate(
+                                'Password must contain at least 8 characters');
                           }
                           return null;
                         },
@@ -181,13 +188,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return TranslatedTextWidget.translate('Empty');
                           }
                           if (value != passController.text) {
-                            return TranslatedTextWidget.translate('Write the same password to confirm');
+                            return TranslatedTextWidget.translate(
+                                'Write the same password to confirm');
                           }
                           return null;
                         },
                         obscureText: obscureConfirmText,
                         decoration: InputDecoration(
-                          labelText: TranslatedTextWidget.translate('Confirm Password'),
+                          labelText: TranslatedTextWidget.translate(
+                              'Confirm Password'),
                           prefixIcon: const Icon(
                             Icons.password,
                           ),

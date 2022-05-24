@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class PlaceSelectCard extends StatelessWidget {
   final String placeName;
@@ -43,7 +44,7 @@ class PlaceSelectCard extends StatelessWidget {
                     placeName,
                     maxLines: 4,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w900,
                       fontSize: 15.0,

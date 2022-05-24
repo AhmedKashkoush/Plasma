@@ -3,10 +3,13 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../Model/Models/question_model.dart';
 import '../Widgets/question_number_dot.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class QuestionsScreen extends StatefulWidget {
   final PageController pageController;
-  const QuestionsScreen({Key? key, required this.pageController}) : super(key: key);
+
+  const QuestionsScreen({Key? key, required this.pageController})
+      : super(key: key);
 
   @override
   _QuestionsScreenState createState() => _QuestionsScreenState();
@@ -69,14 +72,16 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   ];
 
   int currentQuestion = 0;
+
   @override
   void dispose() {
     _questionPageController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return           Scaffold(
+    return Scaffold(
       body: Column(
         children: [
           Padding(
@@ -90,7 +95,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 itemBuilder: (context, index) => QuestionNumberDot(
                     numberIndex: index, currentQuestion: currentQuestion),
                 separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
+                    const SizedBox(
                   width: 10,
                 ),
                 itemCount: _questions.length,
@@ -132,9 +137,10 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: Colors.blue.shade700),
-                          child: Text(
-                            _questions[index].answers[0],
+                            primary: Colors.blue.shade700,
+                          ),
+                          child: TranslatedTextWidget(
+                            text: _questions[index].answers[0],
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -145,15 +151,14 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                       SizedBox(
                         width: 140,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.red),
+                          style: ElevatedButton.styleFrom(primary: Colors.red),
                           onPressed: () {
                             setState(() {
                               _moveToNextQuestion();
                             });
                           },
-                          child: Text(
-                            _questions[index].answers[1],
+                          child: TranslatedTextWidget(
+                            text: _questions[index].answers[1],
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

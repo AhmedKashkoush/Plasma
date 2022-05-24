@@ -76,10 +76,10 @@ class SelectPlaceScreen extends StatelessWidget {
                   shrinkWrap: true,
                   itemBuilder: (context, index) => PlaceSelectCard(
                     placeName:
-                        '${placesList[index]["name"]},${placesList[index]["address"]},${placesList[index]["gov"]}',
+                        '${TranslatedTextWidget.translate(placesList[index]["name"]!)},${TranslatedTextWidget.translate(placesList[index]["address"]!)},${TranslatedTextWidget.translate(placesList[index]["gov"]!)}',
                     onTap: () {
                       _provider.setCenter(
-                          '${placesList[index]["name"]},${placesList[index]["address"]},${placesList[index]["gov"]}');
+                          '${TranslatedTextWidget.translate(placesList[index]["name"]!)},${TranslatedTextWidget.translate(placesList[index]["address"]!)},${TranslatedTextWidget.translate(placesList[index]["gov"]!)}');
                       _moveToNextPage();
                     },
                   ),

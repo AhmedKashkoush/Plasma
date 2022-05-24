@@ -10,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
+import 'package:plasma/Utils/locales.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../View/Mobile/donation_places_screen.dart';
@@ -17,12 +18,14 @@ import '../View/Widgets/blood_loading.dart';
 import '../View/Widgets/translated_text_widget.dart';
 
 class Utils {
-  static Future<void> animateToAddress(String address,
-      {required BuildContext context,
-      required GlobalKey<MapBodyState> mapKey}) async {
+  static Future<void> animateToAddress(
+    String address, {
+    required BuildContext context,
+    required GlobalKey<MapBodyState> mapKey,
+  }) async {
     try {
       List<Location> locations =
-          await locationFromAddress(address, localeIdentifier: 'ar');
+          await locationFromAddress(address, localeIdentifier: 'en');
       final LatLng _coordinates =
           LatLng(locations.first.latitude, locations.first.longitude);
       mapKey.currentState?.controller?.animateCamera(
@@ -41,14 +44,20 @@ class Utils {
   static Future<void> showConnectionError(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Connection Error'),
-          content: const Text('Check Your Internet Connection'),
+          title: TranslatedTextWidget(
+            text: 'Connection Error',
+          ),
+          content: TranslatedTextWidget(
+            text: 'Check Your Internet Connection',
+          ),
           actions: [
             TextButton(
               onPressed: () async {
                 Navigator.pop(context);
               },
-              child: const Text('Ok'),
+              child: TranslatedTextWidget(
+                text: 'Ok',
+              ),
             ),
           ],
         ),
@@ -59,15 +68,21 @@ class Utils {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Permission Error'),
-          content: Text(
-              'Cannot Access $permissionType Services In Your Device.Please Enable Service From App Settings To Continue'),
+          title: TranslatedTextWidget(
+            text: 'Permission Error',
+          ),
+          content: TranslatedTextWidget(
+            text:
+                'Cannot Access $permissionType Services In Your Device.Please Enable Service From App Settings To Continue',
+          ),
           actions: [
             TextButton(
               onPressed: () async {
                 Navigator.pop(context);
               },
-              child: const Text('Ok'),
+              child: TranslatedTextWidget(
+                text: 'Ok',
+              ),
             ),
           ],
         ),
@@ -78,21 +93,29 @@ class Utils {
       showDialog(
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: Text('Permission Error'),
-          content: Text('$permissionType Access Is Denied'),
+          title: TranslatedTextWidget(
+            text: 'Permission Error',
+          ),
+          content: TranslatedTextWidget(
+            text: '$permissionType Access Is Denied',
+          ),
           actions: [
             TextButton(
               onPressed: () async {
                 Navigator.pop(context, true);
               },
-              child: const Text('Request Permission'),
+              child: TranslatedTextWidget(
+                text: 'Request Permission',
+              ),
             ),
             TextButton(
               style: TextButton.styleFrom(primary: Colors.red),
               onPressed: () async {
                 Navigator.pop(context, false);
               },
-              child: const Text('Dismiss'),
+              child: TranslatedTextWidget(
+                text: 'Dismiss',
+              ),
             ),
           ],
         ),
@@ -116,8 +139,10 @@ class Utils {
     String? centerGov;
     LatLng? coordinates;
     placesList.forEach((place) async {
-      List<Location> locations =
-          await locationFromAddress(place["address"]!, localeIdentifier: 'ar');
+      List<Location> locations = await locationFromAddress(
+        "${place["address"]},${place["gov"]}",
+        localeIdentifier: 'ar',
+      );
       final LatLng _coordinates =
           LatLng(locations.first.latitude, locations.first.longitude);
       double distance = Geolocator.distanceBetween(
@@ -144,13 +169,15 @@ class Utils {
     });
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
-        leading: Icon(
+        leading: const Icon(
           Icons.info_outline,
           color: Colors.white,
         ),
-        content: const Text(
-          'We Have Detected The Nearest Center Based On Your Current Location',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        content: TranslatedTextWidget(
+          text:
+              'We Have Detected The Nearest Center Based On Your Current Location',
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         // content: ListTile(
         //   title: const Text(
@@ -179,13 +206,17 @@ class Utils {
               );
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
             },
-            child: const Text('Show In Map'),
+            child: TranslatedTextWidget(
+              text: 'Show In Map',
+            ),
           ),
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
             },
-            child: const Text('Dismiss'),
+            child: TranslatedTextWidget(
+              text: 'Dismiss',
+            ),
           ),
         ],
       ),
@@ -195,15 +226,21 @@ class Utils {
   static Future<void> showUrlLaunchingError(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Error'),
-          content: const Text(
-              'Something Went Wrong While Opening The Link.Try Again Or Check Your Internet Connection'),
+          title: TranslatedTextWidget(
+            text: 'Error',
+          ),
+          content: TranslatedTextWidget(
+            text:
+                'Something Went Wrong While Opening The Link.Try Again Or Check Your Internet Connection',
+          ),
           actions: [
             TextButton(
               onPressed: () async {
                 Navigator.pop(context);
               },
-              child: const Text('Ok'),
+              child: TranslatedTextWidget(
+                text: 'Ok',
+              ),
             ),
           ],
         ),
@@ -348,31 +385,32 @@ class Utils {
     bool canPop = await Navigator.of(context).canPop();
     if (canPop) return canPop;
     return await showDialog(
-      builder: (context) => AlertDialog(
-        title: TranslatedTextWidget(
-          text: 'Exit?',
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(primary: Colors.red),
-            onPressed: () async {
-              Navigator.pop(context, true);
-            },
-            child: TranslatedTextWidget(
-              text: 'Yes',
+          builder: (context) => AlertDialog(
+            title: TranslatedTextWidget(
+              text: 'Exit?',
             ),
+            actions: [
+              TextButton(
+                style: TextButton.styleFrom(primary: Colors.red),
+                onPressed: () async {
+                  Navigator.pop(context, true);
+                },
+                child: TranslatedTextWidget(
+                  text: 'Yes',
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, false);
+                },
+                child: TranslatedTextWidget(
+                  text: 'No',
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context, false);
-            },
-            child: TranslatedTextWidget(
-              text: 'No',
-            ),
-          ),
-        ],
-      ),
-      context: context,
-    )??false;
+          context: context,
+        ) ??
+        false;
   }
 }

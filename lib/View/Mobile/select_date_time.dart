@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:plasma/View/Mobile/predonation_screen.dart';
+import 'package:plasma/Utils/locales.dart';
 import 'package:provider/provider.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
 import '../Providers/question_screen_provider.dart';
 import '../Widgets/place_select_card.dart';
@@ -25,6 +25,8 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLTR = Directionality.of(context) == TextDirection.rtl;
+    String? locale = LocaleHelper.currentLocale?.languageCode.substring(0, 2);
     final QuestionScreenProvider _provider =
         Provider.of<QuestionScreenProvider>(context);
     return GestureDetector(
@@ -77,14 +79,15 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                   placeName: _provider.selectedCenter,
                                 ),
                                 Positioned(
-                                  right: -22,
+                                  left: isLTR ? -22 : null,
+                                  right: !isLTR ? -22 : null,
                                   top: -22,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.teal,
-                                      shape: const CircleBorder(),
+                                      shape: CircleBorder(),
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.edit,
                                       color: Colors.white70,
                                     ),
@@ -103,12 +106,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                               keyboardType: TextInputType.datetime,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return TranslatedTextWidget.translate('Time must not be empty');
+                                  return TranslatedTextWidget.translate(
+                                    'Time must not be empty',
+                                  );
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: TranslatedTextWidget.translate('Donation Time'),
+                                labelText: TranslatedTextWidget.translate(
+                                  'Donation Time',
+                                ),
                                 prefixIcon: const Icon(
                                   Icons.watch_later_outlined,
                                 ),
@@ -137,12 +144,16 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                               keyboardType: TextInputType.datetime,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return TranslatedTextWidget.translate('Date must not be empty');
+                                  return TranslatedTextWidget.translate(
+                                    'Date must not be empty',
+                                  );
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
-                                labelText: TranslatedTextWidget.translate('Donation Date'),
+                                labelText: TranslatedTextWidget.translate(
+                                  'Donation Date',
+                                ),
                                 prefixIcon: const Icon(
                                   Icons.calendar_today,
                                 ),
@@ -157,26 +168,32 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                         lastDate:
                                             DateTime(DateTime.now().year + 5))
                                     .then((value) {
-                                  print(DateFormat.yMMMd().format(value!));
+                                  print(intl.DateFormat.yMMMd().format(value!));
                                   dateController.text =
-                                      DateFormat.yMMMd().format(value);
+                                      intl.DateFormat.yMMMd(locale)
+                                          .format(value);
                                 });
                               },
                             ),
                             const SizedBox(
                               height: 60.0,
                             ),
-                            Container(
+                            MaterialButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  FocusScope.of(context).unfocus();
+                                  Navigator.pop(context);
+                                }
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
                               color: Theme.of(context).primaryColor,
-                              height: 40.0,
-                              width: double.infinity,
-                              child: MaterialButton(
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    FocusScope.of(context).unfocus();
-                                    Navigator.pop(context);
-                                  }
-                                },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 64,
+                                  vertical: 14,
+                                ),
                                 child: TranslatedTextWidget(
                                   text: 'Reservation',
                                   style: const TextStyle(

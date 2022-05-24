@@ -15,6 +15,7 @@ import 'package:plasma/View/Mobile/voice_search.dart';
 import 'package:plasma/Utils/utils.dart';
 
 import '../../Model/APIs/Dummy/dummy_places.dart';
+import '../Widgets/translated_text_widget.dart';
 
 class DonationPlacesScreen extends StatefulWidget {
   const DonationPlacesScreen({Key? key}) : super(key: key);
@@ -78,12 +79,15 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
                   await Utils.showConnectionError(context);
                   return;
                 }
-                if (await Permission.location.status == PermissionStatus.denied) {
+                if (await Permission.location.status ==
+                    PermissionStatus.denied) {
                   PermissionStatus newStatus =
                       await Permission.location.request();
                   if (newStatus == PermissionStatus.denied)
-                    await Utils.showPermissionError(context,
-                        permissionType: 'Location');
+                    await Utils.showPermissionError(
+                      context,
+                      permissionType: 'Location',
+                    );
 
                   return;
                 }
@@ -105,13 +109,16 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
                   await showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      content: const Text('Enable Location To Access'),
+                      content: TranslatedTextWidget(
+                          text: 'Enable Location To Access'),
                       actions: [
                         TextButton(
                           onPressed: () async {
                             Navigator.pop(context);
                           },
-                          child: const Text('Ok'),
+                          child: TranslatedTextWidget(
+                            text: 'Ok',
+                          ),
                         ),
                       ],
                     ),
@@ -226,7 +233,7 @@ class PlacesAppBar extends AppBar {
                       Icons.search,
                       color: Colors.black.withOpacity(0.3),
                     ),
-                    labelText: 'Search',
+                    labelText: TranslatedTextWidget.translate('Search'),
                     labelStyle: TextStyle(
                       color: Colors.black.withOpacity(0.3),
                       fontWeight: FontWeight.w500,
@@ -303,12 +310,21 @@ class PlacesSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     filterList = placesList.where((element) {
-      bool condition = element["name"]!.startsWith(query) ||
-          element["address"]!.startsWith(query) ||
-          element["gov"]!.startsWith(query) ||
-          query.contains(element["name"]!) ||
-          query.contains(element["address"]!) ||
-          query.contains(element["gov"]!);
+      bool condition = TranslatedTextWidget.translate(element["name"]!)
+              .toLowerCase()
+              .startsWith(query.toLowerCase()) ||
+          TranslatedTextWidget.translate(element["address"]!)
+              .toLowerCase()
+              .startsWith(query.toLowerCase()) ||
+          TranslatedTextWidget.translate(element["gov"]!)
+              .toLowerCase()
+              .startsWith(query.toLowerCase()) ||
+          query.contains(
+              TranslatedTextWidget.translate(element["name"]!).toLowerCase()) ||
+          query.contains(TranslatedTextWidget.translate(element["address"]!)
+              .toLowerCase()) ||
+          query.contains(
+              TranslatedTextWidget.translate(element["gov"]!).toLowerCase());
       return condition;
     }).toList();
     if (query.isEmpty)
@@ -331,24 +347,26 @@ class PlacesSearchDelegate extends SearchDelegate {
                       close(context,
                           "${filterList[index]["address"]} ${filterList[index]["gov"]}");
                     },
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.location_on,
                       color: Colors.red,
                       size: 28,
                     ),
-                    title: Text(
-                      filterList[index]["name"]!,
+                    title: TranslatedTextWidget(
+                      text: filterList[index]["name"]!,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                        "${filterList[index]["address"]!}\n${filterList[index]["gov"]!}"),
+                        "${TranslatedTextWidget.translate(filterList[index]["address"]!)}\n${TranslatedTextWidget.translate(filterList[index]["gov"]!)}"),
                     isThreeLine: true,
                   );
                 },
               ),
             )
-          : const Center(
-              child: Text('No Results'),
+          : Center(
+              child: TranslatedTextWidget(
+                text: 'No Results',
+              ),
             );
   }
 
@@ -356,12 +374,22 @@ class PlacesSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     filterList = query.trim().split(',').isNotEmpty
         ? placesList.where((element) {
-            bool condition = element["name"]!.startsWith(query) ||
-                element["address"]!.startsWith(query) ||
-                element["gov"]!.startsWith(query) ||
-                query.contains(element["name"]!) ||
-                query.contains(element["address"]!) ||
-                query.contains(element["gov"]!);
+            bool condition = TranslatedTextWidget.translate(element["name"]!)
+                    .toLowerCase()
+                    .startsWith(query.toLowerCase()) ||
+                TranslatedTextWidget.translate(element["address"]!)
+                    .toLowerCase()
+                    .startsWith(query.toLowerCase()) ||
+                TranslatedTextWidget.translate(element["gov"]!)
+                    .toLowerCase()
+                    .startsWith(query.toLowerCase()) ||
+                query.contains(TranslatedTextWidget.translate(element["name"]!)
+                    .toLowerCase()) ||
+                query.contains(
+                    TranslatedTextWidget.translate(element["address"]!)
+                        .toLowerCase()) ||
+                query.contains(TranslatedTextWidget.translate(element["gov"]!)
+                    .toLowerCase());
             return condition;
           }).toList()
         : placesList;
@@ -386,17 +414,17 @@ class PlacesSearchDelegate extends SearchDelegate {
                 query =
                     "${filterList[index]["name"]} ${filterList[index]["address"]} ${filterList[index]["gov"]}";
               },
-              icon: Icon(Icons.north_west),
+              icon: const Icon(Icons.north_west),
             ),
-            title: Text(
-              filterList[index]["name"]!,
+            title: TranslatedTextWidget(
+              text: filterList[index]["name"]!,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey.shade600,
               ),
             ),
             subtitle: Text(
-                "${filterList[index]["address"]!}\n${filterList[index]["gov"]!}"),
+                "${TranslatedTextWidget.translate(filterList[index]["address"]!)}\n${TranslatedTextWidget.translate(filterList[index]["gov"]!)}"),
             isThreeLine: true,
           );
         },
@@ -452,14 +480,12 @@ class MapBodyState extends State<MapBody> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.green.shade600,
-              content: SizedBox(
-                height: 16,
-                child: Center(
-                  child: Text(
-                    'Online',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+              content: TranslatedTextWidget(
+                text: 'Online',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -550,15 +576,16 @@ class MapBodyState extends State<MapBody> {
     try {
       placesList.forEach((center) async {
         List<Location> locations = await locationFromAddress(
-            "${center["address"]},${center["gov"]}",
-            localeIdentifier: 'ar');
+          "${center["address"]},${center["gov"]}",
+          localeIdentifier: 'en',
+        );
         final LatLng _coordinates =
             LatLng(locations.first.latitude, locations.first.longitude);
         Marker _marker = Marker(
           markerId: MarkerId("${center["address"]},${center["gov"]}"),
           position: _coordinates,
           infoWindow: InfoWindow(
-            title: "${center["name"]}",
+            title: TranslatedTextWidget.translate("${center["name"]}"),
             onTap: () {
               controller?.animateCamera(
                 CameraUpdate.newCameraPosition(
@@ -731,24 +758,25 @@ class PlacesBottomSheet extends StatelessWidget {
                         return ListTile(
                           onTap: () async {
                             Utils.animateToAddress(
-                                "${placesList[index]["address"]},${placesList[index]["gov"]}",
-                                context: context,
-                                mapKey: mapKey);
+                              "${placesList[index]["address"]},${placesList[index]["gov"]!}",
+                              context: context,
+                              mapKey: mapKey,
+                            );
                             // await _animateToAddress(
                             //     "${placesList[index]["address"]},${placesList[index]["gov"]}",context,);
                             Navigator.pop(context);
                           },
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.location_on,
                             color: Colors.red,
                             size: 28,
                           ),
-                          title: Text(
-                            placesList[index]["name"]!,
+                          title: TranslatedTextWidget(
+                            text: placesList[index]["name"]!,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: Text(
-                              "${placesList[index]["address"]!}\n${placesList[index]["gov"]!}"),
+                              "${TranslatedTextWidget.translate(placesList[index]["address"]!)}\n${TranslatedTextWidget.translate(placesList[index]["gov"]!)}"),
                           isThreeLine: true,
                         );
                       },
