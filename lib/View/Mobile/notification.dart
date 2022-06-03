@@ -1,6 +1,12 @@
+import 'dart:math';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
+import 'package:plasma/View/Widgets/notification_widget.dart';
 
 import '../Widgets/translated_text_widget.dart';
 
@@ -15,14 +21,11 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  Future? _future;
+  Future<ConnectivityResult>? _future;
 
   @override
   void initState() {
-    if (mounted)
-      _future = Future.delayed(
-        const Duration(seconds: 5),
-      );
+    if (mounted) _future = Connectivity().checkConnectivity();
     super.initState();
   }
 
@@ -61,13 +64,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
           elevation: 0.0,
         ),
         extendBody: true,
-        body: FutureBuilder(
+        body: FutureBuilder<ConnectivityResult>(
           future: _future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return Center(
                 child: BloodLoadingIndicator(),
               );
+            else if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data != ConnectivityResult.none)
+                return NotificationsPage();
+            }
             return NoNotificationsPage(
               onCall: () async {
                 await _cacheImage(
@@ -76,6 +83,107 @@ class _NotificationScreenState extends State<NotificationScreen> {
             );
           },
         ));
+  }
+
+  Future<void> _cacheImage(
+      ImageProvider imageProvider, BuildContext context) async {
+    await precacheImage(imageProvider, context);
+  }
+}
+
+class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({Key? key}) : super(key: key);
+
+  @override
+  _NotificationsPageState createState() => _NotificationsPageState();
+}
+
+class _NotificationsPageState extends State<NotificationsPage> {
+  Future<List>? _future;
+  List<String> _list = [];
+  final List<String> _types = [
+    'reservation',
+    'reminder',
+    'questionnaire',
+    'analysisResult',
+    'bonus',
+    'auth',
+    'user',
+  ];
+
+  @override
+  void initState() {
+    _future = _triggerNotificationsCall();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List>(
+      future: _future,
+      builder: (context, AsyncSnapshot<List>snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return ListView.builder(
+            itemCount: 40,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) => NotificationLoadingWidget(),
+          );
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            int length = snapshot.data!.length;
+            if (length == 0) return NoNotificationsPage(
+              onCall: () async {
+                await _cacheImage(
+                    AssetImage('assets/images/noNotification.png'), context);
+              },
+            );
+            return RefreshIndicator(
+              triggerMode: RefreshIndicatorTriggerMode.anywhere,
+              onRefresh: () async {
+                await Future.delayed(
+                  const Duration(seconds: 3),
+                );
+                setState(() {
+                  _future = null;
+                });
+                _future = _triggerNotificationsCall();
+              },
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  int _rand = Random().nextInt(_types.length);
+                  return NotificationWidget(
+                    title: _types[_rand], //'Reminder',
+                    body:
+                        'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
+                    time: DateTime.now(),
+                    type: NotificationType.values.byName(_types[_rand]),
+                  );
+                },
+                separatorBuilder: (context, index) => const Divider(
+                  height: 0,
+                ),
+                itemCount: length,
+              ),
+            );
+          }
+          if (snapshot.hasError) return Container(color: Colors.red,);
+        }
+        return NoNotificationsPage(
+          onCall: () async {
+            await _cacheImage(
+                AssetImage('assets/images/noNotification.png'), context);
+          },
+        );
+      },
+    );
+  }
+
+  Future<List>? _triggerNotificationsCall() async {
+    await Future.delayed(
+      const Duration(seconds: 6),
+    );
+    return _list = List<String>.generate(Random().nextInt(20), (index) => '$index')
+        .toList();
   }
 
   Future<void> _cacheImage(
