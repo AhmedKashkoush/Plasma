@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
+import 'package:plasma/ViewModel/notifications_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../Widgets/translated_text_widget.dart';
 
@@ -73,12 +75,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
               );
             else if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data != ConnectivityResult.none)
-                return NotificationsPage();
+                return ChangeNotifierProvider(
+                  create: (BuildContext context) => NotificationsViewModel(),
+                  child: NotificationsPage(),
+                );
             }
-            return NoNotificationsPage(
-              onCall: () async {
-                await _cacheImage(
-                    AssetImage('assets/images/noNotification.png'), context);
+            return NoInternetPage(
+              onRefresh: () {
+                setState(() {
+                  _future = null;
+                });
+                _future = Connectivity().checkConnectivity();
               },
             );
           },
@@ -99,8 +106,9 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  Future<List>? _future;
+  Future? _future;
   List<String> _list = [];
+  final ScrollController _scrollController = ScrollController();
   final List<String> _types = [
     'reservation',
     'reminder',
@@ -113,15 +121,55 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   void initState() {
-    _future = _triggerNotificationsCall();
     super.initState();
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    //   final _notificationsVM = Provider.of<NotificationsViewModel>(context,listen: false);
+    //   _future = await _notificationsVM.loadNotifications(_notificationsVM.limit);
+    //   _scrollController.addListener(() {
+    //     double maxScrollExtent = _scrollController.position.maxScrollExtent;
+    //     double currentPosition = _scrollController.position.pixels;
+    //     int listLength = _notificationsVM.notificationsList.length;
+    //     final int limit = _notificationsVM.limit;
+    //     if (listLength >= limit) {
+    //       if (currentPosition >= maxScrollExtent / 2)
+    //         _notificationsVM.loadMoreNotifications(limit);
+    //     }
+    //   });
+    // });
+  }
+
+  @override
+  void didChangeDependencies(){
+    final _notificationsVM = Provider.of<NotificationsViewModel>(context,listen: false);
+    if (_future == null) {
+      _future = _notificationsVM.loadNotifications(_notificationsVM.limit);
+    }
+    _scrollController.addListener(() async{
+      double maxScrollExtent = _scrollController.position.maxScrollExtent;
+      double currentPosition = _scrollController.position.pixels;
+      int listLength = _notificationsVM.notificationsList.length;
+      final int limit = _notificationsVM.limit;
+      if (listLength >= limit) {
+        if (currentPosition >= maxScrollExtent * 0.7) {
+          await _notificationsVM.loadMoreNotifications(20);
+        }
+      }
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List>(
+    final _notificationsVM = Provider.of<NotificationsViewModel>(context,listen: false);
+    return FutureBuilder(
       future: _future,
-      builder: (context, AsyncSnapshot<List>snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return ListView.builder(
             itemCount: 40,
@@ -129,62 +177,80 @@ class _NotificationsPageState extends State<NotificationsPage> {
             itemBuilder: (context, index) => NotificationLoadingWidget(),
           );
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            int length = snapshot.data!.length;
-            if (length == 0) return NoNotificationsPage(
-              onCall: () async {
-                await _cacheImage(
-                    AssetImage('assets/images/noNotification.png'), context);
-              },
+          if (snapshot.hasError)
+            return Container(
+              color: Colors.red,
             );
+            int length = _notificationsVM.notificationsList.length;
+            if (length == 0)
+              return NoNotificationsPage(
+                onCall: () async {
+                  await _cacheImage(
+                      AssetImage('assets/images/noNotification.png'), context);
+                },
+              );
             return RefreshIndicator(
               triggerMode: RefreshIndicatorTriggerMode.anywhere,
               onRefresh: () async {
                 await Future.delayed(
-                  const Duration(seconds: 3),
+                  const Duration(seconds: 1),
                 );
                 setState(() {
                   _future = null;
                 });
-                _future = _triggerNotificationsCall();
+                _future = _notificationsVM.refresh();
               },
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  int _rand = Random().nextInt(_types.length);
-                  return NotificationWidget(
-                    title: _types[_rand], //'Reminder',
-                    body:
-                        'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-                    time: DateTime.now(),
-                    type: NotificationType.values.byName(_types[_rand]),
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  height: 0,
+              child: Consumer<NotificationsViewModel>(
+                builder: (BuildContext context, provider, Widget? child) => ListView.separated(
+                  controller: _scrollController,
+                  itemBuilder: (context, index) {
+                    //int _rand = Random().nextInt(_types.length);
+                    if (index < provider.notificationsList.length)
+                      return NotificationWidget(
+                        title: provider.notificationsList[index].title,
+                        //'Reminder',
+                        body: provider.notificationsList[index].body,
+                        time: provider.notificationsList[index].time,
+                        type: provider.notificationsList[index].type,
+                        isOpened:
+                        provider.notificationsList[index].isOpened,
+                        onTap: () {
+                          setState(() {
+                            provider.notificationsList[index].isOpened =
+                                true;
+                          });
+                        },
+                      );
+                    return provider.isLoading
+                        ? const NotificationLoadingWidget()
+                        : const SizedBox.shrink();
+                    // return Center(
+                    //   child: Text('${provider.isLoading}'),
+                    // );
+                  },
+                  separatorBuilder: (context, index) => const Divider(
+                    height: 0,
+                  ),
+                  itemCount: provider.notificationsList.length + 1,
                 ),
-                itemCount: length,
               ),
             );
-          }
-          if (snapshot.hasError) return Container(color: Colors.red,);
         }
-        return NoNotificationsPage(
-          onCall: () async {
-            await _cacheImage(
-                AssetImage('assets/images/noNotification.png'), context);
-          },
+        return Center(
+          child: Text('$_future'),
         );
       },
     );
   }
 
-  Future<List>? _triggerNotificationsCall() async {
-    await Future.delayed(
-      const Duration(seconds: 6),
-    );
-    return _list = List<String>.generate(Random().nextInt(20), (index) => '$index')
-        .toList();
-  }
+  // Future<List>? _triggerNotificationsCall() async {
+  //   await Future.delayed(
+  //     const Duration(seconds: 6),
+  //   );
+  //   return _list =
+  //       List<String>.generate(Random().nextInt(20), (index) => '$index')
+  //           .toList();
+  // }
 
   Future<void> _cacheImage(
       ImageProvider imageProvider, BuildContext context) async {
@@ -219,6 +285,53 @@ class NoNotificationsPage extends StatelessWidget {
                 text: 'No New Notifications',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NoInternetPage extends StatelessWidget {
+  final VoidCallback onRefresh;
+
+  const NoInternetPage({
+    Key? key,
+    required this.onRefresh,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 220,
+        height: 220,
+        child: FittedBox(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Opacity(
+                opacity: 0.6,
+                child: Image(
+                  image: AssetImage('assets/images/no-internet.png'),
+                  width: 220,
+                ),
+              ),
+              TranslatedTextWidget(
+                text: 'Check Your Internet Connection',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+              ),
+              TextButton.icon(
+                onPressed: onRefresh,
+                icon: Icon(
+                  Icons.refresh,
+                ),
+                label: TranslatedTextWidget(
+                  text: 'Refresh',
+                ),
+              ),
             ],
           ),
         ),

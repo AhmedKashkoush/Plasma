@@ -18,6 +18,7 @@ class NotificationWidget extends StatefulWidget {
   final String? body;
   final DateTime time;
   final bool isOpened;
+  final VoidCallback onTap;
   final NotificationType type;
 
   const NotificationWidget({
@@ -27,6 +28,7 @@ class NotificationWidget extends StatefulWidget {
     required this.time,
     required this.type,
     this.isOpened = false,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -34,11 +36,8 @@ class NotificationWidget extends StatefulWidget {
 }
 
 class _NotificationWidgetState extends State<NotificationWidget> {
-  bool isOpened = false;
-
   @override
   void initState() {
-    isOpened = widget.isOpened;
     super.initState();
   }
 
@@ -48,17 +47,13 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         TimeOfDay(hour: widget.time.hour, minute: widget.time.minute)
             .format(context);
     return InkWell(
-      onTap: () {
-        setState(() {
-          isOpened = true;
-        });
-      },
+      onTap: widget.onTap,
       onLongPress: () {
         HapticFeedback.vibrate();
       },
       child: Container(
         padding: const EdgeInsets.all(10.0),
-        color: !isOpened
+        color: !widget.isOpened
             ? Colors.orangeAccent.withOpacity(0.1)
             : Colors.transparent,
         child: Row(
@@ -104,6 +99,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             Column(
               children: [
                 IconButton(
+                  enableFeedback: false,
                   onPressed: () {},
                   icon: Icon(Icons.more_horiz),
                 ),
@@ -111,7 +107,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   maintainSize: true,
                   maintainAnimation: true,
                   maintainState: true,
-                  visible: !isOpened,
+                  visible: !widget.isOpened,
                   child: Container(
                     width: 7.0,
                     height: 7.0,
@@ -144,11 +140,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   IconData _checkTypeToIcon() {
     switch (widget.type) {
       case NotificationType.reservation:
-        return Icons.content_paste_sharp;
-      case NotificationType.reminder:
         return Icons.event_note;
+      case NotificationType.reminder:
+        return Icons.alarm;
       case NotificationType.questionnaire:
-        return Icons.question_mark_rounded;
+        return Icons.content_paste_sharp;
       case NotificationType.analysisResult:
         return Icons.analytics_outlined;
       case NotificationType.bonus:
