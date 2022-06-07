@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
+import 'package:plasma/ViewModel/authentication_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'Utils/shared_preferences_api.dart';
@@ -26,6 +28,7 @@ void main() async {
   await SharedPreferencesApi.init();
   await ThemeHelper.loadTheme();
   await LocaleHelper.loadLocale();
+  await AuthHelper.getUserData();
   runApp(
     MultiProvider(
       providers: [
@@ -51,7 +54,10 @@ class MyApp extends StatelessWidget {
     Provider.of<LocaleProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MobileRootScreen(),
+      home: ChangeNotifierProvider(
+        create: (context) => AuthenticationViewModel(),
+        child: const MobileRootScreen(),
+      ),
       title: 'Plasma',
       theme: ThemeHelper.lightTheme,
       darkTheme: ThemeHelper.darkTheme,

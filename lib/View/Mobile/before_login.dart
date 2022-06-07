@@ -33,7 +33,7 @@ class BeforeLoginScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    color: Colors.amber,
+                    color: Theme.of(context).primaryColor,
                     height: 40.0,
                     width: double.infinity,
                     child: MaterialButton(
@@ -41,7 +41,7 @@ class BeforeLoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                            builder: (context) => const LoginPage(),
                           ),
                         );
                       },
@@ -58,7 +58,7 @@ class BeforeLoginScreen extends StatelessWidget {
                     height: 10.0,
                   ),
                   Container(
-                    color: Colors.amber,
+                    color: Theme.of(context).primaryColor,
                     height: 40.0,
                     width: double.infinity,
                     child: MaterialButton(
@@ -66,7 +66,7 @@ class BeforeLoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignUpScreen(),
+                            builder: (context) => const SignUpPage(),
                           ),
                         );
                       },

@@ -19,11 +19,11 @@ class NotificationModel {
 
   static NotificationModel fromJson(Map<String, dynamic> json) =>
       NotificationModel(
-        title: json['title'],
-        body: json['body'],
-        time: DateTime.parse(json['time']),
-        isOpened: json['isOpened'],
-        type: NotificationType.values.byName(json['type']),
+        title: json["title"],
+        body: json["body"],
+        time: DateTime.parse(json["time"]),
+        isOpened: json["is_opened"],
+        type: NotificationType.values.byName(json["type"]),
       );
 
   static Map<String, dynamic> toJson(NotificationModel model) =>
@@ -31,7 +31,7 @@ class NotificationModel {
         'title': model.title,
         'body': model.body,
         'time': model.time.toString(),
-        'isOpened': model.isOpened,
+        'is_opened': model.isOpened,
         'type': model.type.name,
       };
 }

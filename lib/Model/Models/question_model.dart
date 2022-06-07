@@ -12,12 +12,12 @@ class QuestionModel {
   static QuestionModel fromJson(Map<String, dynamic> json) => QuestionModel(
         question: json['question'],
         answers: json['answers'],
-        correctAnswer: json['correctAnswer'],
+        correctAnswer: json['correct_Answer'],
       );
 
   static Map<String, dynamic> toJson(QuestionModel model) => <String, dynamic>{
         'question': model.question,
         'answers': model.answers,
-        'correctAnswer': model.correctAnswer,
+        'correct_answer': model.correctAnswer,
       };
 }

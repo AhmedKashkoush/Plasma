@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Mobile/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../Utils/utils.dart';
-import '../Widgets/blood_loading.dart';
 import '../Widgets/custom_text_field.dart';
 import '../Widgets/translated_text_widget.dart';
 
@@ -12,6 +12,10 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   static bool isBloodTypeGranted = false;
+
+  static final TextEditingController phoneController = TextEditingController(text: '${AuthHelper.currentUser?.phone}');
+  static final TextEditingController emailController = TextEditingController(text: '${AuthHelper.currentUser?.email}');
+  static final TextEditingController bloodTypeController = TextEditingController(text: '${AuthHelper.currentUser?.bloodType}');
 
   @override
   Widget build(BuildContext context) {
@@ -96,13 +100,14 @@ class ProfileScreen extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 Text(
-                  'Username',
+                  '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
                   style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SizedBox(
                   height: height * .1,
                 ),
                 CustomTextField(
+                  controller: phoneController,
                   hint: 'Phone Number',
                   icon: const Icon(Icons.phone_android_outlined),
                   isEditable: true,
@@ -112,6 +117,7 @@ class ProfileScreen extends StatelessWidget {
                   height: height * .02,
                 ),
                 CustomTextField(
+                  controller: emailController,
                   hint: 'Mail',
                   icon: const Icon(Icons.email_outlined),
                   isEditable: true,
@@ -122,6 +128,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 if (isBloodTypeGranted)
                   CustomTextField(
+                    controller: bloodTypeController,
                     hint: 'Blood Type',
                     icon: const Icon(Icons.bloodtype_outlined),
                     readOnly: true,
@@ -177,14 +184,15 @@ class ProfileScreen extends StatelessWidget {
                       context,
                       text: 'Logging Out...',
                     );
-                    await Future.delayed(const Duration(seconds: 3), () {
-                      Navigator.pop(context);
-                    });
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
+                    bool success = await AuthHelper.logOut();
+                    Navigator.pop(context);
+                    if (success) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    }
                   },
                   icon: const Icon(
                     Icons.logout,

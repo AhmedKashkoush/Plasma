@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/Mobile/predonation_screen.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         title: GestureDetector(
           onTap: () => bottomBarKey.currentState?.setPage(3),
           child: Text(
-            'Username',
+            '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,

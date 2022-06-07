@@ -1,7 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Mobile/login.dart';
+import 'package:plasma/View/Mobile/main_screen.dart';
+import 'package:plasma/ViewModel/authentication_view_model.dart';
+import 'package:provider/provider.dart';
 
+import '../../Model/Models/user_model.dart';
 import '../../Utils/utils.dart';
 import '../Widgets/translated_text_widget.dart';
+
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => AuthenticationViewModel(),
+      child: const SignUpScreen(),
+    );
+  }
+}
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -11,18 +29,26 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  var emailController = TextEditingController();
-
-  var passController = TextEditingController();
-  var confirmController = TextEditingController();
+  final TextEditingController fNameController = TextEditingController();
+  final TextEditingController lNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+  final TextEditingController nationalIDController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
 
   bool obscurePasswordText = true;
   bool obscureConfirmText = true;
 
-  var formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  static final double alignment = 15;
 
   @override
   Widget build(BuildContext context) {
+    final bool isLTR = Directionality.of(context) == TextDirection.ltr;
+    final AuthenticationViewModel _authVM =
+        Provider.of<AuthenticationViewModel>(context);
     return WillPopScope(
       onWillPop: () => Utils.confirmExit(context),
       child: Scaffold(
@@ -50,7 +76,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 30.0,
                       ),
+                      Row(
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                backgroundImage:
+                                    const AssetImage('assets/images/user.png'),
+                              ),
+                              isLTR
+                                  ? Positioned(
+                                      right: -alignment,
+                                      bottom: -alignment,
+                                      child: ElevatedButton(
+                                        onPressed: _takePhoto,
+                                        child: Icon(Icons.camera_alt_rounded),
+                                        style: ElevatedButton.styleFrom(
+                                          shape: const CircleBorder(),
+                                          primary: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.3),
+                                        ),
+                                      ),
+                                    )
+                                  : Positioned(
+                                      left: -alignment,
+                                      bottom: -alignment,
+                                      child: ElevatedButton(
+                                        onPressed: _takePhoto,
+                                        child: Icon(Icons.camera_alt_rounded),
+                                        style: ElevatedButton.styleFrom(
+                                          shape: const CircleBorder(),
+                                          primary: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(0.3),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
                       TextFormField(
+                        controller: fNameController,
                         keyboardType: TextInputType.text,
                         onFieldSubmitted: (value) {
                           print(value);
@@ -60,12 +134,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         validator: (String? value) {
                           if (value!.isEmpty) {
-                            return TranslatedTextWidget.translate('Empty');
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
                           }
                         },
                         decoration: InputDecoration(
-                          labelText:
-                              TranslatedTextWidget.translate('Enter your Name'),
+                          labelText: TranslatedTextWidget.translate(
+                              'Enter your First Name'),
                           prefixIcon: const Icon(
                             Icons.person,
                           ),
@@ -76,6 +151,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 25.0,
                       ),
                       TextFormField(
+                        controller: lNameController,
+                        keyboardType: TextInputType.text,
+                        onFieldSubmitted: (value) {
+                          print(value);
+                        },
+                        onChanged: (value) {
+                          print(value);
+                        },
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: TranslatedTextWidget.translate(
+                              'Enter your Last Name'),
+                          prefixIcon: const Icon(
+                            Icons.person,
+                          ),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 25.0,
+                      ),
+                      TextFormField(
+                        controller: phoneController,
                         keyboardType: TextInputType.number,
                         onFieldSubmitted: (value) {
                           print(value);
@@ -85,7 +188,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         validator: (String? value) {
                           if (value!.isEmpty) {
-                            return TranslatedTextWidget.translate('Empty');
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
                           }
                         },
                         decoration: InputDecoration(
@@ -111,7 +215,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         validator: (String? value) {
                           if (value!.isEmpty) {
-                            return TranslatedTextWidget.translate('Empty');
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
                           }
                           if (!value.contains('@')) {
                             return TranslatedTextWidget.translate(
@@ -142,7 +247,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return TranslatedTextWidget.translate('Empty');
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
                           }
                           if (value.length < 8) {
                             return TranslatedTextWidget.translate(
@@ -185,7 +291,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return TranslatedTextWidget.translate('Empty');
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
                           }
                           if (value != passController.text) {
                             return TranslatedTextWidget.translate(
@@ -216,28 +323,104 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       const SizedBox(
+                        height: 25.0,
+                      ),
+                      TextFormField(
+                        controller: nationalIDController,
+                        keyboardType: TextInputType.number,
+                        onFieldSubmitted: (value) {
+                          print(value);
+                        },
+                        onChanged: (value) {
+                          print(value);
+                        },
+                        maxLength: 14,
+                        validator: (String? value) {
+                          if (value!.isNotEmpty && value.length < 14)
+                            return TranslatedTextWidget.translate(
+                                'National ID must be 14 numbers');
+                          if (value.isEmpty) {
+                            return TranslatedTextWidget.translate(
+                                'Required Field');
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: TranslatedTextWidget.translate(
+                              'Enter your National ID'),
+                          prefixIcon: const Icon(
+                            Icons.perm_identity_rounded,
+                          ),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(
                         height: 50.0,
                       ),
                       Container(
-                        color: Colors.amber,
-                        height: 40.0,
+                        color: Theme.of(context).primaryColor.withOpacity(_authVM.isLoading? 0.2:1),
+                        height: 50.0,
                         width: double.infinity,
                         child: MaterialButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
+                          onPressed: _authVM.isLoading
+                              ? null
+                              : () async {
+                                  if (formKey.currentState!.validate()) {
+                                    FocusScope.of(context).unfocus();
+                                    final UserModel userModel = UserModel(
+                                      firstName: fNameController.text,
+                                      lastName: lNameController.text,
+                                      phone: phoneController.text,
+                                      email: emailController.text,
+                                      password: passController.text,
+                                      nationalId: nationalIDController.text,
+                                    );
+                                    UserCredential? createdUser = await _authVM
+                                        .createNewUser(userModel, context);
+                                    if (createdUser != null)
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MainScreen(),
+                                        ),
+                                      );
+                                  }
+                                  // print(emailcontroller.text);
+                                  // print(passcontroller.text);
+                                },
+                          child: _authVM.isLoading
+                              ? const Center(
+                                  child: SizedBox(width:35,height: 35,child: CircularProgressIndicator()),
+                                )
+                              : TranslatedTextWidget(
+                                  text: 'Register Now',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TranslatedTextWidget(
+                              text: 'You Already Have An Account?'),
+                          TextButton(
+                            onPressed: () {
                               FocusScope.of(context).unfocus();
-                            }
-                            // print(emailcontroller.text);
-                            // print(passcontroller.text);
-                          },
-                          child: TranslatedTextWidget(
-                            text: 'Register Now',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
+                            child: TranslatedTextWidget(
+                              text: 'Login',
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -249,4 +432,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  void _takePhoto() async {}
 }

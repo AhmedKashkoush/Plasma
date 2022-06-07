@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Mobile/notification.dart';
 import 'package:plasma/View/Mobile/profile.dart';
@@ -17,7 +18,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _index = 1;
-  int _notificationsNumber = 5;
+  int _notificationsNumber = AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
   final GlobalKey<CurvedNavigationBarState> _curvedBarKey =
       GlobalKey<CurvedNavigationBarState>();
   static const List<IconData> _itemIcons = [

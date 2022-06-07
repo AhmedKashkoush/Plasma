@@ -1,8 +1,5 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Mobile/settings_screen.dart';
 import 'package:plasma/View/Widgets/selectable_tile.dart';
@@ -29,7 +26,6 @@ class MobileCustomDrawer extends StatelessWidget {
         child: SingleChildScrollView(
           child: DrawerContent(
             itemSelected: screenIndex,
-            homeNotifications: homeNotifications,
           ),
         ),
       ),
@@ -39,10 +35,9 @@ class MobileCustomDrawer extends StatelessWidget {
 
 class DrawerContent extends StatelessWidget {
   final int itemSelected;
-  final int? homeNotifications;
 
   const DrawerContent(
-      {Key? key, required this.itemSelected, this.homeNotifications})
+      {Key? key, required this.itemSelected,})
       : super(key: key);
 
   static const List<String> _items = [
@@ -77,8 +72,11 @@ class DrawerContent extends StatelessWidget {
     SettingsScreen(),
   ];
 
+  static int homeNotifications = AuthHelper.currentUser?.notifications?["new_notifications"];
+
   @override
   Widget build(BuildContext context) {
+    if (homeNotifications < 0) homeNotifications = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
@@ -91,7 +89,7 @@ class DrawerContent extends StatelessWidget {
             (item) {
               final int index = _items.indexOf(item);
               final List<int> _notifications = [
-                homeNotifications!,
+                homeNotifications,
                 0,
                 0,
                 0,
