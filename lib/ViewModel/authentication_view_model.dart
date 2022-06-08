@@ -31,8 +31,8 @@ class AuthenticationViewModel extends ChangeNotifier {
           email: userModel.email, password: userModel.password);
       if (image != null) {
         final Reference imagePath =
-            await _storage.ref("/users/${userModel.nationalId}");
-        imagePath.putFile(image);
+            await _storage.ref().child("users").child("${userModel.nationalId}").child("/${userModel.nationalId}.png");
+        await imagePath.putFile(image);
         _imageUrl = await imagePath.getDownloadURL();
       }
       AuthHelper.currentUser = UserModel(
@@ -90,6 +90,8 @@ class AuthenticationViewModel extends ChangeNotifier {
       UserCredential credentials = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user = credentials.user;
       AuthHelper.currentUser = await getUserData(user);
+      isLoading = false;
+      notifyListeners();
       return credentials;
     } on Exception catch (e) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();

@@ -144,6 +144,10 @@
   "microphone_access_denied": "الوصول إلى الميكروفون مرفوض",
   "cannot_access_microphone": "لا يمكن الوصول إلى خدمات الميكروفون في جهازك. يرجى تمكين الخدمة من إعدادات التطبيق للمتابعة",
   "enable_microphone_to_access": "تمكين الميكروفون للوصول",
+  "storage": "التخزين",
+  "storage_access_denied": "الوصول إلى التخزين مرفوض",
+  "cannot_access_storage": "لا يمكن الوصول إلى خدمات التخزين في جهازك. يرجى تمكين الخدمة من إعدادات التطبيق للمتابعة",
+  "enable_storage_to_access": "تمكين التخزين للوصول",
   "request_permission": "اطلب الإذن",
   "connection_error": "خطأ في الإتصال",
   "check_internet_connection": "تحقق من اتصالك بالإنترنت"

@@ -144,6 +144,10 @@
   "microphone_access_denied": "Microphone Access Is Denied",
   "cannot_access_microphone": "Cannot Access Microphone Services In Your Device.Please Enable Service From App Settings To Continue",
   "enable_microphone_to_access": "Enable Microphone To Access",
+  "storage": "Storage",
+  "storage_access_denied": "Storage Access Is Denied",
+  "cannot_access_storage": "Cannot Access Storage Services In Your Device.Please Enable Service From App Settings To Continue",
+  "enable_storage_to_access": "Enable Storage To Access",
   "request_permission": "Request Permission",
   "connection_error": "Connection Error",
   "check_internet_connection": "Check Your Internet Connection"

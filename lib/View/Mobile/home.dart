@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Utils/auth.dart';
@@ -29,11 +30,24 @@ class HomeScreen extends StatelessWidget {
         ),
         leading: GestureDetector(
           onTap: () => bottomBarKey.currentState?.setPage(3),
-          child: Icon(
-            Icons.account_circle,
-            size: 32,
-            color: Theme.of(context).primaryColor,
-          ),
+          child: AuthHelper.currentUser?.image != null &&
+                  AuthHelper.currentUser?.image != ""
+              ? Transform.scale(
+                  scale: 0.5,
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: CachedNetworkImageProvider(
+                      '${AuthHelper.currentUser?.image}',
+                      cacheKey: 'profile_image',
+                    ),
+                  ),
+                )
+              : Icon(
+                  Icons.account_circle,
+                  size: 32,
+                  color: Theme.of(context).primaryColor,
+                ),
         ),
       ),
       extendBody: true,

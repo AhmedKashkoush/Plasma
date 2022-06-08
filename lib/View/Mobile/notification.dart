@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
 import 'package:plasma/ViewModel/notifications_view_model.dart';
@@ -32,15 +30,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Theme.of(context).brightness == Brightness.light
               ? Colors.white
               : Colors.grey.shade800,
@@ -55,11 +48,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           leading: GestureDetector(
             onTap: () => widget.bottomBarKey.currentState?.setPage(3),
-            child: Icon(
-              Icons.account_circle,
-              size: 32,
-              color: Theme.of(context).primaryColor,
-            ),
+            child:  AuthHelper.currentUser?.image != null &&
+                AuthHelper.currentUser?.image != ""
+                ? Transform.scale(
+                    scale: 0.5,
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: CachedNetworkImageProvider(
+                        '${AuthHelper.currentUser?.image}',
+                        cacheKey: 'profile_image',
+                      ),
+                    ),
+                  )
+                : Icon(
+                    Icons.account_circle,
+                    size: 32,
+                    color: Theme.of(context).primaryColor,
+                  ),
           ),
           actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
           // centerTitle: true,
@@ -91,11 +97,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
           },
         ));
   }
-
-  Future<void> _cacheImage(
-      ImageProvider imageProvider, BuildContext context) async {
-    await precacheImage(imageProvider, context);
-  }
 }
 
 class NotificationsPage extends StatefulWidget {
@@ -107,17 +108,7 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   Future? _future;
-  List<String> _list = [];
   final ScrollController _scrollController = ScrollController();
-  final List<String> _types = [
-    'reservation',
-    'reminder',
-    'questionnaire',
-    'analysisResult',
-    'bonus',
-    'auth',
-    'user',
-  ];
 
   @override
   void initState() {
@@ -139,12 +130,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 
   @override
-  void didChangeDependencies(){
-    final _notificationsVM = Provider.of<NotificationsViewModel>(context,listen: false);
+  void didChangeDependencies() {
+    final _notificationsVM =
+        Provider.of<NotificationsViewModel>(context, listen: false);
     if (_future == null) {
       _future = _notificationsVM.loadNotifications(_notificationsVM.limit);
     }
-    _scrollController.addListener(() async{
+    _scrollController.addListener(() async {
       double maxScrollExtent = _scrollController.position.maxScrollExtent;
       double currentPosition = _scrollController.position.pixels;
       int listLength = _notificationsVM.notificationsList.length;
@@ -166,7 +158,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _notificationsVM = Provider.of<NotificationsViewModel>(context,listen: false);
+    final _notificationsVM =
+        Provider.of<NotificationsViewModel>(context, listen: false);
     return FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
@@ -181,60 +174,59 @@ class _NotificationsPageState extends State<NotificationsPage> {
             return Container(
               color: Colors.red,
             );
-            int length = _notificationsVM.notificationsList.length;
-            if (length == 0)
-              return NoNotificationsPage(
-                onCall: () async {
-                  await _cacheImage(
-                      AssetImage('assets/images/noNotification.png'), context);
-                },
-              );
-            return RefreshIndicator(
-              triggerMode: RefreshIndicatorTriggerMode.anywhere,
-              onRefresh: () async {
-                await Future.delayed(
-                  const Duration(seconds: 1),
-                );
-                setState(() {
-                  _future = null;
-                });
-                _future = _notificationsVM.refresh();
+          int length = _notificationsVM.notificationsList.length;
+          if (length == 0)
+            return NoNotificationsPage(
+              onCall: () async {
+                await _cacheImage(
+                    AssetImage('assets/images/noNotification.png'), context);
               },
-              child: Consumer<NotificationsViewModel>(
-                builder: (BuildContext context, provider, Widget? child) => ListView.separated(
-                  controller: _scrollController,
-                  itemBuilder: (context, index) {
-                    //int _rand = Random().nextInt(_types.length);
-                    if (index < provider.notificationsList.length)
-                      return NotificationWidget(
-                        title: provider.notificationsList[index].title,
-                        //'Reminder',
-                        body: provider.notificationsList[index].body,
-                        time: provider.notificationsList[index].time,
-                        type: provider.notificationsList[index].type,
-                        isOpened:
-                        provider.notificationsList[index].isOpened,
-                        onTap: () {
-                          setState(() {
-                            provider.notificationsList[index].isOpened =
-                                true;
-                          });
-                        },
-                      );
-                    return provider.isLoading
-                        ? const NotificationLoadingWidget()
-                        : const SizedBox.shrink();
-                    // return Center(
-                    //   child: Text('${provider.isLoading}'),
-                    // );
-                  },
-                  separatorBuilder: (context, index) => const Divider(
-                    height: 0,
-                  ),
-                  itemCount: provider.notificationsList.length + 1,
-                ),
-              ),
             );
+          return RefreshIndicator(
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: () async {
+              await Future.delayed(
+                const Duration(seconds: 1),
+              );
+              setState(() {
+                _future = null;
+              });
+              _future = _notificationsVM.refresh();
+            },
+            child: Consumer<NotificationsViewModel>(
+              builder: (BuildContext context, provider, Widget? child) =>
+                  ListView.separated(
+                controller: _scrollController,
+                itemBuilder: (context, index) {
+                  //int _rand = Random().nextInt(_types.length);
+                  if (index < provider.notificationsList.length)
+                    return NotificationWidget(
+                      title: provider.notificationsList[index].title,
+                      //'Reminder',
+                      body: provider.notificationsList[index].body,
+                      time: provider.notificationsList[index].time,
+                      type: provider.notificationsList[index].type,
+                      isOpened: provider.notificationsList[index].isOpened,
+                      onTap: () {
+                        setState(() {
+                          provider.notificationsList[index].isOpened = true;
+                        });
+                      },
+                    );
+                  return provider.isLoading
+                      ? const NotificationLoadingWidget()
+                      : const SizedBox.shrink();
+                  // return Center(
+                  //   child: Text('${provider.isLoading}'),
+                  // );
+                },
+                separatorBuilder: (context, index) => const Divider(
+                  height: 0,
+                ),
+                itemCount: provider.notificationsList.length + 1,
+              ),
+            ),
+          );
         }
         return Center(
           child: Text('$_future'),

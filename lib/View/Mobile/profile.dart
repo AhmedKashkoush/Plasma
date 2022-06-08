@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/Utils/files_api.dart';
 import 'package:plasma/View/Mobile/login.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -13,10 +14,16 @@ class ProfileScreen extends StatelessWidget {
 
   static bool isBloodTypeGranted = false;
 
-  static final TextEditingController phoneController = TextEditingController(text: '${AuthHelper.currentUser?.phone}');
-  static final TextEditingController emailController = TextEditingController(text: '${AuthHelper.currentUser?.email}');
-  static final TextEditingController bloodTypeController = TextEditingController(text: '${AuthHelper.currentUser?.bloodType}');
+  static final TextEditingController phoneController =
+      TextEditingController(text: '${AuthHelper.currentUser?.phone}');
+  static final TextEditingController emailController =
+      TextEditingController(text: '${AuthHelper.currentUser?.email}');
+  static final TextEditingController bloodTypeController =
+      TextEditingController(text: '${AuthHelper.currentUser?.bloodType}');
+  static final String qrData =
+      '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName};${AuthHelper.currentUser?.nationalId};${AuthHelper.currentUser?.bloodType}';
 
+  static final GlobalKey repaintBoundaryKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -51,18 +58,24 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.grey.shade600.withOpacity(0.3),
                         ),
                         const Divider(),
-                        QrImage(
-                          size: 172,
-                          data: 'Test QR Code View In The Application',
-                          padding: const EdgeInsets.all(12),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black87,
+                        RepaintBoundary(
+                          key: repaintBoundaryKey,
+                          child: QrImage(
+                            size: 172,
+                            data: qrData,
+                            padding: const EdgeInsets.all(12),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black87,
+                          ),
                         ),
                         const SizedBox(
                           height: 25,
                         ),
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed:  () async{
+                            await FilesApi.shareImage(repaintBoundaryKey, qrData);
+                            Navigator.pop(context);
+                          },
                           style:
                               TextButton.styleFrom(primary: Colors.blueAccent),
                           label: TranslatedTextWidget(
@@ -71,7 +84,10 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icon(Icons.adaptive.share),
                         ),
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () async{
+                            await FilesApi.saveImageToGallery(context, repaintBoundaryKey, qrData);
+                            Navigator.pop(context);
+                          },
                           style: TextButton.styleFrom(primary: Colors.teal),
                           label: TranslatedTextWidget(
                             text: 'Save To Gallery',
@@ -94,6 +110,20 @@ class ProfileScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
               child: Column(children: [
+                AuthHelper.currentUser?.image != null &&
+                    AuthHelper.currentUser?.image != ""
+                    ? Transform.scale(
+                  scale: 0.8,
+                      child: CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: CachedNetworkImageProvider(
+                      '${AuthHelper.currentUser?.image}',
+                    cacheKey: 'profile_image',
+                  ),
+                ),
+                    )
+                    :
                 Icon(
                   Icons.account_circle,
                   size: 140,
@@ -101,7 +131,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Text(
                   '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SizedBox(
                   height: height * .1,
@@ -189,7 +220,7 @@ class ProfileScreen extends StatelessWidget {
                     if (success) {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
+                          builder: (context) => const LoginScreen(),
                         ),
                       );
                     }

@@ -16,7 +16,7 @@ class NotificationsViewModel extends ChangeNotifier
     'reservation',
     'reminder',
     'questionnaire',
-    'analysisResult',
+    'medicalTestResult',
     'bonus',
     'auth',
     'user',

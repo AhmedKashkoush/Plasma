@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart' as intl;
 
 enum NotificationType {
   reservation,
   reminder,
   questionnaire,
-  analysisResult,
+  medicalTestResult,
   bonus,
   auth,
   user,
@@ -145,7 +143,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         return Icons.alarm;
       case NotificationType.questionnaire:
         return Icons.content_paste_sharp;
-      case NotificationType.analysisResult:
+      case NotificationType.medicalTestResult:
         return Icons.analytics_outlined;
       case NotificationType.bonus:
         return Icons.add;
@@ -164,7 +162,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         return Colors.teal;
       case NotificationType.questionnaire:
         return Colors.blueAccent;
-      case NotificationType.analysisResult:
+      case NotificationType.medicalTestResult:
         return Colors.indigo;
       case NotificationType.bonus:
         return Colors.red.shade800;

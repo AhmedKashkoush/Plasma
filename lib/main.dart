@@ -38,6 +38,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => LocaleProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => AuthenticationViewModel(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -54,10 +57,7 @@ class MyApp extends StatelessWidget {
     Provider.of<LocaleProvider>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider(
-        create: (context) => AuthenticationViewModel(),
-        child: const MobileRootScreen(),
-      ),
+      home: const MobileRootScreen(),
       title: 'Plasma',
       theme: ThemeHelper.lightTheme,
       darkTheme: ThemeHelper.darkTheme,

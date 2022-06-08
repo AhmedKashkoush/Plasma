@@ -144,6 +144,10 @@
   "microphone_access_denied": "L'accès au microphone est refusé",
   "cannot_access_microphone": "Impossible d'accéder aux services de microphone sur votre appareil. Veuillez activer le service à partir des paramètres de l'application pour continuer",
   "enable_microphone_to_access": "Activer le microphone pour accéder",
+  "storage": "Stockage",
+  "storage_access_denied": "L'accès au stockage est refusé",
+  "cannot_access_storage": "Impossible d'accéder aux services de stockage sur votre appareil. Veuillez activer le service à partir des paramètres de l'application pour continuer",
+  "enable_storage_to_access": "Activer le stockage pour accéder",
   "request_permission": "Demander la permission",
   "connection_error": "Erreur de connexion",
   "check_internet_connection": "Vérifiez votre connection internet"

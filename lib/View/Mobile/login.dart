@@ -9,17 +9,17 @@ import '../../Utils/utils.dart';
 import '../Widgets/translated_text_widget.dart';
 import 'main_screen.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthenticationViewModel(),
-      child: const LoginScreen(),
-    );
-  }
-}
+// class LoginPage extends StatelessWidget {
+//   const LoginPage({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return ChangeNotifierProvider(
+//       create: (context) => AuthenticationViewModel(),
+//       child: const LoginScreen(),
+//     );
+//   }
+// }
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const SignUpPage(),
+                                builder: (context) => const SignUpScreen(),
                               ),
                             );
                           },

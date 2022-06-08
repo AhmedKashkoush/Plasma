@@ -11,6 +11,7 @@ class ThemeHelper{
     primaryColor: Colors.amber.shade600,
     iconTheme: IconThemeData(color: Colors.grey.shade500),
     useMaterial3: true,
+    pageTransitionsTheme: _pageTransitionTheme,
     colorScheme: ColorScheme.fromSwatch(
       accentColor: Colors.amber.shade600,
       primarySwatch: Colors.amber,
@@ -26,6 +27,7 @@ class ThemeHelper{
     primaryColor: Colors.amber.shade600,
     useMaterial3: true,
     iconTheme: IconThemeData(color: Colors.grey.shade600),
+    pageTransitionsTheme: _pageTransitionTheme,
     colorScheme: ColorScheme.fromSwatch(
       accentColor: Colors.amber.shade600,
       primarySwatch: Colors.amber,
@@ -41,4 +43,10 @@ class ThemeHelper{
       default: themeMode = ThemeMode.system;
     }
   }
+
+  static final PageTransitionsTheme _pageTransitionTheme = PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: ZoomPageTransitionsBuilder(),
+    }
+  );
 }

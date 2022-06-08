@@ -4,7 +4,6 @@ import 'package:plasma/View/Mobile/sign_up.dart';
 
 import '../../Utils/utils.dart';
 import '../Widgets/translated_text_widget.dart';
-import 'login.dart';
 
 class BeforeLoginScreen extends StatelessWidget {
   const BeforeLoginScreen({Key? key}) : super(key: key);
@@ -41,7 +40,7 @@ class BeforeLoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
+                            builder: (context) => const LoginScreen(),
                           ),
                         );
                       },
@@ -66,7 +65,7 @@ class BeforeLoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignUpPage(),
+                            builder: (context) => const SignUpScreen(),
                           ),
                         );
                       },

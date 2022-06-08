@@ -7,11 +7,15 @@ class AuthHelper{
   static final FirebaseFirestore _store = FirebaseFirestore.instance;
   static UserModel? currentUser;
   static Future<void> getUserData() async {
-    if (_auth.currentUser == null) return;
-    final DocumentSnapshot<Map<String, dynamic>> snapshot =
-    await _store.collection('users').doc(_auth.currentUser?.uid).get();
-    final Map<String, dynamic> data = snapshot.data()!;
-    currentUser = UserModel.fromJson(data);
+    try {
+      if (_auth.currentUser == null) return;
+      final DocumentSnapshot<Map<String, dynamic>> snapshot =
+      await _store.collection('users').doc(_auth.currentUser?.uid).get();
+      final Map<String, dynamic> data = snapshot.data()!;
+      currentUser = UserModel.fromJson(data);
+    } on Exception catch (e) {
+      currentUser = null;
+    }
   }
 
   static Future<bool> logOut() async {
