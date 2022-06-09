@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                     backgroundColor: Colors.transparent,
                     backgroundImage: CachedNetworkImageProvider(
                       '${AuthHelper.currentUser?.image}',
-                      cacheKey: 'profile_image',
+                      cacheKey: '${AuthHelper.currentUser?.image}',
                     ),
                   ),
                 )

@@ -16,7 +16,7 @@ class FilesApi {
   static Future<Uint8List> _convertToImage(GlobalKey repaintBoundaryKey) async {
     final RenderRepaintBoundary boundary = repaintBoundaryKey.currentContext
         ?.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage();
+    ui.Image image = await boundary.toImage(pixelRatio: 3);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List imageBytes = byteData!.buffer.asUint8List();
     return imageBytes;
@@ -34,7 +34,7 @@ class FilesApi {
 
   static Future<void> saveImageToGallery(BuildContext context,
       GlobalKey repaintBoundaryKey, String fileName) async {
-    PermissionStatus status = await Permission.storage.request();
+    await Permission.storage.request();
     Uint8List imageBytes = await _convertToImage(repaintBoundaryKey);
     String dateTime = DateTime.now()
         .toIso8601String()
@@ -43,10 +43,12 @@ class FilesApi {
     String fName = 'plasma-qr-data:$fileName/$dateTime';
     final path = await ImageGallerySaver.saveImage(imageBytes, name: fName);
     final Color toastColor = Theme.of(context).scaffoldBackgroundColor;
+    final Color toastForeground = Theme.of(context).brightness == Brightness.light? Colors.black:Colors.white;
     Fluttertoast.cancel();
     Fluttertoast.showToast(
       msg: 'QR Image Saved To Path: ${path["filePath"]}',
       backgroundColor: toastColor,
+      textColor: toastForeground,
       gravity: ToastGravity.BOTTOM,
     );
   }

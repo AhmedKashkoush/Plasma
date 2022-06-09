@@ -21,6 +21,7 @@ class AuthHelper{
   static Future<bool> logOut() async {
     try {
       await _auth.signOut();
+      currentUser = null;
       return true;
     } on Exception catch (e) {
       // TODO

@@ -57,7 +57,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       backgroundColor: Colors.transparent,
                       backgroundImage: CachedNetworkImageProvider(
                         '${AuthHelper.currentUser?.image}',
-                        cacheKey: 'profile_image',
+                        cacheKey: '${AuthHelper.currentUser?.image}',
                       ),
                     ),
                   )

@@ -46,9 +46,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  static final double alignment = 15;
+  final double alignment = 15;
 
-  static File? imageFile;
+  File? imageFile;
+
+  @override
+  void dispose() {
+    fNameController.dispose();
+    lNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passController.dispose();
+    nationalIDController.dispose();
+    confirmController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,15 +100,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (imageFile != null)
                             CircleAvatar(
                               radius: 50,
-                              backgroundColor:
-                                  Theme.of(context).primaryColor,
+                              backgroundColor: Theme.of(context).primaryColor,
                               backgroundImage: FileImage(imageFile!),
                             )
                           else
                             CircleAvatar(
                               radius: 50,
-                              backgroundColor:
-                                  Theme.of(context).primaryColor,
+                              backgroundColor: Theme.of(context).primaryColor,
                               backgroundImage: const AssetImage(
                                 'assets/images/user.png',
                               ),
@@ -150,8 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (String? value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                     },
                     decoration: InputDecoration(
@@ -177,8 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (String? value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                     },
                     decoration: InputDecoration(
@@ -204,8 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (String? value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                     },
                     decoration: InputDecoration(
@@ -231,8 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (String? value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                       if (!value.contains('@')) {
                         return TranslatedTextWidget.translate(
@@ -263,8 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                       if (value.length < 8) {
                         return TranslatedTextWidget.translate(
@@ -307,8 +312,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                       if (value != passController.text) {
                         return TranslatedTextWidget.translate(
@@ -318,8 +322,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                     obscureText: obscureConfirmText,
                     decoration: InputDecoration(
-                      labelText: TranslatedTextWidget.translate(
-                          'Confirm Password'),
+                      labelText:
+                          TranslatedTextWidget.translate('Confirm Password'),
                       prefixIcon: const Icon(
                         Icons.password,
                       ),
@@ -356,8 +360,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return TranslatedTextWidget.translate(
                             'National ID must be 14 numbers');
                       if (value.isEmpty) {
-                        return TranslatedTextWidget.translate(
-                            'Required Field');
+                        return TranslatedTextWidget.translate('Required Field');
                       }
                       return null;
                     },
@@ -399,8 +402,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (createdUser != null)
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MainScreen(),
+                                      builder: (context) => const MainScreen(),
                                     ),
                                   );
                               }

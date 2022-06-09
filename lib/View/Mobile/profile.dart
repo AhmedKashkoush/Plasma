@@ -9,21 +9,36 @@ import '../../Utils/utils.dart';
 import '../Widgets/custom_text_field.dart';
 import '../Widgets/translated_text_widget.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
-  static bool isBloodTypeGranted = false;
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
-  static final TextEditingController phoneController =
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool isBloodTypeGranted = AuthHelper.currentUser?.bloodType != null &&
+      AuthHelper.currentUser?.bloodType != "";
+
+  final GlobalKey repaintBoundaryKey = GlobalKey();
+
+  final TextEditingController phoneController =
       TextEditingController(text: '${AuthHelper.currentUser?.phone}');
-  static final TextEditingController emailController =
+  final TextEditingController emailController =
       TextEditingController(text: '${AuthHelper.currentUser?.email}');
-  static final TextEditingController bloodTypeController =
+  final TextEditingController bloodTypeController =
       TextEditingController(text: '${AuthHelper.currentUser?.bloodType}');
-  static final String qrData =
-      '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName};${AuthHelper.currentUser?.nationalId};${AuthHelper.currentUser?.bloodType}';
+  final String qrData =
+      'plasma-donor-data:${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName};${AuthHelper.currentUser?.nationalId};${AuthHelper.currentUser?.bloodType}';
 
-  static final GlobalKey repaintBoundaryKey = GlobalKey();
+  @override
+  void dispose() {
+    phoneController.dispose();
+    emailController.dispose();
+    bloodTypeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -60,20 +75,47 @@ class ProfileScreen extends StatelessWidget {
                         const Divider(),
                         RepaintBoundary(
                           key: repaintBoundaryKey,
-                          child: QrImage(
-                            size: 172,
-                            data: qrData,
-                            padding: const EdgeInsets.all(12),
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black87,
+                          child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              QrImage(
+                                size: 172,
+                                data: qrData,
+                                padding: const EdgeInsets.all(12),
+                                backgroundColor: Colors.white,
+                                //eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
+                                //foregroundColor: Theme.of(context).primaryColor
+                                foregroundColor: Colors.black87,
+                              ),
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Colors.white,
+                                child: AuthHelper.currentUser?.image != null &&
+                                    AuthHelper.currentUser?.image != ""
+                                    ? CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    '${AuthHelper.currentUser?.image}',
+                                    cacheKey:
+                                        '${AuthHelper.currentUser?.image}',
+                                  ),
+                                ): Icon(
+                                  Icons.account_circle,
+                                  size: 36,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
                           height: 25,
                         ),
                         TextButton.icon(
-                          onPressed:  () async{
-                            await FilesApi.shareImage(repaintBoundaryKey, qrData);
+                          onPressed: () async {
+                            await FilesApi.shareImage(
+                                repaintBoundaryKey, qrData);
                             Navigator.pop(context);
                           },
                           style:
@@ -84,8 +126,9 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icon(Icons.adaptive.share),
                         ),
                         TextButton.icon(
-                          onPressed: () async{
-                            await FilesApi.saveImageToGallery(context, repaintBoundaryKey, qrData);
+                          onPressed: () async {
+                            await FilesApi.saveImageToGallery(
+                                context, repaintBoundaryKey, qrData);
                             Navigator.pop(context);
                           },
                           style: TextButton.styleFrom(primary: Colors.teal),
@@ -111,24 +154,23 @@ class ProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
               child: Column(children: [
                 AuthHelper.currentUser?.image != null &&
-                    AuthHelper.currentUser?.image != ""
+                        AuthHelper.currentUser?.image != ""
                     ? Transform.scale(
-                  scale: 0.8,
-                      child: CircleAvatar(
-                  radius: 80,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: CachedNetworkImageProvider(
-                      '${AuthHelper.currentUser?.image}',
-                    cacheKey: 'profile_image',
-                  ),
-                ),
-                    )
-                    :
-                Icon(
-                  Icons.account_circle,
-                  size: 140,
-                  color: Theme.of(context).primaryColor,
-                ),
+                        scale: 0.8,
+                        child: CircleAvatar(
+                          radius: 80,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: CachedNetworkImageProvider(
+                            '${AuthHelper.currentUser?.image}',
+                            cacheKey: '${AuthHelper.currentUser?.image}',
+                          ),
+                        ),
+                      )
+                    : Icon(
+                        Icons.account_circle,
+                        size: 140,
+                        color: Theme.of(context).primaryColor,
+                      ),
                 Text(
                   '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
                   style: const TextStyle(
