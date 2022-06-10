@@ -83,9 +83,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 data: qrData,
                                 padding: const EdgeInsets.all(12),
                                 backgroundColor: Colors.white,
-                                //eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
-                                //foregroundColor: Theme.of(context).primaryColor
-                                foregroundColor: Colors.black87,
+                                eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
+                                foregroundColor: Theme.of(context).primaryColor
+                                //foregroundColor: Colors.black87,
                               ),
                               CircleAvatar(
                                 radius: 18,
