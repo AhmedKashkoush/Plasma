@@ -1,16 +1,9 @@
-# plasma
+# Plasma
+[plasma](assets/images/plasma-logo-bg.png)
+A plasma-based application built to help people treat with the whole process of plasma donation safely and communicate directly with the head organization.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Application Structure
+.Gives a definition of plasma and its benefits
+.Informs the user with the donation conditions
+.Asks some questions as a start of the donation process to make sure that the user is ready for the donation
+.Displays the donation centers nationwide in a map 

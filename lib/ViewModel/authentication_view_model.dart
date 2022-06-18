@@ -15,23 +15,30 @@ class AuthenticationViewModel extends ChangeNotifier {
   final FirebaseFirestore _store = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  bool isLoading = false;
+  bool _isLoading = false;
   bool _hasError = false;
+
+  bool get isLoading => _isLoading;
+
+  bool get hasError => _hasError;
 
   Future<UserCredential?> createNewUser(
       UserModel userModel, BuildContext context,
       [File? image]) async {
     UserCredential? _user;
     _hasError = false;
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
     try {
       String _imageUrl = '';
       _user = await _auth.createUserWithEmailAndPassword(
           email: userModel.email, password: userModel.password);
       if (image != null) {
-        final Reference imagePath =
-            await _storage.ref().child("users").child("${userModel.nationalId}").child("/${userModel.nationalId}.png");
+        final Reference imagePath = await _storage
+            .ref()
+            .child("users")
+            .child("${userModel.nationalId}")
+            .child("/${userModel.nationalId}.png");
         await imagePath.putFile(image);
         _imageUrl = await imagePath.getDownloadURL();
       }
@@ -44,9 +51,17 @@ class AuthenticationViewModel extends ChangeNotifier {
         nationalId: userModel.nationalId,
         image: _imageUrl,
         bloodType: '',
-        notifications: NotificationsModel.toJson(NotificationsModel(newNotifications: -1,notificationsList: [],)),
-        reservation: ReservationModel.toJson(ReservationModel(place: '',date: null,time: null,)),
-        donorTypeModel: DonorTypeModel.toJson(DonorTypeModel(type: null,delayTime: null)),
+        notifications: NotificationsModel.toJson(NotificationsModel(
+          newNotifications: -1,
+          notificationsList: [],
+        )),
+        reservation: ReservationModel.toJson(ReservationModel(
+          place: '',
+          date: null,
+          time: null,
+        )),
+        donorTypeModel:
+            DonorTypeModel.toJson(DonorTypeModel(type: null, delayTime: null)),
       );
       await _store
           .collection('users')
@@ -64,9 +79,9 @@ class AuthenticationViewModel extends ChangeNotifier {
         backgroundColor: Colors.red,
       ));
     }
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
-    return _hasError?null:_user;
+    return _hasError ? null : _user;
   }
 
   Future<void> verifyEmail(UserModel userModel,
@@ -83,14 +98,16 @@ class AuthenticationViewModel extends ChangeNotifier {
     );
   }
 
-  Future<UserCredential?> logIn(BuildContext context,String email,String password) async {
-    isLoading = true;
+  Future<UserCredential?> logIn(
+      BuildContext context, String email, String password) async {
+    _isLoading = true;
     notifyListeners();
     try {
-      UserCredential credentials = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential credentials = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       User? user = credentials.user;
       AuthHelper.currentUser = await getUserData(user);
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       return credentials;
     } on Exception catch (e) {
@@ -99,15 +116,16 @@ class AuthenticationViewModel extends ChangeNotifier {
         content: Text(
           '${e.runtimeType}',
           style:
-          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.red,
       ));
     }
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
     return null;
   }
+
   Future<void> logOut() async {
     await _auth.signOut();
   }

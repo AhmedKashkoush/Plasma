@@ -75,38 +75,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const Divider(),
                         RepaintBoundary(
                           key: repaintBoundaryKey,
-                          child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: [
-                              QrImage(
-                                size: 172,
-                                data: qrData,
-                                padding: const EdgeInsets.all(12),
-                                backgroundColor: Colors.white,
-                                eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
-                                foregroundColor: Theme.of(context).primaryColor
-                                //foregroundColor: Colors.black87,
-                              ),
-                              CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.white,
-                                child: AuthHelper.currentUser?.image != null &&
-                                    AuthHelper.currentUser?.image != ""
-                                    ? CircleAvatar(
-                                  radius: 16,
-                                  backgroundColor: Colors.transparent,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                    '${AuthHelper.currentUser?.image}',
-                                    cacheKey:
-                                        '${AuthHelper.currentUser?.image}',
-                                  ),
-                                ): Icon(
-                                  Icons.account_circle,
-                                  size: 36,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ],
+                          child: QrImage(
+                            size: 172,
+                            data: qrData,
+                            padding: const EdgeInsets.all(12),
+                            backgroundColor: Colors.white,
+                            eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
+                            foregroundColor: Theme.of(context).primaryColor
+                            //foregroundColor: Colors.black87,
                           ),
                         ),
                         const SizedBox(
