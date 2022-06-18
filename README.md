@@ -1,6 +1,6 @@
 # Plasma
 <p align="center">
-![plasma](assets/images/plasma-logo-bg.png)
+  <img width="192" height="188" src="assets/images/plasma-logo-bg.png">
 </p>
 
 A plasma-based application built to help people treat with the whole process of plasma donation safely and communicate directly with the head organization.
