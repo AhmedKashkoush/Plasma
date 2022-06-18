@@ -1,5 +1,5 @@
 # Plasma
-[plasma](assets/images/plasma-logo-bg.png)
+![plasma]{assets/images/plasma-logo-bg.png}
 A plasma-based application built to help people treat with the whole process of plasma donation safely and communicate directly with the head organization.
 
 ## Application Structure
