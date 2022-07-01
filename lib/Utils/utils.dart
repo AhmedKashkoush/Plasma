@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
@@ -10,9 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
+import 'package:plasma/Model/Models/center_model.dart';
+import 'package:plasma/Utils/centers_locations.dart';
 import 'package:plasma/View/Mobile/team_members_screen.dart';
 import 'package:plasma/View/Widgets/link_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../View/Mobile/donation_places_screen.dart';
 import '../View/Widgets/blood_loading.dart';
@@ -25,10 +25,23 @@ class Utils {
     required GlobalKey<MapBodyState> mapKey,
   }) async {
     try {
-      List<Location> locations =
-          await locationFromAddress(address, localeIdentifier: 'en');
-      final LatLng _coordinates =
+      CenterModel? model;
+      LatLng _coordinates;
+      CentersLocations.centerLocations.forEach((center) {
+        if (address.contains(center['address'])){
+          model = CenterModel.fromJson(center);
+        }
+      });
+      if (model == null) {
+        final List<Location> locations =
+          await locationFromAddress(address, localeIdentifier: 'ar');
+          _coordinates =
           LatLng(locations.first.latitude, locations.first.longitude);
+      }
+      else {
+        _coordinates = LatLng(model!.latitude, model!.longitude);
+      }
+
       mapKey.currentState?.controller?.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
@@ -37,7 +50,7 @@ class Utils {
           ),
         ),
       );
-    } on PlatformException catch (e) {
+    } on PlatformException {
       showConnectionError(context);
     }
   }
@@ -135,11 +148,11 @@ class Utils {
       return;
     Position currentLocation = await Geolocator.getCurrentPosition();
     double? minDistance;
-    String? centerName;
-    String? centerAddress;
-    String? centerGov;
+    // String? centerName;
+    // String? centerAddress;
+    // String? centerGov;
     LatLng? coordinates;
-    placesList.forEach((place) async {
+    placesListArabic.forEach((place) async {
       List<Location> locations = await locationFromAddress(
         "${place["address"]},${place["gov"]}",
         localeIdentifier: 'ar',
@@ -155,16 +168,16 @@ class Utils {
       if (minDistance != null) {
         if (distance < minDistance!) {
           minDistance = distance;
-          centerName = place["name"]!;
-          centerAddress = place["address"]!;
-          centerGov = place["gov"]!;
+          // centerName = place["name"]!;
+          // centerAddress = place["address"]!;
+          // centerGov = place["gov"]!;
           coordinates = _coordinates;
         }
       } else {
         minDistance = distance;
-        centerName = place["name"]!;
-        centerAddress = place["address"]!;
-        centerGov = place["gov"]!;
+        // centerName = place["name"]!;
+        // centerAddress = place["address"]!;
+        // centerGov = place["gov"]!;
         coordinates = _coordinates;
       }
     });

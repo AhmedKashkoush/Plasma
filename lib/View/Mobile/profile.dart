@@ -77,44 +77,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           RepaintBoundary(
                             key: repaintBoundaryKey,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 35,vertical: 25),
+                              padding: const EdgeInsets.symmetric(horizontal: 25,vertical: 15),
                               width: 280,
                               height: 320,
-                              child: FittedBox(
-                                child: Column(
-                                  children: [
-                                    CircleAvatar(
-                                      child: CircleAvatar(
-                                        foregroundImage: AuthHelper.currentUser?.image != null && AuthHelper.currentUser?.image != ""?CachedNetworkImageProvider(
-                                          '${AuthHelper.currentUser?.image}',
-                                          cacheKey: '${AuthHelper.currentUser?.image}',
-                                        ): null,
-                                        radius: 32,
-                                        child: Icon(Icons.person,color: Colors.white,size: 48,),
-                                        backgroundColor: Theme.of(context).primaryColor,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                                child: FittedBox(
+                                  child: Column(
+                                    children: [
+                                      CircleAvatar(
+                                        child: CircleAvatar(
+                                          foregroundImage: AuthHelper.currentUser?.image != null && AuthHelper.currentUser?.image != ""?CachedNetworkImageProvider(
+                                            '${AuthHelper.currentUser?.image}',
+                                            cacheKey: '${AuthHelper.currentUser?.image}',
+                                          ): null,
+                                          radius: 32,
+                                          child: Icon(Icons.person,color: Colors.white,size: 48,),
+                                          backgroundColor: Theme.of(context).primaryColor,
+                                        ),
+                                        radius: 34,
+                                        backgroundColor: Colors.white,
                                       ),
-                                      radius: 34,
-                                      backgroundColor: Colors.white,
-                                    ),
-                                    const SizedBox(height: 20,),
-                                    Text(
-                                      '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600, fontSize: 20),
-                                    ),
-                                    const SizedBox(
-                                      height: 18,
-                                    ),
-                                    QrImage(
-                                      size: 172,
-                                      data: qrData,
-                                      padding: const EdgeInsets.all(12),
-                                      backgroundColor: Colors.white,
-                                      eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
-                                      foregroundColor: Theme.of(context).primaryColor,
-                                      //foregroundColor: Colors.black87,
-                                    ),
-                                  ],
+                                      const SizedBox(height: 20,),
+                                      Text(
+                                        '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600, fontSize: 20),
+                                      ),
+                                      const SizedBox(
+                                        height: 18,
+                                      ),
+                                      QrImage(
+                                        size: 172,
+                                        data: qrData,
+                                        padding: const EdgeInsets.all(12),
+                                        backgroundColor: Colors.white,
+                                        eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
+                                        //foregroundColor: Theme.of(context).primaryColor,
+                                        //foregroundColor: Colors.black87,
+                                        foregroundColor: Colors.black,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

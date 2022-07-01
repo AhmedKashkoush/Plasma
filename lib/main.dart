@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/Utils/centers_locations.dart';
 import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
@@ -29,6 +30,7 @@ void main() async {
   await ThemeHelper.loadTheme();
   await LocaleHelper.loadLocale();
   await AuthHelper.getUserData();
+  await CentersLocations.loadLocations();
   runApp(
     MultiProvider(
       providers: [

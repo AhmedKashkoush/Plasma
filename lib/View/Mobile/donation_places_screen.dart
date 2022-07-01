@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:plasma/View/Widgets/blood_loading.dart';
+import 'package:plasma/Model/Models/center_model.dart';
+import 'package:plasma/Utils/centers_locations.dart';
 import 'package:plasma/View/Widgets/mobile_custom_drawer.dart';
 import 'package:plasma/View/Widgets/rounded_header.dart';
 import 'package:plasma/View/Mobile/voice_search.dart';
@@ -173,6 +171,18 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
     switch (status) {
       case PermissionStatus.granted:
         return;
+      case PermissionStatus.denied:
+        // TODO: Handle this case.
+        break;
+      case PermissionStatus.restricted:
+        // TODO: Handle this case.
+        break;
+      case PermissionStatus.limited:
+        // TODO: Handle this case.
+        break;
+      case PermissionStatus.permanentlyDenied:
+        // TODO: Handle this case.
+        break;
     }
   }
 }
@@ -412,7 +422,7 @@ class PlacesSearchDelegate extends SearchDelegate {
             trailing: IconButton(
               onPressed: () {
                 query =
-                    "${filterList[index]["name"]} ${filterList[index]["address"]} ${filterList[index]["gov"]}";
+                    "${TranslatedTextWidget.translate(filterList[index]["name"]!)} ${TranslatedTextWidget.translate(filterList[index]["address"]!)} ${TranslatedTextWidget.translate(filterList[index]["gov"]!)}";
               },
               icon: const Icon(Icons.north_west),
             ),
@@ -443,7 +453,7 @@ class MapBody extends StatefulWidget {
 }
 
 class MapBodyState extends State<MapBody> {
-  Set<Marker> _markers = {};
+  //Set<Marker> _markers = {};
   GoogleMapController? controller;
   final CameraPosition initialPosition = CameraPosition(
     target: LatLng(27.5206, 30.8025),
@@ -490,8 +500,12 @@ class MapBodyState extends State<MapBody> {
               ),
             ),
           );
+          if (CentersLocations.centerLocations.isEmpty) {
+            await CentersLocations.loadLocations();
+            setState(() {});
+          }
         }
-        _initiateMarkers();
+        //_initiateMarkers();
       } else {
         if (result != ConnectivityResult.none)
           Utils.showConnectionError(
@@ -539,6 +553,9 @@ class MapBodyState extends State<MapBody> {
       ),
       zoom: 20,
     );
+    setState(() {
+
+    });
   }
 
   @override
@@ -550,6 +567,9 @@ class MapBodyState extends State<MapBody> {
 
   @override
   Widget build(BuildContext context) {
+    Set<CenterModel> _centers = CentersLocations.centerLocations
+        .map((center) => CenterModel.fromJson(center))
+        .toSet();
     return Scaffold(
       body: GoogleMap(
         zoomControlsEnabled: false,
@@ -564,7 +584,26 @@ class MapBodyState extends State<MapBody> {
         },
         //initialCameraPosition: locationEnabled?currentPosition!:initialPosition,
         initialCameraPosition: initialPosition,
-        markers: _markers,
+        markers: _centers.map((model) {
+          final LatLng _coordinates = LatLng(model.latitude, model.longitude);
+          return Marker(
+            markerId: MarkerId("${model.name},${model.address},${model.gov}"),
+            position: _coordinates,
+            infoWindow: InfoWindow(
+              title: TranslatedTextWidget.translate("${model.name}"),
+              onTap: () {
+                controller?.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(target: _coordinates, zoom: 16),
+                  ),
+                );
+              },
+            ),
+            //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+            icon: CentersLocations.image,
+          );
+        }).toSet(),
+        //_markers,
         mapToolbarEnabled: false,
         myLocationEnabled: locationEnabled,
         myLocationButtonEnabled: false,
@@ -572,46 +611,46 @@ class MapBodyState extends State<MapBody> {
     );
   }
 
-  Future<void> _initiateMarkers() async {
-    try {
-      placesList.forEach((center) async {
-        List<Location> locations = await locationFromAddress(
-          "${center["address"]},${center["gov"]}",
-          localeIdentifier: 'en',
-        );
-        final LatLng _coordinates =
-            LatLng(locations.first.latitude, locations.first.longitude);
-        Marker _marker = Marker(
-          markerId: MarkerId("${center["address"]},${center["gov"]}"),
-          position: _coordinates,
-          infoWindow: InfoWindow(
-            title: TranslatedTextWidget.translate("${center["name"]}"),
-            onTap: () {
-              controller?.animateCamera(
-                CameraUpdate.newCameraPosition(
-                  CameraPosition(target: _coordinates, zoom: 16),
-                ),
-              );
-            },
-          ),
-          //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-          icon: await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty,
-            'assets/images/plasma-marker.png',
-          ),
-        );
-        _markers.add(_marker);
-      });
-      setState(() {});
-    } on PlatformException catch (e) {
-      setState(() {
-        _markers = {};
-      });
-      Utils.showConnectionError(
-        context,
-      );
-    }
-  }
+// Future<void> _initiateMarkers() async {
+//   try {
+//     placesList.forEach((center) async {
+//       List<Location> locations = await locationFromAddress(
+//         "${center["address"]},${center["gov"]}",
+//         localeIdentifier: 'en',
+//       );
+//       final LatLng _coordinates =
+//       LatLng(locations.first.latitude, locations.first.longitude);
+//       Marker _marker = Marker(
+//         markerId: MarkerId("${center["address"]},${center["gov"]}"),
+//         position: _coordinates,
+//         infoWindow: InfoWindow(
+//           title: TranslatedTextWidget.translate("${center["name"]}"),
+//           onTap: () {
+//             controller?.animateCamera(
+//               CameraUpdate.newCameraPosition(
+//                 CameraPosition(target: _coordinates, zoom: 16),
+//               ),
+//             );
+//           },
+//         ),
+//         //icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+//         icon: await BitmapDescriptor.fromAssetImage(
+//           ImageConfiguration.empty,
+//           'assets/images/plasma-marker.png',
+//         ),
+//       );
+//       _markers.add(_marker);
+//     });
+//     setState(() {});
+//   } on PlatformException catch (e) {
+//     setState(() {
+//       _markers = {};
+//     });
+//     Utils.showConnectionError(
+//       context,
+//     );
+//   }
+// }
 }
 
 // class PlacesHeader extends SliverAppBar {
@@ -758,7 +797,7 @@ class PlacesBottomSheet extends StatelessWidget {
                         return ListTile(
                           onTap: () async {
                             Utils.animateToAddress(
-                              "${placesList[index]["address"]},${placesList[index]["gov"]!}",
+                              "${placesListArabic[index]["address"]},${placesListArabic[index]["gov"]}",
                               context: context,
                               mapKey: mapKey,
                             );
