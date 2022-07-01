@@ -22,6 +22,6 @@ List<Map<String, dynamic>> teamMembersList = [
   {
     "name": "Shimaa Sakr",
     "github": "https://github.com/0101143",
-    "linkedin": "",
+    "linkedin": "https://www.linkedin.com/in/shaimaa-sakr-a0b107244",
   },
 ];
