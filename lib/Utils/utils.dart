@@ -10,7 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
-import 'package:plasma/Utils/locales.dart';
+import 'package:plasma/View/Mobile/team_members_screen.dart';
+import 'package:plasma/View/Widgets/link_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../View/Mobile/donation_places_screen.dart';
@@ -250,7 +251,7 @@ class Utils {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
-    bool isTapped = false;
+    //bool isTapped = false;
     showAboutDialog(
       context: context,
       applicationIcon:
@@ -284,50 +285,62 @@ class Utils {
         const SizedBox(
           height: 10,
         ),
-        StatefulBuilder(
-          builder:
-              (BuildContext context, void Function(void Function()) setState) {
-            return Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text:
-                        '${TranslatedTextWidget.translate('For more info about the application,donation or organization, visit:')} ',
-                  ),
-                  TextSpan(
-                    text: 'plasma.mohp.gov.eg',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      backgroundColor:
-                          isTapped ? Colors.blue.withOpacity(0.4) : null,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        if (!await launchUrl(
-                          Uri.parse('http://plasma.mohp.gov.eg/'),
-                        )) showUrlLaunchingError(context);
-                      }
-                      ..onTapDown = (details) {
-                        setState(() {
-                          isTapped = true;
-                        });
-                      }
-                      ..onTapUp = (details) {
-                        setState(() {
-                          isTapped = false;
-                        });
-                      }
-                      ..onTapCancel = () {
-                        setState(() {
-                          isTapped = false;
-                        });
-                      },
-                  ),
-                ],
+        LinkWidget(
+          link: 'http://plasma.mohp.gov.eg/',
+          linkText: 'plasma.mohp.gov.eg',
+          text:
+              'For more info about the application,donation or organization, visit:',
+        ),
+        // return Text.rich(
+        //   TextSpan(
+        //     children: [
+        //       TextSpan(
+        //         text:
+        //             '${TranslatedTextWidget.translate('For more info about the application,donation or organization, visit:')} ',
+        //       ),
+        //       TextSpan(
+        //         text: 'plasma.mohp.gov.eg',
+        //         style: TextStyle(
+        //           color: Colors.blue,
+        //           backgroundColor:
+        //               isTapped ? Colors.blue.withOpacity(0.4) : null,
+        //         ),
+        //         recognizer: TapGestureRecognizer()
+        //           ..onTap = () async {
+        //             if (!await launchUrl(
+        //               Uri.parse('http://plasma.mohp.gov.eg/'),
+        //             )) showUrlLaunchingError(context);
+        //           }
+        //           ..onTapDown = (details) {
+        //             setState(() {
+        //               isTapped = true;
+        //             });
+        //           }
+        //           ..onTapUp = (details) {
+        //             setState(() {
+        //               isTapped = false;
+        //             });
+        //           }
+        //           ..onTapCancel = () {
+        //             setState(() {
+        //               isTapped = false;
+        //             });
+        //           },
+        //       ),
+        //     ],
+        //   ),
+        // );
+        Builder(builder: (context) {
+          return TextButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TeamMembersScreen(),
               ),
-            );
-          },
-        )
+            ),
+            child: const Text('View Developers Team'),
+          );
+        }),
       ],
     );
   }

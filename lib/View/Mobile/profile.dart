@@ -60,60 +60,95 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   context: context,
-                  builder: (context) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.horizontal_rule_rounded,
-                          size: 68,
-                          color: Colors.grey.shade600.withOpacity(0.3),
-                        ),
-                        const Divider(),
-                        RepaintBoundary(
-                          key: repaintBoundaryKey,
-                          child: QrImage(
-                            size: 172,
-                            data: qrData,
-                            padding: const EdgeInsets.all(12),
-                            backgroundColor: Colors.white,
-                            eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
-                            foregroundColor: Theme.of(context).primaryColor
-                            //foregroundColor: Colors.black87,
+                  builder: (context) => SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Icon(
+                          //   Icons.horizontal_rule_rounded,
+                          //   size: 68,
+                          //   color: Colors.grey.shade600.withOpacity(0.3),
+                          // ),
+                          //const Divider(),
+                          RepaintBoundary(
+                            key: repaintBoundaryKey,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 35,vertical: 25),
+                              width: 280,
+                              height: 320,
+                              child: FittedBox(
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      child: CircleAvatar(
+                                        foregroundImage: AuthHelper.currentUser?.image != null && AuthHelper.currentUser?.image != ""?CachedNetworkImageProvider(
+                                          '${AuthHelper.currentUser?.image}',
+                                          cacheKey: '${AuthHelper.currentUser?.image}',
+                                        ): null,
+                                        radius: 32,
+                                        child: Icon(Icons.person,color: Colors.white,size: 48,),
+                                        backgroundColor: Theme.of(context).primaryColor,
+                                      ),
+                                      radius: 34,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                    const SizedBox(height: 20,),
+                                    Text(
+                                      '${AuthHelper.currentUser?.firstName} ${AuthHelper.currentUser?.lastName}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w600, fontSize: 20),
+                                    ),
+                                    const SizedBox(
+                                      height: 18,
+                                    ),
+                                    QrImage(
+                                      size: 172,
+                                      data: qrData,
+                                      padding: const EdgeInsets.all(12),
+                                      backgroundColor: Colors.white,
+                                      eyeStyle: QrEyeStyle(eyeShape: QrEyeShape.circle),
+                                      foregroundColor: Theme.of(context).primaryColor,
+                                      //foregroundColor: Colors.black87,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            await FilesApi.shareImage(
-                                repaintBoundaryKey, qrData);
-                            Navigator.pop(context);
-                          },
-                          style:
-                              TextButton.styleFrom(primary: Colors.blueAccent),
-                          label: TranslatedTextWidget(
-                            text: 'Share My Code',
+                          // const SizedBox(
+                          //   height: 25,
+                          // ),
+                          TextButton.icon(
+                            onPressed: () async {
+                              await FilesApi.shareImage(
+                                  repaintBoundaryKey, qrData);
+                              Navigator.pop(context);
+                            },
+                            // style:
+                            //     TextButton.styleFrom(primary: Colors.blueAccent),
+                            label: TranslatedTextWidget(
+                              text: 'Share My Code',
+                            ),
+                            icon: Icon(Icons.adaptive.share),
                           ),
-                          icon: Icon(Icons.adaptive.share),
-                        ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            await FilesApi.saveImageToGallery(
-                                context, repaintBoundaryKey, qrData);
-                            Navigator.pop(context);
-                          },
-                          style: TextButton.styleFrom(primary: Colors.teal),
-                          label: TranslatedTextWidget(
-                            text: 'Save To Gallery',
+                          TextButton.icon(
+                            onPressed: () async {
+                              await FilesApi.saveImageToGallery(
+                                  context, repaintBoundaryKey, qrData);
+                              Navigator.pop(context);
+                            },
+                            //style: TextButton.styleFrom(primary: Colors.teal),
+                            label: TranslatedTextWidget(
+                              text: 'Save To Gallery',
+                            ),
+                            icon: const Icon(Icons.save_alt_rounded),
                           ),
-                          icon: const Icon(Icons.save_alt_rounded),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

@@ -67,7 +67,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     color: Theme.of(context).primaryColor,
                   ),
           ),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+          //actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
           // centerTitle: true,
           elevation: 0.0,
         ),
