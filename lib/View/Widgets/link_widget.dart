@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class LinkWidget extends StatefulWidget {
   final String? text;
@@ -36,6 +37,7 @@ class _LinkWidgetState extends State<LinkWidget> {
               ..onTap = () async {
                 if (!await launchUrl(
                   Uri.parse(widget.link),
+                  mode: LaunchMode.externalApplication,
                 )) Utils.showUrlLaunchingError(context);
               }
               ..onTapDown = (details) {

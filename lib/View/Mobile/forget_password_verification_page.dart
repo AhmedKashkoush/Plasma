@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
@@ -20,10 +19,8 @@ class ForgotPasswordVerificationScreen extends StatefulWidget {
 
 class _ForgotPasswordVerificationScreenState
     extends State<ForgotPasswordVerificationScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _pinSuccess = false;
-
-  var formKey;
 
   int otpLength = 4;
 
@@ -163,7 +160,7 @@ class ThemeHelper {
   BoxDecoration buttonBoxDecoration(BuildContext context,
       [String color1 = "", String color2 = ""]) {
     Color c1 = Theme.of(context).primaryColor;
-    Color c2 = Theme.of(context).accentColor;
+    Color c2 = Theme.of(context).colorScheme.secondary;
     if (color1.isEmpty == false) {
       c1 = HexColor(color1);
     }

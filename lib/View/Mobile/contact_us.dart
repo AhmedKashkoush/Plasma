@@ -80,6 +80,7 @@ class ContactUsPortrait extends StatelessWidget {
                 onPressed: () async {
                   if (!await launchUrl(
                     Uri.parse('https://www.facebook.com/DonatePlasmaEG'),
+                    mode: LaunchMode.externalApplication,
                   )) Utils.showUrlLaunchingError(context);
                 },
                 icon: Icon(Icons.facebook),
@@ -138,6 +139,7 @@ class ContactUsPortrait extends StatelessWidget {
                 onPressed: () async {
                   if (!await launchUrl(
                     Uri.parse('http://plasma.mohp.gov.eg/'),
+                    mode: LaunchMode.externalApplication,
                   )) Utils.showUrlLaunchingError(context);
                 },
                 icon: Icon(Icons.integration_instructions_outlined),
@@ -236,6 +238,7 @@ class ContactUsLandscape extends StatelessWidget {
                       onPressed: () async {
                         if (!await launchUrl(
                           Uri.parse('https://www.facebook.com/DonatePlasmaEG'),
+                          mode: LaunchMode.externalApplication,
                         )) Utils.showUrlLaunchingError(context);
                       },
                       icon: Icon(Icons.facebook),
@@ -303,6 +306,7 @@ class ContactUsLandscape extends StatelessWidget {
                       onPressed: () async {
                         if (!await launchUrl(
                           Uri.parse('http://plasma.mohp.gov.eg/'),
+                          mode: LaunchMode.externalApplication,
                         )) Utils.showUrlLaunchingError(context);
                       },
                       icon: Icon(Icons.integration_instructions_outlined),
