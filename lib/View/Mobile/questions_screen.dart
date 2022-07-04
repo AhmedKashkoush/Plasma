@@ -69,6 +69,31 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
+    QuestionModel(
+      question: 'Have you ever donated blood or one of its derivatives during the past three months?',
+      answers: ['Yes', 'No'],
+      correctAnswer: 'No',
+    ),
+    QuestionModel(
+      question: 'During the past 14 days, did you have any symptoms of the emerging corona virus?',
+      answers: ['Yes', 'No'],
+      correctAnswer: 'No',
+    ),
+    QuestionModel(
+      question: 'During the past 14 days, have you had contact with a patient infected with the emerging corona virus?',
+      answers: ['Yes', 'No'],
+      correctAnswer: 'No',
+    ),
+    QuestionModel(
+      question: 'Have you undergone any dental treatment (filling, extraction, root treatment, cleaning, whitening)?',
+      answers: ['Yes', 'No'],
+      correctAnswer: 'No',
+    ),
+    QuestionModel(
+      question: 'Do you live with someone who has hepatitis?',
+      answers: ['Yes', 'No'],
+      correctAnswer: 'No',
+    ),
   ];
 
   int currentQuestion = 0;

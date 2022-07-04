@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Widgets/toast_widget.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 class FilesApi {
@@ -43,7 +44,7 @@ class FilesApi {
         .replaceAll(':', '-');
     String fName = 'plasma-qr-data:$fileName/$dateTime';
     final path = await ImageGallerySaver.saveImage(imageBytes, name: fName);
-    ToastWidget.showToast(context, msg: 'QR Image Saved To Path: ${path["filePath"]}');
+    ToastWidget.showToast(context, msg: '${TranslatedTextWidget.translate('QR Image Saved To Path: ')}${path["filePath"]}');
     // final Color toastColor = Theme.of(context).scaffoldBackgroundColor;
     // final Color toastForeground = Theme.of(context).brightness == Brightness.light? Colors.black:Colors.white;
     // Fluttertoast.cancel();

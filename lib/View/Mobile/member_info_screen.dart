@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:plasma/Model/Models/team_member_model.dart';
 import 'package:plasma/View/Widgets/link_widget.dart';
 import 'package:plasma/View/Widgets/toast_widget.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class MemberInfoScreen extends StatelessWidget {
   final TeamMemberModel memberModel;
@@ -16,22 +17,22 @@ class MemberInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Member Info'),
+        title: TranslatedTextWidget(text: 'Developer Info'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              memberModel.name,
+            TranslatedTextWidget(
+              text: memberModel.name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 75,
             ),
-            const Text(
-              'Contact',
+            TranslatedTextWidget(
+              text: 'Contact',
               style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w400,
@@ -47,10 +48,10 @@ class MemberInfoScreen extends StatelessWidget {
                 link: memberModel.gitHub,
               ),
               trailing: IconButton(
-                onPressed: () async{
+                onPressed: () async {
                   await FlutterClipboard.copy(memberModel.gitHub);
                   HapticFeedback.vibrate();
-                  ToastWidget.showToast(context, msg: 'Copied To Clipboard');
+                  ToastWidget.showToast(context, msg: TranslatedTextWidget.translate('Copied To Clipboard'));
                 },
                 icon: Icon(Icons.copy),
               ),
@@ -62,10 +63,10 @@ class MemberInfoScreen extends StatelessWidget {
                   link: memberModel.linkedIn,
                 ),
                 trailing: IconButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     await FlutterClipboard.copy(memberModel.linkedIn);
                     HapticFeedback.vibrate();
-                    ToastWidget.showToast(context, msg: 'Copied To Clipboard');
+                    ToastWidget.showToast(context, msg: TranslatedTextWidget.translate('Copied To Clipboard'));
                   },
                   icon: Icon(Icons.copy),
                 ),

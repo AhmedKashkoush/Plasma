@@ -61,7 +61,6 @@ class PlasmaInformationScreen extends StatelessWidget {
                 ListTile(
                   title: TranslatedTextWidget(
                     text: 'Plasma is the main source for the manufacture of derivatives such as clotting factors, which is the only treatment for patients with chronic bleeding, such as "hemophilia".',
-                    textAlign: TextAlign.left,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
@@ -80,7 +79,6 @@ class PlasmaInformationScreen extends StatelessWidget {
                 ListTile(
                   title: TranslatedTextWidget(
                     text: 'Blood plasma is made from proteins that are important for the treatment of inflammatory patients, liver cancers and kidney patients.',
-                    textAlign: TextAlign.left,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,
@@ -99,7 +97,6 @@ class PlasmaInformationScreen extends StatelessWidget {
                 ListTile(
                   title: TranslatedTextWidget(
                     text: 'Plasma consists of 92% water and 8% blood plasma proteins.',
-                    textAlign: TextAlign.left,
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 20.0,

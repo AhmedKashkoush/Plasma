@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             IconButton(
               onPressed: () {
                 showModalBottomSheet(
+                  clipBehavior: Clip.antiAlias,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(25),

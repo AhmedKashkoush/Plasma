@@ -28,7 +28,9 @@ class Utils {
       CenterModel? model;
       LatLng _coordinates;
       CentersLocations.centerLocations.forEach((center) {
-        if (address.contains(center['address'])){
+        int index = CentersLocations.centerLocations.toList().indexOf(center);
+        String _address = '${placesListArabic[index]["address"]},${placesListArabic[index]["gov"]}';
+        if (_address == address){
           model = CenterModel.fromJson(center);
         }
       });
@@ -41,7 +43,6 @@ class Utils {
       else {
         _coordinates = LatLng(model!.latitude, model!.longitude);
       }
-
       mapKey.currentState?.controller?.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
@@ -152,13 +153,24 @@ class Utils {
     // String? centerAddress;
     // String? centerGov;
     LatLng? coordinates;
+    LatLng _coordinates;
     placesListArabic.forEach((place) async {
-      List<Location> locations = await locationFromAddress(
-        "${place["address"]},${place["gov"]}",
-        localeIdentifier: 'ar',
-      );
-      final LatLng _coordinates =
-          LatLng(locations.first.latitude, locations.first.longitude);
+      if (CentersLocations.centerLocations.isNotEmpty) {
+        List<Location> locations = await locationFromAddress(
+          "${place["address"]},${place["gov"]}",
+          localeIdentifier: 'ar',
+        );
+        _coordinates =
+            LatLng(locations.first.latitude, locations.first.longitude);
+      }
+      else {
+        int _index = placesListArabic.indexOf(place);
+        List _list = CentersLocations.centerLocations.toList();
+        Map<String,dynamic> _center = _list[_index];
+        CenterModel _model = CenterModel.fromJson(_center);
+        _coordinates =
+            LatLng(_model.latitude, _model.longitude);
+      }
       double distance = Geolocator.distanceBetween(
         currentLocation.latitude,
         currentLocation.longitude,
@@ -351,7 +363,7 @@ class Utils {
                 builder: (context) => TeamMembersScreen(),
               ),
             ),
-            child: const Text('View Developers Team'),
+            child: TranslatedTextWidget(text: 'View Developers Team'),
           );
         }),
       ],

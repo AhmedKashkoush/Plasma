@@ -489,6 +489,7 @@ class MapBodyState extends State<MapBody> {
         if (result == ConnectivityResult.none) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              dismissDirection: DismissDirection.none,
               backgroundColor: Colors.green.shade600,
               content: TranslatedTextWidget(
                 text: 'Online',
@@ -504,6 +505,7 @@ class MapBodyState extends State<MapBody> {
             await CentersLocations.loadLocations();
             setState(() {});
           }
+          _showNearestCenter();
         }
         //_initiateMarkers();
       } else {
@@ -511,6 +513,7 @@ class MapBodyState extends State<MapBody> {
           Utils.showConnectionError(
             context,
           );
+        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
         // setState(() {
         //   _markers.clear();
         // });
@@ -553,9 +556,7 @@ class MapBodyState extends State<MapBody> {
       ),
       zoom: 20,
     );
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override

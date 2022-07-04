@@ -28,36 +28,45 @@ class CentersLocations {
   }
 
   static Future<void> _loadLocationsFromCache() async {
-    Directory _directory = await getApplicationDocumentsDirectory();
-    String _path = _directory.path;
-    File _cacheFile = File('$_path/CenterLocations.txt');
+    if (_centerLocations.isNotEmpty) return;
+    final Directory _directory = await getApplicationDocumentsDirectory();
+    final String _path = _directory.path;
+    final File _cacheFile = File('$_path/CenterLocations.txt');
     if (await _cacheFile.exists()) {
-      String _data = _cacheFile.readAsStringSync();
-      //Fluttertoast.showToast(msg: 'ss');
-      Map<String,dynamic> _map = jsonDecode(_data);
-      Set<Map<String, dynamic>> _set = _map['locations'];
-      _centerLocations = _set;
+      final String _data = _cacheFile.readAsStringSync();
+      final Map<String,dynamic> _map = jsonDecode(_data);
+      _map['locations'].forEach((center) {
+        final String _name = center["name"]!;
+        final String _address = center["address"]!;
+        final String _gov = center["gov"]!;
+        final double _latitude = center['latitude'];
+        final double _longitude = center['longitude'];
+        final Map<String, dynamic> _centerMap = {
+          'name': _name,
+          'address': _address,
+          'gov': _gov,
+          'latitude': _latitude,
+          'longitude': _longitude,
+        };
+        _centerLocations.add(_centerMap);
+      });
     }
   }
 
   static Future<void> _cacheLocations() async {
+    await _deleteCacheFile();
     Directory _directory = await getApplicationDocumentsDirectory();
     String _path = _directory.path;
     File _cacheFile = File('$_path/CenterLocations.txt');
     if (!await _cacheFile.exists()) {
       await _cacheFile.create();
       Map<String,dynamic> _map = {
-        'locations': _centerLocations,
+        'locations': _centerLocations.toList(),
       };
       String _data = jsonEncode(_map);
       //String _data = '${_centerLocations.toList()}';
       Fluttertoast.showToast(msg: _data);
       _cacheFile.writeAsStringSync(_data);
-    }
-    else {
-      //await _deleteCacheFile();
-      // String _data = _cacheFile.readAsStringSync();
-      // Fluttertoast.showToast(msg: _data);
     }
   }
 
@@ -77,6 +86,7 @@ class CentersLocations {
   }
 
   static Future<void> _loadLocationsFromNetworkAndCache() async {
+    if (_centerLocations.isNotEmpty) return;
     placesListArabic.forEach((center) async {
       List<Location> locations = await locationFromAddress(
         "${center["address"]},${center["gov"]}",
@@ -98,20 +108,18 @@ class CentersLocations {
       _centerLocations.add(_centerMap);
       if (_centerLocations.length == placesListArabic.length) {
         await _cacheLocations();
-        Fluttertoast.cancel();
-        Fluttertoast.showToast(msg: '${_centerLocations.length}');
       }
     });
-    //Cache locations
-    //_cacheLocations();
   }
 
   static Future<void> _getCentersLocations() async {
-    await _deleteCacheFile();
+    if (_centerLocations.isNotEmpty) return;
+    //await _deleteCacheFile();
     //Load from Cache
     if (await _isCacheFileExists()) {
       await _loadLocationsFromCache();
     }
+    //Load from internet
     else await _loadLocationsFromNetworkAndCache();
   }
 }
