@@ -1,7 +1,9 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/View/Mobile/beforequistion.dart';
 import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/Mobile/predonation_screen.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
@@ -31,128 +33,123 @@ class HomeScreen extends StatelessWidget {
         leading: GestureDetector(
           onTap: () => bottomBarKey.currentState?.setPage(3),
           child: AuthHelper.currentUser?.image != null &&
-                  AuthHelper.currentUser?.image != ""
+              AuthHelper.currentUser?.image != ""
               ? Transform.scale(
-                  scale: 0.5,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: CachedNetworkImageProvider(
-                      '${AuthHelper.currentUser?.image}',
-                      cacheKey: '${AuthHelper.currentUser?.image}',
-                    ),
-                  ),
-                )
+            scale: 0.5,
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.transparent,
+              backgroundImage: CachedNetworkImageProvider(
+                '${AuthHelper.currentUser?.image}',
+                cacheKey: '${AuthHelper.currentUser?.image}',
+              ),
+            ),
+          )
               : Icon(
-                  Icons.account_circle,
-                  size: 32,
-                  color: Theme.of(context).primaryColor,
-                ),
+            Icons.account_circle,
+            size: 32,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       extendBody: true,
-      body: SingleChildScrollView(
-        reverse: true,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 80,
-            left: 10,
-            right: 10,
-          ),
-          child: Column(
+      body:
+         Padding(
+           padding: const EdgeInsets.all(20.0),
+           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                //height: 40.0,
-                width: double.infinity,
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    15.0,
-                  ),
-                  color: Theme.of(context).primaryColor,
+             mainAxisSize: MainAxisSize.min,
+             children: [
+               Container(
+                 //height: 40.0,
+                 width: double.infinity,
+                 padding: const EdgeInsets.all(10.0),
+                 decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(
+                     15.0,
+                   ),
+                   color: Theme.of(context).primaryColor,
+                 ),
+                 child: TranslatedTextWidget(
+                   text: 'Most Sick People Need Blood Plasma',
+                   textAlign: TextAlign.center,
+                   style: const TextStyle(
+                     color: Colors.white,
+                     fontWeight: FontWeight.w500,
+                     fontSize: 20.0,
+                   ),
+                 ),
+               ),
+                SizedBox(
+                 height: 5,
+               ),
+               Text( 'Donate and help them treat many diseases that threaten their lives.',
+                 textAlign: TextAlign.center,
+                 style: const TextStyle(
+                   fontWeight: FontWeight.w700,
+                   fontSize: 18.0,
+                 ),
+               ),
+               Divider(
+                 indent: 35,
+                 endIndent: 35,
+                 thickness: 2,
+                 color: Theme.of(context).primaryColor,
+               ),
+                Expanded(
+                  child: Image(
+                   image: AssetImage(
+                     'assets/images/imgHome.png',
+                   ),
+
+               ),
                 ),
-                child: TranslatedTextWidget(
-                  text: 'Most Sick People Need Blood Plasma',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20.0,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              TranslatedTextWidget(
-                text: 'data:- the date for benefit of Donations',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18.0,
-                ),
-              ),
-              Divider(
-                indent: 35,
-                endIndent: 35,
-                thickness: 2,
-                color: Theme.of(context).primaryColor,
-              ),
-              const Image(
-                image: AssetImage(
-                  'assets/images/imgHome.png',
-                ),
-                width: 420,
-              ),
-              Divider(
-                indent: 70,
-                endIndent: 70,
-                thickness: 2,
-                color: Theme.of(context).primaryColor,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              // اتبرع الان !!!!!!
-              Container(
-                width: double.infinity,
-                height: 40.0,
-                padding: const EdgeInsets.symmetric(horizontal: 48),
-                margin: const EdgeInsets.symmetric(vertical: 16),
-                child: MaterialButton(
-                  elevation: 0,
-                  highlightElevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  color: Theme.of(context).primaryColor,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(
-                          create: (BuildContext context) =>
-                              QuestionScreenProvider(),
-                          child: const PreDonationScreen(),
-                        ),
-                      ),
-                    );
-                  },
-                  child: TranslatedTextWidget(
-                    text: 'Donate Now',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+               Divider(
+                 indent: 70,
+                 endIndent: 70,
+                 thickness: 2,
+                 color: Theme.of(context).primaryColor,
+               ),
+               const SizedBox(
+                 height: 5,
+               ),
+               //Donate now button
+               Align(
+                 alignment: FractionalOffset.bottomCenter,
+                 child: Padding(
+                   padding: const EdgeInsets.all(20.0),
+                   child: MaterialButton(
+                     shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(24),
+                     ),
+                     color: Theme.of(context).primaryColor,
+                       elevation:15,
+                     onPressed: () => {
+                       Navigator.of(context).push(
+                         MaterialPageRoute(
+                           builder: (context) => ChangeNotifierProvider(
+                             create: (BuildContext context) =>
+                                 QuestionScreenProvider(),
+                             child:  beforequistion(),
+                           ),
+                         ),
+                       )
+                     },
+                     child: const Text(
+                       '   Donate Now ',
+                       style: TextStyle(
+                         color: Colors.white,
+                         fontWeight: FontWeight.w600,
+                         fontSize: 20,
+                       ),
+                     ),
+                   ),
+                 ),
+               ),
+             ],
+           ),
+         ),
+
     );
   }
 }

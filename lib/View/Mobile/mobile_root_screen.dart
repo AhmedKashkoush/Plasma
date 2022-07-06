@@ -28,6 +28,6 @@ class _MobileRootScreenState extends State<MobileRootScreen> {
     final AuthenticationViewModel _authVM =
     Provider.of<AuthenticationViewModel>(context,);
     SystemChrome.setSystemUIOverlayStyle(MobileRootScreen.overlay);
-    return isMobileSignedIn ? MainScreen() : const BeforeLoginScreen();
+    return isMobileSignedIn ? MainScreen() : const BeforeLoginScreen ();
   }
 }
