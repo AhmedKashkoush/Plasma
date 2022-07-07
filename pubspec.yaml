@@ -42,7 +42,7 @@ dependencies:
   otp_text_field: ^1.1.2
   hexcolor: ^2.0.6
   badges: ^2.0.2
-  scrollable_positioned_list: ^0.2.3
+  #scrollable_positioned_list: ^0.2.3
   permission_handler: ^9.2.0
   qr_flutter: ^4.0.0
   avatar_glow: ^2.0.2

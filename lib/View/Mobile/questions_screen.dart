@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../Model/Models/question_model.dart';
 import '../Widgets/question_number_dot.dart';
@@ -17,7 +17,8 @@ class QuestionsScreen extends StatefulWidget {
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
   final PageController _questionPageController = PageController();
-  final ItemScrollController _controller = ItemScrollController();
+  // final ItemScrollController _controller = ItemScrollController();
+  final PageController _controller = PageController(viewportFraction: 0.15);
   final List<QuestionModel> _questions = [
     QuestionModel(
       question: 'Are you over 18 years old?',
@@ -118,18 +119,29 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             padding: const EdgeInsets.only(top: 60.0),
             child: SizedBox(
               height: 50,
-              child: ScrollablePositionedList.separated(
-                physics: NeverScrollableScrollPhysics(),
-                itemScrollController: _controller,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => QuestionNumberDot(
-                    numberIndex: index, currentQuestion: currentQuestion),
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                  width: 10,
+              child: PageView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _controller,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    child: QuestionNumberDot(
+                        numberIndex: index, currentQuestion: currentQuestion),
+                  ),
+                  itemCount: _questions.length,
                 ),
-                itemCount: _questions.length,
-              ),
+              // child: ScrollablePositionedList.separated(
+              //   physics: NeverScrollableScrollPhysics(),
+              //   itemScrollController: _controller,
+              //   scrollDirection: Axis.horizontal,
+              //   itemBuilder: (context, index) => QuestionNumberDot(
+              //       numberIndex: index, currentQuestion: currentQuestion),
+              //   separatorBuilder: (BuildContext context, int index) =>
+              //       const SizedBox(
+              //     width: 10,
+              //   ),
+              //   itemCount: _questions.length,
+              // ),
             ),
           ),
           const Divider(
@@ -233,11 +245,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-    _controller.scrollTo(
-      index: currentQuestion,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      alignment: 0.5,
-    );
+    // _controller.scrollTo(
+    //   index: currentQuestion,
+    //   duration: const Duration(milliseconds: 300),
+    //   curve: Curves.easeInOut,
+    //   alignment: 0.5,
+    // );
+    _controller.animateToPage(currentQuestion, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut,);
   }
 }

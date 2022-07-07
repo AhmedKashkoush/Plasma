@@ -13,6 +13,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   bool obscureText = true;
 
   var formKey = GlobalKey<FormState>();
+  String? radioValue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 ),
                 TranslatedTextWidget(
                   text:
-                      "In order to ensure that the Ministry of Health is providing the best service to donors, answer the following.",
+                      "In the interest of the Ministry of Health to provide the best service to donors, answer the following:",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 24.0,
@@ -55,7 +56,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                const Divider(thickness: 1,),
+                const Divider(
+                  thickness: 1,
+                ),
                 TranslatedTextWidget(
                   text:
                       "What is your rating for the service you received at the center in general?",
@@ -70,7 +73,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                const Divider(
+                  thickness: 1,
+                  indent: 14,
+                  endIndent: 84,
+                ),
                 TranslatedTextWidget(
                   text:
                       "What is your assessment of the performance of the service in terms of:",
@@ -95,7 +102,11 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 const SizedBox(
                   height: 28.0,
                 ),
-                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                const Divider(
+                  thickness: 1,
+                  indent: 14,
+                  endIndent: 84,
+                ),
                 TranslatedTextWidget(
                   text: "2- Availability of information and donor awareness?",
                   style: TextStyle(
@@ -109,9 +120,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 const SizedBox(
                   height: 28.0,
                 ),
-                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                const Divider(
+                  thickness: 1,
+                  indent: 14,
+                  endIndent: 84,
+                ),
                 TranslatedTextWidget(
-                  text: "3- The level of medical safety and sterilization",
+                  text: "3- The level of medical safety and sterilization?",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
@@ -123,66 +138,100 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 const SizedBox(
                   height: 30.0,
                 ),
-                const Divider(thickness: 1,),
+                const Divider(
+                  thickness: 1,
+                  indent: 14,
+                  endIndent: 84,
+                ),
                 TranslatedTextWidget(
-                  text:
-                      "Enter your name and phone number, and one of the center's representatives will call you.",
+                  text: "Would you like to be a regular donor?",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(
-                  height: 15.0,
+                RadioListTile(
+                    title: TranslatedTextWidget(text: 'Yes',),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    value: 'yes',
+                    groupValue: radioValue,
+                    onChanged: (String? value) {
+                      setState(() {
+                        radioValue = value;
+                      });
+                    }),
+                RadioListTile(
+                    title: TranslatedTextWidget(text: 'No',),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    value: 'no',
+                    groupValue: radioValue,
+                    onChanged: (String? value) {
+                      setState(() {
+                        radioValue = value;
+                      });
+                    }),
+                const Divider(
+                  thickness: 1,
                 ),
-                TextFormField(
-                  controller: nameController,
-                  keyboardType: TextInputType.name,
-                  onFieldSubmitted: (value) {
-                    print(value);
-                  },
-                  onChanged: (value) {
-                    print(value);
-                  },
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return TranslatedTextWidget.translate('Required Field');
-                    }
-
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: TranslatedTextWidget.translate('Your Name'),
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(
-                  height: 15.0,
-                ),
-                TextFormField(
-                  controller: numberController,
-                  keyboardType: TextInputType.number,
-                  onFieldSubmitted: (value) {
-                    print(value);
-                  },
-                  onChanged: (value) {
-                    print(value);
-                  },
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return TranslatedTextWidget.translate('Required Field');
-                    }
-
-                    return null;
-                  },
-                  decoration: InputDecoration(
-                    labelText: TranslatedTextWidget.translate('Your Phone'),
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
+                // TranslatedTextWidget(
+                //   text:
+                //       "Enter your name and phone number, and one of the center's representatives will call you.",
+                //   style: TextStyle(
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 15.0,
+                // ),
+                // // TextFormField(
+                // //   controller: nameController,
+                // //   keyboardType: TextInputType.name,
+                // //   onFieldSubmitted: (value) {
+                // //     print(value);
+                // //   },
+                // //   onChanged: (value) {
+                // //     print(value);
+                // //   },
+                // //   validator: (String? value) {
+                // //     if (value!.isEmpty) {
+                // //       return TranslatedTextWidget.translate('Required Field');
+                // //     }
+                // //
+                // //     return null;
+                // //   },
+                // //   decoration: InputDecoration(
+                // //     labelText: TranslatedTextWidget.translate('Your Name'),
+                // //     border: const OutlineInputBorder(),
+                // //   ),
+                // // ),
+                // // const SizedBox(
+                // //   height: 15.0,
+                // // ),
+                // // TextFormField(
+                // //   controller: numberController,
+                // //   keyboardType: TextInputType.number,
+                // //   onFieldSubmitted: (value) {
+                // //     print(value);
+                // //   },
+                // //   onChanged: (value) {
+                // //     print(value);
+                // //   },
+                // //   validator: (String? value) {
+                // //     if (value!.isEmpty) {
+                // //       return TranslatedTextWidget.translate('Required Field');
+                // //     }
+                // //
+                // //     return null;
+                // //   },
+                // //   decoration: InputDecoration(
+                // //     labelText: TranslatedTextWidget.translate('Your Phone'),
+                // //     border: const OutlineInputBorder(),
+                // //   ),
+                // // ),
+                // // const SizedBox(
+                // //   height: 30.0,
+                // // ),
                 Container(
                   alignment: Alignment.center,
                   //padding: EdgeInsets.all(24),
