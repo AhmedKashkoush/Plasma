@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
-import 'package:emoji_feedback/emoji_feedback.dart';
+import 'package:plasma/View/Widgets/rating_widget.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   const QuestionnaireScreen({Key? key}) : super(key: key);
@@ -21,177 +19,192 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
     var nameController;
     var numberController;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: SingleChildScrollView(
-            //to make scroll
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Image(
+      body: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          //to make scroll
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: const Image(
                     image: AssetImage(
                       'assets/images/plasma_img.png',
                     ),
-                    width: 100.0,
-                    height: 100.0,
+                    width: 120.0,
+                    height: 120.0,
                   ),
-                  const SizedBox(
-                    height: 30.0,
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                TranslatedTextWidget(
+                  text:
+                      "In order to ensure that the Ministry of Health is providing the best service to donors, answer the following.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24.0,
                   ),
-                  Text(
-                    "In order to ensure that the Ministry of Health is providing the best service to donors, answer the following. ",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 35.0,
-                    ),
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                const Divider(thickness: 1,),
+                TranslatedTextWidget(
+                  text:
+                      "What is your rating for the service you received at the center in general?",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(
-                    height: 30.0,
+                ),
+                RatingWidget(
+                  onRatingUpdate: (rate) {},
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                TranslatedTextWidget(
+                  text:
+                      "What is your assessment of the performance of the service in terms of:",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
                   ),
-                  Text(
-                    "What is your rating for the service you received at the center in general?",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
+                ),
+                const SizedBox(
+                  height: 28.0,
+                ),
+                TranslatedTextWidget(
+                  text: "1- Welcoming and good treatment?",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
                   ),
-                  EmojiFeedback(
-                    onChange: (index) {
-                      print(index);
-                    },
+                ),
+                RatingWidget(
+                  onRatingUpdate: (rate) {},
+                ),
+                const SizedBox(
+                  height: 28.0,
+                ),
+                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                TranslatedTextWidget(
+                  text: "2- Availability of information and donor awareness?",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(
-                    height: 30.0,
+                ),
+                RatingWidget(
+                  onRatingUpdate: (rate) {},
+                ),
+                const SizedBox(
+                  height: 28.0,
+                ),
+                const Divider(thickness: 1,indent: 14,endIndent: 84,),
+                TranslatedTextWidget(
+                  text: "3- The level of medical safety and sterilization",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
                   ),
-                  Text(
-                    "What is your assessment of the performance of the service in terms of?",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
+                ),
+                RatingWidget(
+                  onRatingUpdate: (rate) {},
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                const Divider(thickness: 1,),
+                TranslatedTextWidget(
+                  text:
+                      "Enter your name and phone number, and one of the center's representatives will call you.",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(
-                    height: 29.0,
-                  ),
-                  Text(
-                    "Welcoming and good treatment",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  EmojiFeedback(
-                    onChange: (index) {
-                      print(index);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 28.0,
-                  ),
-                  Text(
-                    "Availability of information and donor awareness",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  EmojiFeedback(
-                    onChange: (index) {
-                      print(index);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 28.0,
-                  ),
-                  Text(
-                    "The level of medical safety and sterilization",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  EmojiFeedback(
-                    onChange: (index) {
-                      print(index);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Enter your phone number and name, and one of the center's representatives will call you.",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  TextFormField(
-                    controller: nameController,
-                    keyboardType: TextInputType.name,
-                    onFieldSubmitted: (value) {
-                      print(value);
-                    },
-                    onChanged: (value) {
-                      print(value);
-                    },
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return ('Required Field');
-                      }
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                TextFormField(
+                  controller: nameController,
+                  keyboardType: TextInputType.name,
+                  onFieldSubmitted: (value) {
+                    print(value);
+                  },
+                  onChanged: (value) {
+                    print(value);
+                  },
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return TranslatedTextWidget.translate('Required Field');
+                    }
 
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      labelText: ('Your Name'),
-                      border: const OutlineInputBorder(),
-                    ),
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: TranslatedTextWidget.translate('Your Name'),
+                    border: const OutlineInputBorder(),
                   ),
-                  const SizedBox(
-                    height: 15.0,
-                  ),
-                  TextFormField(
-                    controller: numberController,
-                    keyboardType: TextInputType.number,
-                    onFieldSubmitted: (value) {
-                      print(value);
-                    },
-                    onChanged: (value) {
-                      print(value);
-                    },
-                    validator: (String? value) {
-                      if (value!.isEmpty) {
-                        return ('Required Field');
-                      }
+                ),
+                const SizedBox(
+                  height: 15.0,
+                ),
+                TextFormField(
+                  controller: numberController,
+                  keyboardType: TextInputType.number,
+                  onFieldSubmitted: (value) {
+                    print(value);
+                  },
+                  onChanged: (value) {
+                    print(value);
+                  },
+                  validator: (String? value) {
+                    if (value!.isEmpty) {
+                      return TranslatedTextWidget.translate('Required Field');
+                    }
 
-                      return null;
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: TranslatedTextWidget.translate('Your Phone'),
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  //padding: EdgeInsets.all(24),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // minimumSize: Size(280, 80),
+                      // textStyle: TextStyle(fontSize: 28),
+                      // primary: Colors.amber,
+                      // onPrimary: Colors.black,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 34),
+                    ),
+                    onPressed: () {
+                      formKey.currentState!.validate();
                     },
-                    decoration: InputDecoration(
-                      labelText: ('your phone'),
-                      border: const OutlineInputBorder(),
-                    ),
+                    child: TranslatedTextWidget(text: "Send"),
                   ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(32),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(280, 80),
-                        textStyle: TextStyle(fontSize: 28),
-                        primary: Colors.amber,
-                        onPrimary: Colors.black,
-                      ),
-                      onPressed: () {},
-                      child: Text("Send"),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../Utils/utils.dart';
-import '../Widgets/blood_loading.dart';
 import '../Widgets/custom_text_field.dart';
 import '../Widgets/translated_text_widget.dart';
 
-class SimilarQuestionsScreen extends StatefulWidget {
+class MedicationScreen extends StatefulWidget {
   final PageController pageController;
 
-  const SimilarQuestionsScreen({Key? key, required this.pageController})
+  const MedicationScreen({Key? key, required this.pageController})
       : super(key: key);
 
   @override
-  State<SimilarQuestionsScreen> createState() => _SimilarQuestionsScreenState();
+  State<MedicationScreen> createState() => _MedicationScreenState();
 }
 
-class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
+class _MedicationScreenState extends State<MedicationScreen> {
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -57,7 +56,7 @@ class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
                     Center(
                       child: TranslatedTextWidget(
                         text:
-                            'If You Were Asked Similar Questions Please Inform Us With It',
+                            'If you are taking any medication, please let us know',
                         style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
@@ -67,7 +66,7 @@ class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
                     ),
                     CustomTextField(
                       controller: textController,
-                      hint: 'Write a Question',
+                      hint: 'Write medication names',
                       onChanged: (s) {
                         setState(() {});
                       },
@@ -134,7 +133,7 @@ class _SimilarQuestionsScreenState extends State<SimilarQuestionsScreen> {
                             }
                           : null,
                       child: TranslatedTextWidget(
-                        text: 'Submit Question',
+                        text: 'Submit',
                       ),
                     ),
                     ElevatedButton(

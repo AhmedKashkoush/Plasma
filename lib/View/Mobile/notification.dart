@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/View/Mobile/questionnaire.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
 import 'package:plasma/ViewModel/notifications_view_model.dart';
@@ -48,8 +49,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           leading: GestureDetector(
             onTap: () => widget.bottomBarKey.currentState?.setPage(3),
-            child:  AuthHelper.currentUser?.image != null &&
-                AuthHelper.currentUser?.image != ""
+            child: AuthHelper.currentUser?.image != null &&
+                    AuthHelper.currentUser?.image != ""
                 ? Transform.scale(
                     scale: 0.5,
                     child: CircleAvatar(
@@ -211,6 +212,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         setState(() {
                           provider.notificationsList[index].isOpened = true;
                         });
+                        _goToNotificationPage(provider.notificationsList[index].type);
                       },
                     );
                   return provider.isLoading
@@ -247,6 +249,36 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Future<void> _cacheImage(
       ImageProvider imageProvider, BuildContext context) async {
     await precacheImage(imageProvider, context);
+  }
+
+  void _goToNotificationPage(NotificationType type) {
+    switch (type) {
+      case NotificationType.questionnaire:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const QuestionnaireScreen(),
+          ),
+        );
+        break;
+      case NotificationType.reservation:
+        // TODO: Handle this case.
+        break;
+      case NotificationType.reminder:
+        // TODO: Handle this case.
+        break;
+      case NotificationType.medicalTestResult:
+        // TODO: Handle this case.
+        break;
+      case NotificationType.bonus:
+        // TODO: Handle this case.
+        break;
+      case NotificationType.auth:
+        // TODO: Handle this case.
+        break;
+      case NotificationType.user:
+        // TODO: Handle this case.
+        break;
+    }
   }
 }
 

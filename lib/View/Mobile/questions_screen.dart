@@ -20,72 +20,76 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   final ItemScrollController _controller = ItemScrollController();
   final List<QuestionModel> _questions = [
     QuestionModel(
-      question: 'Are You Over 18 Years Old?',
+      question: 'Are you over 18 years old?',
       answers: ['Yes', 'No'],
       correctAnswer: 'Yes',
     ),
     QuestionModel(
-      question: 'Do You Weigh More Than 50 Kg?',
+      question: 'Do you weigh more than 50 Kg?',
       answers: ['Yes', 'No'],
       correctAnswer: 'Yes',
     ),
     QuestionModel(
-      question: 'Is Your Blood Pressure Level Regular?',
+      question: 'Is your blood pressure level regular?',
       answers: ['Yes', 'No'],
       correctAnswer: 'Yes',
     ),
     QuestionModel(
-      question: 'Do You Suffer From Heart Problems?',
+      question: 'Do you suffer from Heart problems?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Do You Suffer From Liver Problems?',
+      question: 'Do you suffer from Liver problems?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Do You Suffer From Kidney Problems?',
+      question: 'Do you suffer from Kidney problems?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Do You Suffer From Thyroid Problems?',
+      question: 'Do you suffer from Thyroid problems?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Do You Have Diabetes Problems?',
+      question: 'Do you have Diabetes problems?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Have You Received The CoronaVirus Vaccine?',
+      question: 'Have you received the CoronaVirus vaccine?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Have You Had Surgery in The Last 6 Months?',
+      question: 'Have you had surgery in the last 6 months?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Have you ever donated blood or one of its derivatives during the past three months?',
+      question:
+          'Have you ever donated blood or one of its derivatives during the past three months?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'During the past 14 days, did you have any symptoms of the emerging corona virus?',
+      question:
+          'During the past 14 days, did you have any symptoms of the emerging corona virus?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'During the past 14 days, have you had contact with a patient infected with the emerging corona virus?',
+      question:
+          'During the past 14 days, have you had contact with a patient infected with the emerging corona virus?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
     QuestionModel(
-      question: 'Have you undergone any dental treatment (filling, extraction, root treatment, cleaning, whitening)?',
+      question:
+          'Have you undergone any dental treatment (filling, extraction, root treatment, cleaning, whitening)?',
       answers: ['Yes', 'No'],
       correctAnswer: 'No',
     ),
@@ -97,6 +101,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   ];
 
   int currentQuestion = 0;
+  final double radius = 24;
 
   @override
   void dispose() {
@@ -141,8 +146,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      _questions[index].question,
+                    child: TranslatedTextWidget(
+                      text: _questions[index].question,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -163,20 +169,27 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.blue.shade700,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(radius)),
                           ),
                           child: TranslatedTextWidget(
                             text: _questions[index].answers[0],
                             style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(
                         width: 140,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(radius)),
+                          ),
                           onPressed: () {
                             setState(() {
                               _moveToNextQuestion();

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/Models/question_model.dart';
 import 'package:plasma/View/Mobile/questions_screen.dart';
-import 'package:plasma/View/Mobile/similar_questions_screen.dart';
+import 'package:plasma/View/Mobile/medication_screen.dart';
 import 'package:plasma/View/Providers/question_screen_provider.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/custom_text_field.dart';
@@ -100,7 +100,7 @@ class _PreDonationScreenState extends State<PreDonationScreen> {
         scrollDirection: Axis.horizontal,
         children: [
           QuestionsScreen(pageController: _pageController),
-          SimilarQuestionsScreen(pageController: _pageController),
+          MedicationScreen(pageController: _pageController),
           SelectPlaceScreen(pageController: _pageController),
           SelectDateTimeScreen(pageController: _pageController),
         ],
