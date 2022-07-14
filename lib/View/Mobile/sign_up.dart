@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plasma/Utils/files_api.dart';
 import 'package:plasma/View/Mobile/login.dart';
@@ -40,9 +41,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController passController = TextEditingController();
   final TextEditingController nationalIDController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
+  String? gender;
 
   bool obscurePasswordText = true;
   bool obscureConfirmText = true;
+
+  final String phoneRegex = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  final String emailRegex = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  final String passwordRegex = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -201,9 +207,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 25.0,
                   ),
+                  DropdownButtonFormField<String>(
+                    items: [
+                      DropdownMenuItem<String>(
+                        child: TranslatedTextWidget(
+                          text: 'Male',
+                        ),
+                        value: 'male',
+                      ),
+                      DropdownMenuItem<String>(
+                        child: TranslatedTextWidget(
+                          text: 'Female',
+                        ),
+                        value: 'female',
+                      ),
+                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return TranslatedTextWidget.translate('Required Field');
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        gender = value;
+                      });
+                    },
+                    hint: TranslatedTextWidget(
+                      text: 'Gender',
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: gender == 'male'
+                          ? const Icon(Icons.male)
+                          : gender == 'female'
+                              ? const Icon(Icons.female)
+                              : SizedBox(
+                                width: 16,
+                                child: Center(
+                                  child: const FaIcon(
+                                    FontAwesomeIcons.genderless,
+                                  ),
+                                ),
+                              ),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25.0,
+                  ),
                   TextFormField(
                     controller: phoneController,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.phone,
                     onFieldSubmitted: (value) {
                       print(value);
                     },
@@ -214,6 +268,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value!.isEmpty) {
                         return TranslatedTextWidget.translate('Required Field');
                       }
+                      final RegExp exp = RegExp(phoneRegex);
+                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid phone number');
                     },
                     decoration: InputDecoration(
                       labelText: TranslatedTextWidget.translate(
@@ -240,10 +296,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value!.isEmpty) {
                         return TranslatedTextWidget.translate('Required Field');
                       }
-                      if (!value.contains('@')) {
-                        return TranslatedTextWidget.translate(
-                            'It is not a valid email address');
-                      }
+                      // if (!value.contains('@')) {
+                      //   return TranslatedTextWidget.translate(
+                      //       'It is not a valid email address');
+                      // }
+                      final RegExp exp = RegExp(emailRegex);
+                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid email address');
                       return null;
                     },
                     decoration: InputDecoration(
@@ -275,6 +333,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return TranslatedTextWidget.translate(
                             'Password must contain at least 8 characters');
                       }
+                      final RegExp exp = RegExp(passwordRegex);
+                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid password');
                       return null;
                     },
                     obscureText: obscurePasswordText,
@@ -391,6 +451,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 final UserModel userModel = UserModel(
                                   firstName: fNameController.text,
                                   lastName: lNameController.text,
+                                  gender: gender!,
                                   phone: phoneController.text,
                                   email: emailController.text,
                                   password: passController.text,

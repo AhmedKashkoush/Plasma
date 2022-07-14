@@ -9,6 +9,7 @@ import 'package:plasma/Model/Models/notifications_model.dart';
 import 'package:plasma/Model/Models/reservation_model.dart';
 import 'package:plasma/Model/Models/user_model.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/Utils/notification_helper.dart';
 
 class AuthenticationViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -45,6 +46,7 @@ class AuthenticationViewModel extends ChangeNotifier {
       AuthHelper.currentUser = UserModel(
         firstName: userModel.firstName,
         lastName: userModel.lastName,
+        gender: userModel.gender,
         phone: userModel.phone,
         email: userModel.email,
         password: userModel.password,
@@ -59,6 +61,7 @@ class AuthenticationViewModel extends ChangeNotifier {
           place: '',
           date: null,
           time: null,
+          questionsAnswers: null,
         )),
         donorTypeModel:
             DonorTypeModel.toJson(DonorTypeModel(type: null, delayTime: null)),
@@ -67,6 +70,7 @@ class AuthenticationViewModel extends ChangeNotifier {
           .collection('users')
           .doc(_user.user?.uid)
           .set(UserModel.toJson(AuthHelper.currentUser!));
+      await NotificationHelper.subscribeToTopic(AuthHelper.currentUser!.nationalId);
     } on Exception catch (e) {
       _hasError = true;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();

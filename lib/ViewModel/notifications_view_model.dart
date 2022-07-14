@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plasma/Model/Repositories/notifications_repository.dart';
+import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
 
 import '../Model/Models/notification_model.dart';
@@ -10,6 +12,7 @@ class NotificationsViewModel extends ChangeNotifier
   bool isLoading = false;
   bool hasError = false;
   bool isDone = false;
+  int newNotifications = 0;//AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
 
   List<NotificationModel> notificationsList = [];
   final List<String> _types = [
@@ -95,5 +98,15 @@ class NotificationsViewModel extends ChangeNotifier
   Future<void> refreshOnError() async {
     hasError = false;
     loadMoreNotifications(limit);
+  }
+
+  Future<void> incrementNotifications()async{
+    newNotifications ++;
+    notifyListeners();
+  }
+
+  Future<void> flushNotifications() async {
+    newNotifications = 0;
+    notifyListeners();
   }
 }

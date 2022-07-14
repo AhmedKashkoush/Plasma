@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plasma/Model/Models/user_model.dart';
+import 'package:plasma/Utils/notification_helper.dart';
 
 class AuthHelper{
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,6 +14,7 @@ class AuthHelper{
       await _store.collection('users').doc(_auth.currentUser?.uid).get();
       final Map<String, dynamic> data = snapshot.data()!;
       currentUser = UserModel.fromJson(data);
+      await NotificationHelper.subscribeToTopic(currentUser!.nationalId);
     } on Exception catch (e) {
       currentUser = null;
     }
@@ -21,6 +23,7 @@ class AuthHelper{
   static Future<bool> logOut() async {
     try {
       await _auth.signOut();
+      await NotificationHelper.unsubscribeFromTopic(currentUser!.nationalId);
       currentUser = null;
       return true;
     } on Exception catch (e) {

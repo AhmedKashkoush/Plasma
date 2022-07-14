@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Mobile/settings_screen.dart';
 import 'package:plasma/View/Widgets/selectable_tile.dart';
@@ -9,23 +8,26 @@ import 'package:plasma/View/Mobile/contact_us.dart';
 import 'package:plasma/View/Mobile/donation_places_screen.dart';
 import 'package:plasma/View/Mobile/information.dart';
 import 'package:plasma/View/Mobile/main_screen.dart';
+import 'package:plasma/ViewModel/notifications_view_model.dart';
+import 'package:provider/provider.dart';
 
 class MobileCustomDrawer extends StatelessWidget {
   final int screenIndex;
-  final int homeNotifications;
 
   const MobileCustomDrawer(
-      {Key? key, required this.screenIndex, this.homeNotifications = 0})
+      {Key? key, required this.screenIndex})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final NotificationsViewModel vm = Provider.of<NotificationsViewModel>(context);
     return Drawer(
       child: Material(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: SingleChildScrollView(
           child: DrawerContent(
             itemSelected: screenIndex,
+            homeNotifications: vm.newNotifications,
           ),
         ),
       ),
@@ -35,9 +37,10 @@ class MobileCustomDrawer extends StatelessWidget {
 
 class DrawerContent extends StatelessWidget {
   final int itemSelected;
+  final int homeNotifications;
 
   const DrawerContent(
-      {Key? key, required this.itemSelected,})
+      {Key? key, required this.itemSelected,this.homeNotifications = 0})
       : super(key: key);
 
   static const List<String> _items = [
@@ -72,11 +75,11 @@ class DrawerContent extends StatelessWidget {
     SettingsScreen(),
   ];
 
-  static int homeNotifications = AuthHelper.currentUser?.notifications?["new_notifications"];
+  //static int homeNotifications = AuthHelper.currentUser?.notifications?["new_notifications"];
 
   @override
   Widget build(BuildContext context) {
-    if (homeNotifications < 0) homeNotifications = 0;
+    //if (homeNotifications < 0) homeNotifications = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
@@ -105,7 +108,7 @@ class DrawerContent extends StatelessWidget {
                 notifications: _notifications[index],
                 contentSize: 15,
                 onTap: index == itemSelected
-                    ? Scaffold.of(context).isDrawerOpen
+                    ? Navigator.of(context).canPop()
                         ? () {
                             Navigator.pop(context);
                           }

@@ -1,10 +1,11 @@
 import 'package:badges/badges.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Mobile/notification.dart';
 import 'package:plasma/View/Mobile/profile.dart';
+import 'package:plasma/ViewModel/notifications_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../Widgets/mobile_custom_drawer.dart';
 import 'home.dart';
@@ -18,7 +19,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _index = 1;
-  int _notificationsNumber = AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
+  late int _notificationsNumber; //AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
   final GlobalKey<CurvedNavigationBarState> _curvedBarKey =
       GlobalKey<CurvedNavigationBarState>();
   static const List<IconData> _itemIcons = [
@@ -27,19 +28,43 @@ class _MainScreenState extends State<MainScreen> {
     Icons.notifications,
     Icons.account_circle_rounded,
   ];
+
+//   void _messageHandler(RemoteMessage message) async {
+//       RemoteNotification? notification = message.notification;
+//       AndroidNotification? android = message.notification!.android;
+//       if (notification != null && android != null) {
+//         if (_index != 2) vm?.incrementNotifications();
+//       }
+//   }
+//
+//
+//   @override
+//   void initState() {
+//     FirebaseMessaging.onMessage.listen((message) async{
+//       _messageHandler(message);
+//     });
+//     super.initState();
+//   }
+// @override
+//   void didChangeDependencies() {
+//     vm = Provider.of<NotificationsViewModel>(context);
+//     super.didChangeDependencies();
+//   }
+
   @override
   Widget build(BuildContext context) {
+    final NotificationsViewModel vm = Provider.of<NotificationsViewModel>(context);
+    _notificationsNumber = vm.newNotifications;
     return WillPopScope(
       onWillPop: () => Utils.confirmExit(context),
       child: Scaffold(
         drawer: MobileCustomDrawer(
           screenIndex: 0,
-          homeNotifications: _notificationsNumber,
         ),
         body: MainScreenItems(
-          index: _index,
-          bottomBarKey: _curvedBarKey,
-        ),
+              index: _index,
+              bottomBarKey: _curvedBarKey,
+            ),
         bottomNavigationBar: Builder(builder: (context) {
           return CurvedNavigationBar(
             key: _curvedBarKey,
@@ -49,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
               if (index != _index)
                 setState(() {
                   _index = index;
-                  if (_index == 2) _notificationsNumber = 0;
+                  if (_index == 2) vm.flushNotifications();
                 });
             },
             animationDuration: const Duration(milliseconds: 300),
@@ -68,6 +93,7 @@ class _MainScreenState extends State<MainScreen> {
                             ? Badge(
                                 animationType: BadgeAnimationType.scale,
                                 elevation: 0,
+                                animationDuration: const Duration(milliseconds: 300),
                                 position: BadgePosition.topEnd(top: -5,end: -5,),
                                 badgeContent: Text(
                                   '$_notificationsNumber',

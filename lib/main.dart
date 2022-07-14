@@ -4,9 +4,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/centers_locations.dart';
 import 'package:plasma/Utils/locales.dart';
+import 'package:plasma/Utils/notification_helper.dart';
 import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
 import 'package:plasma/ViewModel/authentication_view_model.dart';
+import 'package:plasma/ViewModel/notifications_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'Utils/shared_preferences_api.dart';
@@ -31,6 +33,7 @@ void main() async {
   await LocaleHelper.loadLocale();
   await AuthHelper.getUserData();
   await CentersLocations.loadLocations();
+  await NotificationHelper.messageHandler();
   runApp(
     MultiProvider(
       providers: [
@@ -42,6 +45,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => AuthenticationViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationsViewModel(),
         ),
       ],
       child: const MyApp(),

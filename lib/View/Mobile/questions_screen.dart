@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/View/Providers/question_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../Model/Models/question_model.dart';
 import '../Widgets/question_number_dot.dart';
@@ -112,6 +114,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final QuestionScreenProvider _provider = Provider.of<QuestionScreenProvider>(context,listen: false);
     return Scaffold(
       body: Column(
         children: [
@@ -176,6 +179,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
+                              _provider.setAnswer('yes');
                               _moveToNextQuestion();
                             });
                           },
@@ -204,6 +208,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                           ),
                           onPressed: () {
                             setState(() {
+                              _provider.setAnswer('no');
                               _moveToNextQuestion();
                             });
                           },

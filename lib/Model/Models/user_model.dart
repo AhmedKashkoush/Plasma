@@ -1,10 +1,7 @@
-import 'package:plasma/Model/Models/donor_type_model.dart';
-import 'package:plasma/Model/Models/notifications_model.dart';
-import 'package:plasma/Model/Models/reservation_model.dart';
-
 class UserModel {
   final String firstName;
   final String lastName;
+  final String gender;
   final String phone;
   final String email;
   final String password;
@@ -18,6 +15,7 @@ class UserModel {
   UserModel({
     required this.firstName,
     required this.lastName,
+    required this.gender,
     required this.phone,
     required this.email,
     required this.password,
@@ -32,6 +30,7 @@ class UserModel {
   static UserModel fromJson(Map<String, dynamic> json) => UserModel(
         firstName: json["first_name"],
         lastName: json["last_name"],
+        gender: json["gender"],
         phone: json["phone"],
         email: json["email"],
         password: json["password"],
@@ -46,6 +45,7 @@ class UserModel {
   static Map<String, dynamic> toJson(UserModel model) => <String, dynamic>{
         'first_name': model.firstName,
         'last_name': model.lastName,
+        'gender': model.gender,
         'phone': model.phone,
         'email': model.email,
         'password': model.password,

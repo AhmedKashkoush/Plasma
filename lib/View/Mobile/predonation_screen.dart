@@ -3,6 +3,8 @@ import 'package:plasma/View/Mobile/questions_screen.dart';
 import 'package:plasma/View/Mobile/medication_screen.dart';
 import 'package:plasma/View/Mobile/select_date_time.dart';
 import 'package:plasma/View/Mobile/select_place.dart';
+import 'package:plasma/View/Providers/question_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../Widgets/translated_text_widget.dart';
 
@@ -16,15 +18,19 @@ class PreDonationScreen extends StatefulWidget {
 class _PreDonationScreenState extends State<PreDonationScreen> {
   final PageController _pageController = PageController();
   final PageController _questionPageController = PageController();
+  late QuestionScreenProvider provider;
+
   @override
   void dispose() {
     _pageController.dispose();
     _questionPageController.dispose();
+    provider.disposeProvider();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<QuestionScreenProvider>(context,listen: false);
     return WillPopScope(
       onWillPop: () async {
         return await _confirmDialog(context) ?? false;
@@ -43,35 +49,33 @@ class _PreDonationScreenState extends State<PreDonationScreen> {
     );
   }
 
-  Future<bool?> _confirmDialog(BuildContext context) async =>
-      await showDialog(
+  Future<bool?> _confirmDialog(BuildContext context) async => await showDialog(
         context: context,
-        builder: (context) =>
-            AlertDialog(
-              title: TranslatedTextWidget(
-                text: 'Go Back?',
+        builder: (context) => AlertDialog(
+          title: TranslatedTextWidget(
+            text: 'Go Back?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.red,
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  style: TextButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  child: TranslatedTextWidget(
-                    text: 'Ok',
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: TranslatedTextWidget(
-                    text: 'Cancel',
-                  ),
-                ),
-              ],
+              child: TranslatedTextWidget(
+                text: 'Ok',
+              ),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: TranslatedTextWidget(
+                text: 'Cancel',
+              ),
+            ),
+          ],
+        ),
       );
 }
