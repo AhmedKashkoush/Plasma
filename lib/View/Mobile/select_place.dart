@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/APIs/Dummy/dummy_places.dart';
-import 'package:plasma/View/Mobile/predonation_screen.dart';
 import 'package:plasma/View/Widgets/place_select_card.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +78,7 @@ class SelectPlaceScreen extends StatelessWidget {
                         '${TranslatedTextWidget.translate(placesList[index]["name"]!)},${TranslatedTextWidget.translate(placesList[index]["address"]!)},${TranslatedTextWidget.translate(placesList[index]["gov"]!)}',
                     onTap: () {
                       _provider.setCenter(
-                          '${TranslatedTextWidget.translate(placesList[index]["name"]!)},${TranslatedTextWidget.translate(placesList[index]["address"]!)},${TranslatedTextWidget.translate(placesList[index]["gov"]!)}');
+                          '${placesList[index]["name"]!};${placesList[index]["address"]!};${placesList[index]["gov"]!}');
                       _moveToNextPage();
                     },
                   ),

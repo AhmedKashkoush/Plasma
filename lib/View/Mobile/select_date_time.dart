@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plasma/Model/Models/reservation_model.dart';
 import 'package:plasma/Utils/locales.dart';
+import 'package:plasma/ViewModel/reservation_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart' as intl;
@@ -19,9 +21,12 @@ class SelectDateTimeScreen extends StatefulWidget {
 }
 
 class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
-  var timeController = TextEditingController();
-  var dateController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
+  final TextEditingController timeController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  String? _date;
+  String? _time;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +34,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
     String? locale = LocaleHelper.currentLocale?.languageCode.substring(0, 2);
     final QuestionScreenProvider _provider =
         Provider.of<QuestionScreenProvider>(context);
+    final ReservationViewModel _vm = Provider.of<ReservationViewModel>(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusScope.of(context).unfocus(),
@@ -76,7 +82,7 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                               clipBehavior: Clip.none,
                               children: [
                                 PlaceSelectCard(
-                                  placeName: _provider.selectedCenter,
+                                  placeName: '${TranslatedTextWidget.translate(_provider.centerName)},${TranslatedTextWidget.translate(_provider.centerAddress)},${TranslatedTextWidget.translate(_provider.centerGov)}',
                                 ),
                                 Positioned(
                                   left: isLTR ? -22 : null,
@@ -131,7 +137,9 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                     selectableTimePredicate: (time) =>
                                         time!.hour > 7 && time.hour < 21).then(
                                     (value) {
+                                  //_time = value;
                                   timeController.text = value!.format(context);
+                                  _time = value.format(context);
                                   print(value.format(context));
                                 });
                               },
@@ -172,35 +180,67 @@ class _SelectDateTimeScreenState extends State<SelectDateTimeScreen> {
                                   dateController.text =
                                       intl.DateFormat.yMMMd(locale)
                                           .format(value);
+                                  _date = intl.DateFormat.yMMMd().format(value);
                                 });
                               },
                             ),
                             const SizedBox(
                               height: 60.0,
                             ),
-                            MaterialButton(
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  FocusScope.of(context).unfocus();
-                                  Navigator.pop(context);
-                                }
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              color: Theme.of(context).primaryColor,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 64,
-                                  vertical: 14,
+                            SizedBox(
+                              width: 200,
+                              height: 55,
+                              child: MaterialButton(
+                                onPressed: _vm.isLoading
+                                    ? null
+                                    : () async {
+                                        if (formKey.currentState!.validate()) {
+                                          FocusScope.of(context).unfocus();
+                                          List<String> place = _provider
+                                              .centerName
+                                              .split(',');
+                                          String placeName = place[0];
+                                          ReservationModel model =
+                                              ReservationModel(
+                                                  time: _time!,
+                                                  date: _date!,
+                                                  place: placeName,
+                                                  questionsAnswers: _provider
+                                                      .answeredQuestions);
+                                          bool success =
+                                              await _vm.reserve(model);
+                                          if (success)
+                                            Navigator.pop(context);
+                                          else
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.red,
+                                                content: TranslatedTextWidget(
+                                                  text: 'Something went wrong',
+                                                ),
+                                              ),
+                                            );
+                                        }
+                                      },
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
-                                child: TranslatedTextWidget(
-                                  text: 'Reservation',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
+                                color: Theme.of(context).primaryColor,
+                                disabledColor: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2),
+                                child: _vm.isLoading
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : TranslatedTextWidget(
+                                        text: 'Reservation',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
                               ),
                             ),
                           ],

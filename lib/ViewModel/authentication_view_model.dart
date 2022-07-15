@@ -59,9 +59,9 @@ class AuthenticationViewModel extends ChangeNotifier {
         )),
         reservation: ReservationModel.toJson(ReservationModel(
           place: '',
-          date: null,
-          time: null,
-          questionsAnswers: null,
+          date: '',
+          time: '',
+          questionsAnswers: [],
         )),
         donorTypeModel:
             DonorTypeModel.toJson(DonorTypeModel(type: null, delayTime: null)),

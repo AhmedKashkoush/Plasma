@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class QuestionScreenProvider extends ChangeNotifier{
-  String selectedCenter = '';
+  String centerName = '';
+  String centerAddress = '';
+  String centerGov = '';
   List<String> _answeredQuestions = [];
 
   List<String> get answeredQuestions => _answeredQuestions;
 
   void setCenter(String name){
-    selectedCenter = name;
+    List<String> center = name.split(';');
+    centerName = center[0];
+    centerAddress = center[1];
+    centerGov = center[2];
     notifyListeners();
   }
 
@@ -16,7 +21,9 @@ class QuestionScreenProvider extends ChangeNotifier{
   }
 
   void disposeProvider(){
-    selectedCenter = '';
+    centerName = '';
+    centerAddress = '';
+    centerGov = '';
     _answeredQuestions.clear();
   }
 }

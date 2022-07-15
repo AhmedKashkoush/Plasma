@@ -171,6 +171,7 @@
   "exit": "الخروج؟",
   "yes": "نعم",
   "no": "لا",
+  "cancel_reservation": "إلغاء الحجز؟",
   "copied_to_clipboard": "تم النسخ إلى الحافظة",
   "qr_image_saved_to_path": "تم حفظ صورة QR في المسار: ",
   "error": "خطأ",
@@ -190,5 +191,7 @@
   "enable_storage_to_access": "تمكين التخزين للوصول",
   "request_permission": "اطلب الإذن",
   "connection_error": "خطأ في الإتصال",
-  "check_internet_connection": "تحقق من اتصالك بالإنترنت"
+  "check_internet_connection": "تحقق من اتصالك بالإنترنت",
+  "something_went_wrong": "حدث خطأ ما",
+  "reservation_cancelled": "تم إلغاء الحجز"
 }

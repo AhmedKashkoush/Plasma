@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:plasma/Model/Models/reservation_model.dart';
 import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Mobile/before_questions.dart';
-import 'package:plasma/View/Providers/question_screen_provider.dart';
-import 'package:plasma/View/Mobile/predonation_screen.dart';
+import 'package:plasma/View/Widgets/reservation_banner_widget.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
+import 'package:plasma/ViewModel/reservation_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ReservationViewModel _vm = Provider.of<ReservationViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -61,9 +63,10 @@ class HomeScreen extends StatelessWidget {
           children: [
             Expanded(
               child: LayoutBuilder(
-                builder: (context,constraints) => SingleChildScrollView(
+                builder: (context, constraints) => SingleChildScrollView(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 56),
@@ -133,28 +136,70 @@ class HomeScreen extends StatelessWidget {
             //Donate now button
             Align(
               alignment: FractionalOffset.bottomCenter,
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 44,vertical: 4,),
-                color: Theme.of(context).primaryColor,
-                elevation: 15,
-                onPressed: () => {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const BeforeQuestions(),
+              child: FutureBuilder<ReservationModel>(
+                future: _vm.getReservation(),
+                builder: (context, AsyncSnapshot<ReservationModel> snapshot) {
+                  _vm.setContext(context);
+                  if (!snapshot.hasData)
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  ReservationModel model = snapshot.data!;
+                  bool reserved = model.time != '' &&
+                      model.date != '' &&
+                      model.place != '' &&
+                      model.questionsAnswers != [];
+                  if (reserved)
+                    return ReservationBannerWidget(
+                        model: model);
+                  else if (!snapshot.hasError)
+                    return MaterialButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 44,
+                        vertical: 4,
+                      ),
+                      color: Theme.of(context).primaryColor,
+                      elevation: 15,
+                      onPressed: () => {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const BeforeQuestions(),
+                          ),
+                        ),
+                      },
+                      child: TranslatedTextWidget(
+                        text: 'Donate Now',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20,
+                        ),
+                      ),
+                    );
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 44,
+                      vertical: 4,
                     ),
-                  ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: Theme.of(context).primaryColor.withOpacity(0.3),
+                    ),
+                    child: TranslatedTextWidget(
+                      text: 'Check Your Internet Connection',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                    ),
+                  );
                 },
-                child: TranslatedTextWidget(
-                  text: 'Donate Now',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                ),
               ),
             ),
           ],

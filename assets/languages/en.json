@@ -171,6 +171,7 @@
   "exit": "Exit?",
   "yes": "Yes",
   "no": "No",
+  "cancel_reservation": "Cancel Reservation?",
   "copied_to_clipboard": "Copied To Clipboard",
   "qr_image_saved_to_path": "QR Image Saved To Path: ",
   "error": "Error",
@@ -190,5 +191,7 @@
   "enable_storage_to_access": "Enable Storage To Access",
   "request_permission": "Request Permission",
   "connection_error": "Connection Error",
-  "check_internet_connection": "Check Your Internet Connection"
+  "check_internet_connection": "Check Your Internet Connection",
+  "something_went_wrong": "Something went wrong",
+  "reservation_cancelled": "Reservation was cancelled"
 }

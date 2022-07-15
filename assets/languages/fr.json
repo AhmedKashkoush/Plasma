@@ -171,6 +171,7 @@
   "exit": "Sortie?",
   "yes": "Oui",
   "no": "Non",
+  "cancel_reservation": "Annuler une réservation?",
   "copied_to_clipboard": "Copié dans le presse-papier",
   "qr_image_saved_to_path": "Image QR enregistrée dans le chemin: ",
   "error": "Erreur",
@@ -190,5 +191,7 @@
   "enable_storage_to_access": "Activer le stockage pour accéder",
   "request_permission": "Demander la permission",
   "connection_error": "Erreur de connexion",
-  "check_internet_connection": "Vérifiez votre connection internet"
+  "check_internet_connection": "Vérifiez votre connection internet",
+  "something_went_wrong": "Quelque chose s'est mal passé",
+  "reservation_cancelled": "La réservation a été annulée"
 }

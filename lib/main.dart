@@ -9,6 +9,7 @@ import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
 import 'package:plasma/ViewModel/authentication_view_model.dart';
 import 'package:plasma/ViewModel/notifications_view_model.dart';
+import 'package:plasma/ViewModel/reservation_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'Utils/shared_preferences_api.dart';
@@ -48,6 +49,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => NotificationsViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ReservationViewModel(),
         ),
       ],
       child: const MyApp(),

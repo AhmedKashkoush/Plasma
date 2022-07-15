@@ -1,18 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:plasma/Utils/locales.dart';
 
 class TranslatedTextWidget extends StatefulWidget {
   final String text;
   final TextStyle? style;
   final TextAlign? textAlign;
+  final TextOverflow? overflow;
   final int? maxLines;
 
   TranslatedTextWidget(
-      {Key? key, required this.text, this.style, this.textAlign, this.maxLines})
+      {Key? key, required this.text, this.style, this.textAlign, this.maxLines, this.overflow})
       : super(key: key);
 
   @override
@@ -54,6 +53,7 @@ class _TranslatedTextWidgetState extends State<TranslatedTextWidget> {
       style: widget.style,
       textAlign: widget.textAlign,
       maxLines: widget.maxLines,
+      overflow: widget.overflow,
     );
   }
 // TranslatedTextWidget(
