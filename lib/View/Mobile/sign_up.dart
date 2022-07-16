@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:plasma/Utils/files_api.dart';
 import 'package:plasma/View/Mobile/login.dart';
-import 'package:plasma/View/Mobile/main_screen.dart';
 import 'package:plasma/ViewModel/authentication_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -47,8 +46,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool obscureConfirmText = true;
 
   final String phoneRegex = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-  final String emailRegex = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-  final String passwordRegex = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+  final String emailRegex =
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  final String passwordRegex =
+      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -168,6 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value!.isEmpty) {
                         return TranslatedTextWidget.translate('Required Field');
                       }
+                      return null;
                     },
                     decoration: InputDecoration(
                       labelText: TranslatedTextWidget.translate(
@@ -194,6 +196,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value!.isEmpty) {
                         return TranslatedTextWidget.translate('Required Field');
                       }
+                      return null;
                     },
                     decoration: InputDecoration(
                       labelText: TranslatedTextWidget.translate(
@@ -242,13 +245,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           : gender == 'female'
                               ? const Icon(Icons.female)
                               : SizedBox(
-                                width: 16,
-                                child: Center(
-                                  child: const FaIcon(
-                                    FontAwesomeIcons.genderless,
+                                  width: 16,
+                                  child: Center(
+                                    child: const FaIcon(
+                                      FontAwesomeIcons.genderless,
+                                    ),
                                   ),
                                 ),
-                              ),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -269,7 +272,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return TranslatedTextWidget.translate('Required Field');
                       }
                       final RegExp exp = RegExp(phoneRegex);
-                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid phone number');
+                      if (!exp.hasMatch(value))
+                        return TranslatedTextWidget.translate(
+                            'It is not a valid phone number');
+                      return null;
                     },
                     decoration: InputDecoration(
                       labelText: TranslatedTextWidget.translate(
@@ -301,7 +307,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       //       'It is not a valid email address');
                       // }
                       final RegExp exp = RegExp(emailRegex);
-                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid email address');
+                      if (!exp.hasMatch(value))
+                        return TranslatedTextWidget.translate(
+                            'It is not a valid email address');
                       return null;
                     },
                     decoration: InputDecoration(
@@ -334,7 +342,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             'Password must contain at least 8 characters');
                       }
                       final RegExp exp = RegExp(passwordRegex);
-                      if (!exp.hasMatch(value)) return TranslatedTextWidget.translate('It is not a valid password');
+                      if (!exp.hasMatch(value))
+                        return TranslatedTextWidget.translate(
+                            'It is not a valid password');
                       return null;
                     },
                     obscureText: obscurePasswordText,
@@ -460,12 +470,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 UserCredential? createdUser =
                                     await _authVM.createNewUser(
                                         userModel, context, imageFile);
-                                if (createdUser != null)
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => const MainScreen(),
+                                if (createdUser != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.green,
+                                      padding: const EdgeInsets.all(0),
+                                      content: ListTile(
+                                        leading: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                        title: TranslatedTextWidget(
+                                          text: 'Account was created successfully',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   );
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
+                                  );
+                                }
                               }
                               // print(emailcontroller.text);
                               // print(passcontroller.text);
@@ -533,8 +562,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Take From',
+            TranslatedTextWidget(
+              text: 'Pick up from',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
             const SizedBox(
@@ -542,7 +571,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             ListTile(
               leading: Icon(Icons.camera_alt),
-              title: Text('Camera'),
+              title: TranslatedTextWidget(text: 'Camera'),
               onTap: () async {
                 imageFile = await FilesApi.takePhoto(ImageSource.camera);
                 if (imageFile != null) setState(() {});
@@ -551,7 +580,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             ListTile(
               leading: Icon(Icons.image),
-              title: Text('Gallery'),
+              title: TranslatedTextWidget(text: 'Gallery'),
               onTap: () async {
                 imageFile = await FilesApi.takePhoto(ImageSource.gallery);
                 if (imageFile != null) setState(() {});

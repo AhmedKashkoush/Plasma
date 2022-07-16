@@ -43,7 +43,7 @@ class AuthenticationViewModel extends ChangeNotifier {
         await imagePath.putFile(image);
         _imageUrl = await imagePath.getDownloadURL();
       }
-      AuthHelper.currentUser = UserModel(
+      UserModel user = UserModel(
         firstName: userModel.firstName,
         lastName: userModel.lastName,
         gender: userModel.gender,
@@ -69,8 +69,9 @@ class AuthenticationViewModel extends ChangeNotifier {
       await _store
           .collection('users')
           .doc(_user.user?.uid)
-          .set(UserModel.toJson(AuthHelper.currentUser!));
-      await NotificationHelper.subscribeToTopic(AuthHelper.currentUser!.nationalId);
+          .set(UserModel.toJson(user));
+      await _auth.signOut();
+      //await NotificationHelper.subscribeToTopic(user.nationalId);
     } on Exception catch (e) {
       _hasError = true;
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -139,5 +140,53 @@ class AuthenticationViewModel extends ChangeNotifier {
         await _store.collection('users').doc(user?.uid).get();
     final Map<String, dynamic> data = snapshot.data()!;
     return UserModel.fromJson(data);
+  }
+
+  Future<bool> updateUserImage(File image) async{
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+    try {
+      UserModel userModel = AuthHelper.currentUser!;
+      String _imageUrl;
+      final Reference imagePath = await _storage
+          .ref()
+          .child("users")
+          .child("${userModel.nationalId}")
+          .child("/${userModel.nationalId}.png");
+      await imagePath.putFile(image);
+      _imageUrl = await imagePath.getDownloadURL();
+      Map<String,dynamic> _newData = {'image':_imageUrl};
+      await _store.collection('users').doc(_auth.currentUser!.uid).update(_newData);
+      AuthHelper.currentUser = await getUserData(_auth.currentUser);
+    } on Exception catch (e) {
+      _hasError = true;
+    }
+    _isLoading = false;
+    notifyListeners();
+    return _hasError;
+  }
+
+  Future<bool> deleteUserImage() async{
+    _isLoading = true;
+    _hasError = false;
+    notifyListeners();
+    try {
+      UserModel userModel = AuthHelper.currentUser!;
+      String _imageUrl;
+      await _storage
+          .ref()
+          .child("users")
+          .child("${userModel.nationalId}")
+          .child("/${userModel.nationalId}.png").delete();
+      Map<String,dynamic> _newData = {'image':''};
+      await _store.collection('users').doc(_auth.currentUser!.uid).update(_newData);
+      AuthHelper.currentUser = await getUserData(_auth.currentUser);
+    } on Exception catch (e) {
+      _hasError = true;
+    }
+    _isLoading = false;
+    notifyListeners();
+    return _hasError;
   }
 }
