@@ -9,7 +9,7 @@ import 'package:plasma/Model/Models/notifications_model.dart';
 import 'package:plasma/Model/Models/reservation_model.dart';
 import 'package:plasma/Model/Models/user_model.dart';
 import 'package:plasma/Utils/auth.dart';
-import 'package:plasma/Utils/notification_helper.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class AuthenticationViewModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -72,14 +72,30 @@ class AuthenticationViewModel extends ChangeNotifier {
           .set(UserModel.toJson(user));
       await _auth.signOut();
       //await NotificationHelper.subscribeToTopic(user.nationalId);
-    } on Exception catch (e) {
+    } on FirebaseAuthException catch (e) {
       _hasError = true;
+      String message = 'Something went wrong';
+      switch (e.code) {
+        case 'email-already-in-use':
+          message = 'This email is already in use';
+          break;
+        case 'invalid-email':
+          message = 'It is not a valid email address';
+          break;
+        case 'weak-password':
+          message = 'This password is weak';
+          break;
+        default:
+          message = 'Something went wrong';
+      }
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          '$e',
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        content: TranslatedTextWidget(
+          text: message,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.red,
       ));
@@ -115,13 +131,29 @@ class AuthenticationViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       return credentials;
-    } on Exception catch (e) {
+    } on FirebaseAuthException catch (e) {
+      String message = 'Something went wrong';
+      switch (e.code) {
+        case 'invalid-email':
+          message = 'It is not a valid email address';
+          break;
+        case 'user-not-found':
+          message = 'This user was not found';
+          break;
+        case 'wrong-password':
+          message = 'The password entered is wrong';
+          break;
+        default:
+          message = 'Something went wrong';
+      }
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          '${e.runtimeType}',
-          style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        content: TranslatedTextWidget(
+          text: message,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: Colors.red,
       ));
@@ -142,7 +174,7 @@ class AuthenticationViewModel extends ChangeNotifier {
     return UserModel.fromJson(data);
   }
 
-  Future<bool> updateUserImage(File image) async{
+  Future<bool> updateUserImage(File image) async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
@@ -156,10 +188,13 @@ class AuthenticationViewModel extends ChangeNotifier {
           .child("/${userModel.nationalId}.png");
       await imagePath.putFile(image);
       _imageUrl = await imagePath.getDownloadURL();
-      Map<String,dynamic> _newData = {'image':_imageUrl};
-      await _store.collection('users').doc(_auth.currentUser!.uid).update(_newData);
+      Map<String, dynamic> _newData = {'image': _imageUrl};
+      await _store
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .update(_newData);
       AuthHelper.currentUser = await getUserData(_auth.currentUser);
-    } on Exception catch (e) {
+    } catch (e) {
       _hasError = true;
     }
     _isLoading = false;
@@ -167,22 +202,25 @@ class AuthenticationViewModel extends ChangeNotifier {
     return _hasError;
   }
 
-  Future<bool> deleteUserImage() async{
+  Future<bool> deleteUserImage() async {
     _isLoading = true;
     _hasError = false;
     notifyListeners();
     try {
       UserModel userModel = AuthHelper.currentUser!;
-      String _imageUrl;
       await _storage
           .ref()
           .child("users")
           .child("${userModel.nationalId}")
-          .child("/${userModel.nationalId}.png").delete();
-      Map<String,dynamic> _newData = {'image':''};
-      await _store.collection('users').doc(_auth.currentUser!.uid).update(_newData);
+          .child("/${userModel.nationalId}.png")
+          .delete();
+      Map<String, dynamic> _newData = {'image': ''};
+      await _store
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .update(_newData);
       AuthHelper.currentUser = await getUserData(_auth.currentUser);
-    } on Exception catch (e) {
+    } catch (e) {
       _hasError = true;
     }
     _isLoading = false;

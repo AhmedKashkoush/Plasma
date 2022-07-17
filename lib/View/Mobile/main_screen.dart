@@ -56,7 +56,15 @@ class _MainScreenState extends State<MainScreen> {
     final NotificationsViewModel vm = Provider.of<NotificationsViewModel>(context);
     _notificationsNumber = vm.newNotifications;
     return WillPopScope(
-      onWillPop: () => Utils.confirmExit(context),
+      onWillPop: () async {
+        if (_index != 1) {
+          setState(() {
+            _index = 1;
+          });
+          return false;
+        }
+        return Utils.confirmExit(context);
+      },
       child: Scaffold(
         drawer: MobileCustomDrawer(
           screenIndex: 0,

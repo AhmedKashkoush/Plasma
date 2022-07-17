@@ -445,24 +445,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.pop(context);
                   return;
                 }
-                vm.updateUserImage(imageFile!).then((success) {
-                  if (!success)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: TranslatedTextWidget(
-                          text: 'Something went wrong',
-                        ),
-                      ),
-                    );
-                  else ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: TranslatedTextWidget(
-                        text: 'Profile photo was updated successfully',
-                      ),
-                    ),
-                  );
-                });
+                vm.updateUserImage(imageFile!);
                 Navigator.pop(context);
               },
             ),
@@ -480,24 +463,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 onTap: () {
-                  vm.deleteUserImage().then((success) {
-                    if (!success)
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: TranslatedTextWidget(
-                            text: 'Something went wrong',
-                          ),
-                        ),
-                      );
-                    else ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: TranslatedTextWidget(
-                          text: 'Profile photo was updated successfully',
-                        ),
-                      ),
-                    );
-                  });
+                  vm.deleteUserImage();
                   Navigator.pop(context);
                 },
               ),

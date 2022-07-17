@@ -33,7 +33,7 @@ class TeamMembersScreen extends StatelessWidget {
         ),
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         itemBuilder: (context, index) => ListTile(
           onTap: () => Navigator.push(
             context,
