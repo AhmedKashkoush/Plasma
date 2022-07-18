@@ -5,6 +5,7 @@ import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/centers_locations.dart';
 import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/Utils/notification_helper.dart';
+import 'package:plasma/Utils/onboarding_pref.dart';
 import 'package:plasma/Utils/themes.dart';
 import 'package:plasma/View/Mobile/mobile_root_screen.dart';
 import 'package:plasma/ViewModel/authentication_view_model.dart';
@@ -32,6 +33,7 @@ void main() async {
   await SharedPreferencesApi.init();
   await ThemeHelper.loadTheme();
   await LocaleHelper.loadLocale();
+  await OnBoardingPref.hasSkippedOnBoarding();
   await AuthHelper.getUserData();
   await CentersLocations.loadLocations();
   await NotificationHelper.messageHandler();

@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/View/Mobile/medical_results_screen.dart';
 import 'package:plasma/View/Mobile/questionnaire.dart';
 import 'package:plasma/View/Widgets/blood_loading.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
@@ -267,7 +268,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
         // TODO: Handle this case.
         break;
       case NotificationType.medicalTestResult:
-        // TODO: Handle this case.
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const MedicalTestResultsScreen(),
+          ),
+        );
         break;
       case NotificationType.bonus:
         // TODO: Handle this case.
