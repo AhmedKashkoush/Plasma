@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:plasma/Utils/auth.dart';
@@ -30,13 +31,14 @@ void main() async {
       appId: "1:951530390148:web:05340ef570b71e7cc038d1",
     ),
   );
+  await NotificationHelper.messageHandler();
+  FirebaseMessaging.onBackgroundMessage(NotificationHelper.backgroundMessageHandler);
   await SharedPreferencesApi.init();
   await ThemeHelper.loadTheme();
   await LocaleHelper.loadLocale();
   await OnBoardingPref.hasSkippedOnBoarding();
   await AuthHelper.getUserData();
   await CentersLocations.loadLocations();
-  await NotificationHelper.messageHandler();
   runApp(
     MultiProvider(
       providers: [

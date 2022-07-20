@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 class PlaceSelectCard extends StatelessWidget {
   final String placeName;

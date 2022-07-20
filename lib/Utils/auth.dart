@@ -15,7 +15,7 @@ class AuthHelper{
       final Map<String, dynamic> data = snapshot.data()!;
       currentUser = UserModel.fromJson(data);
       await NotificationHelper.subscribeToTopic(currentUser!.nationalId);
-    } on Exception catch (e) {
+    } catch (e) {
       currentUser = null;
     }
   }
@@ -26,8 +26,7 @@ class AuthHelper{
       await NotificationHelper.unsubscribeFromTopic(currentUser!.nationalId);
       currentUser = null;
       return true;
-    } on Exception catch (e) {
-      // TODO
+    } catch (e) {
     }
     return false;
   }

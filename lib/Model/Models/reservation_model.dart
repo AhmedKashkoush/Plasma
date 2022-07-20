@@ -1,5 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-
 class ReservationModel {
   final String place;
   final String date;

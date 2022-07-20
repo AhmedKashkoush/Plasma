@@ -54,7 +54,7 @@ class AuthenticationViewModel extends ChangeNotifier {
         image: _imageUrl,
         bloodType: '',
         notifications: NotificationsModel.toJson(NotificationsModel(
-          newNotifications: -1,
+          newNotifications: 0,
           notificationsList: [],
         )),
         reservation: ReservationModel.toJson(ReservationModel(

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../../View/Widgets/notification_widget.dart';
 
 class NotificationModel {

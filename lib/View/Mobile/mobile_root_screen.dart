@@ -23,7 +23,7 @@ class MobileRootScreen extends StatefulWidget {
   State<MobileRootScreen> createState() => _MobileRootScreenState();
 }
 
-class _MobileRootScreenState extends State<MobileRootScreen> {
+class _MobileRootScreenState extends State<MobileRootScreen> with WidgetsBindingObserver{
   bool isMobileSignedIn = AuthHelper.currentUser != null;
   NotificationsViewModel? vm;
 
@@ -31,18 +31,18 @@ class _MobileRootScreenState extends State<MobileRootScreen> {
   void initState() {
     NotificationHelper.onMessageOpenedApp(context);
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      FirebaseMessaging.onMessage.listen((message) async{
-        _messageHandler(message);
-      });
+      WidgetsBinding.instance?.addObserver(this);
+      if (AuthHelper.currentUser != null) vm?.getNewNotifications();
+      FirebaseMessaging.onMessage.listen(_messageHandler);
     });
     super.initState();
   }
 
-
-  void _messageHandler(RemoteMessage message) async {
+  Future<void> _messageHandler(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification!.android;
     if (notification != null && android != null) {
+      if (AuthHelper.currentUser == null) return;
       vm?.incrementNotifications();
     }
   }
@@ -55,5 +55,11 @@ class _MobileRootScreenState extends State<MobileRootScreen> {
     bool skipped = OnBoardingPref.skippedOnBoarding;
     if (!skipped) return const OnBoardingScreen();
     return isMobileSignedIn ? const MainScreen() : const BeforeLoginScreen();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) vm?.getNewNotifications();
+    super.didChangeAppLifecycleState(state);
   }
 }

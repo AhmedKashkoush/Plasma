@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plasma/Utils/utils.dart';
 import 'package:plasma/View/Widgets/rating_widget.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
@@ -14,11 +15,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
 
   var formKey = GlobalKey<FormState>();
   String? radioValue = '';
+  double? generalRating;
+  double? welcomingRating;
+  double? infoRating;
+  double? safetyRating;
 
   @override
   Widget build(BuildContext context) {
-    var nameController;
-    var numberController;
     return Scaffold(
       body: Scaffold(
         appBar: AppBar(
@@ -68,7 +71,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   ),
                 ),
                 RatingWidget(
-                  onRatingUpdate: (rate) {},
+                  onRatingUpdate: (rate) {
+                    generalRating = rate;
+                  },
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -97,7 +102,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   ),
                 ),
                 RatingWidget(
-                  onRatingUpdate: (rate) {},
+                  onRatingUpdate: (rate) {
+                    welcomingRating = rate;
+                  },
                 ),
                 const SizedBox(
                   height: 28.0,
@@ -115,7 +122,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   ),
                 ),
                 RatingWidget(
-                  onRatingUpdate: (rate) {},
+                  onRatingUpdate: (rate) {
+                    infoRating = rate;
+                  },
                 ),
                 const SizedBox(
                   height: 28.0,
@@ -133,7 +142,9 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   ),
                 ),
                 RatingWidget(
-                  onRatingUpdate: (rate) {},
+                  onRatingUpdate: (rate) {
+                    safetyRating = rate;
+                  },
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -247,8 +258,19 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 12, horizontal: 34),
                     ),
-                    onPressed: () {
-                      formKey.currentState!.validate();
+                    onPressed: () async{
+                      if (_validator()){
+                        FocusScope.of(context).unfocus();
+                        Utils.showBloodLoadingDialog(
+                          context,
+                          text: 'Sending Feedback...',
+                        );
+                        await Future.delayed(const Duration(seconds: 2),
+                                () {
+                              Navigator.pop(context);
+                            });
+                        Navigator.pop(context);
+                      }
                     },
                     child: TranslatedTextWidget(text: "Send"),
                   ),
@@ -259,5 +281,13 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
         ),
       ),
     );
+  }
+
+  bool _validator(){
+    bool exp1 = generalRating != null && welcomingRating != null && infoRating != null && safetyRating != null;
+    bool exp2 = generalRating != 0 && welcomingRating != 0 && infoRating != 0 && safetyRating != 0;
+    bool exp3 = radioValue != '';
+    bool exp = exp1 && exp2 && exp3;
+    return exp;
   }
 }

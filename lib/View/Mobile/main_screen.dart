@@ -17,9 +17,8 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  int _index = 1;
-  late int _notificationsNumber; //AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
+class _MainScreenState extends State<MainScreen>{
+  int _index = 1;//AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
   final GlobalKey<CurvedNavigationBarState> _curvedBarKey =
       GlobalKey<CurvedNavigationBarState>();
   static const List<IconData> _itemIcons = [
@@ -54,7 +53,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final NotificationsViewModel vm = Provider.of<NotificationsViewModel>(context);
-    _notificationsNumber = vm.newNotifications;
     return WillPopScope(
       onWillPop: () async {
         if (_index != 1) {
@@ -97,14 +95,14 @@ class _MainScreenState extends State<MainScreen> {
                         ? () => Scaffold.of(context).openDrawer()
                         : null,
                     child:
-                        _itemIcons.indexOf(icon) == 2 && _notificationsNumber > 0
+                        _itemIcons.indexOf(icon) == 2 && vm.newNotifications > 0
                             ? Badge(
                                 animationType: BadgeAnimationType.scale,
                                 elevation: 0,
                                 animationDuration: const Duration(milliseconds: 300),
                                 position: BadgePosition.topEnd(top: -5,end: -5,),
                                 badgeContent: Text(
-                                  '$_notificationsNumber',
+                                  '${vm.newNotifications}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

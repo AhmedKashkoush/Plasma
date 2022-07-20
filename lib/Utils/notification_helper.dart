@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:plasma/Model/APIs/Notifications/notifications_api.dart';
 import 'package:plasma/Utils/auth.dart';
+import 'package:plasma/View/Mobile/medical_results_screen.dart';
 import 'package:plasma/View/Mobile/questionnaire.dart';
 
 class NotificationHelper{
@@ -12,6 +15,22 @@ class NotificationHelper{
     await _instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true,);
   }
 
+  static Future<void> backgroundMessageHandler(RemoteMessage message) async{
+    await Firebase.initializeApp(
+      name: 'plasma',
+      options: FirebaseOptions(
+        apiKey: "AIzaSyDPzvjtXUhK21PNzHGdwtUk2DvQgMGtPfs",
+        authDomain: "plasma-fecd2.firebaseapp.com",
+        projectId: "plasma-fecd2",
+        storageBucket: "plasma-fecd2.appspot.com",
+        messagingSenderId: "951530390148",
+        appId: "1:951530390148:web:05340ef570b71e7cc038d1",
+      ),
+    );
+    //if (AuthHelper.currentUser == null) return;
+    await NotificationsApi().incrementNotifications();
+  }
+
   static void onMessageOpenedApp(BuildContext context){
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if (AuthHelper.currentUser == null) return;
@@ -19,8 +38,14 @@ class NotificationHelper{
       if (type == 'questionnaire'){
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QuestionnaireScreen()));
       }
+      if (type == 'medical result'){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MedicalTestResultsScreen()));
+      }
     });
+
   }
+
+
 
   static Future<void> subscribeToTopic(String topic) async{
     await _instance.subscribeToTopic(topic);

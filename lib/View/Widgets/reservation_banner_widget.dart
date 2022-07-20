@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/Models/reservation_model.dart';
-import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
 import 'package:plasma/ViewModel/reservation_view_model.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,7 @@ class ReservationBannerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? locale = LocaleHelper.currentLocale?.languageCode.substring(0, 2);
+    //String? locale = LocaleHelper.currentLocale?.languageCode.substring(0, 2);
     String _date = model.date;
     final ReservationViewModel _vm = Provider.of<ReservationViewModel>(context);
     return ListTile(

@@ -172,16 +172,12 @@ class _DonationPlacesScreenState extends State<DonationPlacesScreen> {
       case PermissionStatus.granted:
         return;
       case PermissionStatus.denied:
-        // TODO: Handle this case.
         break;
       case PermissionStatus.restricted:
-        // TODO: Handle this case.
         break;
       case PermissionStatus.limited:
-        // TODO: Handle this case.
         break;
       case PermissionStatus.permanentlyDenied:
-        // TODO: Handle this case.
         break;
     }
   }
@@ -859,7 +855,7 @@ class PlacesBottomSheet extends StatelessWidget {
 //         ),
 //       ],
 //     ),);
-//     // TODO
+//
 //   }
 // }
 }

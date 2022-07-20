@@ -1,5 +1,4 @@
 import 'package:badges/badges.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
 

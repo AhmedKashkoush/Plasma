@@ -41,7 +41,7 @@ class ReservationViewModel extends ChangeNotifier
     try {
       Map<String, dynamic> _data = await _api.getReservation();
       model = ReservationModel.fromJson(_data);
-    } on Exception catch (e) {
+    } catch (e) {
       model = ReservationModel(time: '', questionsAnswers: [], date: '', place: '');
     }
     return model;

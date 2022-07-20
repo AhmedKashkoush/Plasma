@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
+import 'package:plasma/Model/APIs/Notifications/notifications_api.dart';
 import 'package:plasma/Model/Repositories/notifications_repository.dart';
-import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Widgets/notification_widget.dart';
-
 import '../Model/Models/notification_model.dart';
 
 class NotificationsViewModel extends ChangeNotifier
     implements NotificationsRepository {
+  final NotificationsApi _api = NotificationsApi();
   final int limit = 20;
   bool isLoading = false;
   bool hasError = false;
@@ -80,7 +79,7 @@ class NotificationsViewModel extends ChangeNotifier
       notificationsList.sort(
         (a, b) => b.time.compareTo(a.time),
       );
-    } on Exception catch (e) {
+    } catch (e) {
       hasError = true;
     }
     isLoading = false;
@@ -100,13 +99,23 @@ class NotificationsViewModel extends ChangeNotifier
     loadMoreNotifications(limit);
   }
 
-  Future<void> incrementNotifications()async{
-    newNotifications ++;
+  @override
+  Future incrementNotifications()async{
+    await _api.incrementNotifications();
+    await getNewNotifications();
     notifyListeners();
   }
 
-  Future<void> flushNotifications() async {
+  @override
+  Future flushNotifications() async {
     newNotifications = 0;
+    await _api.flushNotifications();
+    notifyListeners();
+  }
+
+  @override
+  Future getNewNotifications() async{
+    newNotifications = await _api.getNewNotifications();
     notifyListeners();
   }
 }

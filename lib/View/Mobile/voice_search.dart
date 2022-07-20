@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -359,6 +358,11 @@ class _VoiceSearchPageState extends State<VoiceSearchPage> {
           permissionType: 'Microphone',
         );
         Navigator.pop(context);
+        break;
+      case PermissionStatus.restricted:
+        break;
+      case PermissionStatus.limited:
+        break;
     }
   }
 }
