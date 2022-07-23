@@ -1,12 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plasma/Model/Models/notification_model.dart';
 import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/Utils/notification_helper.dart';
 import 'package:plasma/Utils/onboarding_pref.dart';
 import 'package:plasma/View/Mobile/before_login.dart';
 import 'package:plasma/View/Mobile/main_screen.dart';
 import 'package:plasma/View/Mobile/onboarding_screen.dart';
+import 'package:plasma/View/Widgets/notification_widget.dart';
 import 'package:plasma/ViewModel/authentication_view_model.dart';
 import 'package:plasma/ViewModel/notifications_view_model.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +45,11 @@ class _MobileRootScreenState extends State<MobileRootScreen> with WidgetsBinding
     AndroidNotification? android = message.notification!.android;
     if (notification != null && android != null) {
       if (AuthHelper.currentUser == null) return;
-      vm?.incrementNotifications();
+      String title = message.notification!.title!;
+      String body = message.notification!.body!;
+      NotificationType type = NotificationType.values.byName('${message.data['type']}');
+      NotificationModel model = NotificationModel(title: title, body: body, time: DateTime.now(), isOpened: false, type: type);
+      vm?.incrementNotifications(model);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plasma/View/Widgets/translated_text_widget.dart';
 
 enum NotificationType {
   reservation,
@@ -72,8 +73,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.title,
+                  TranslatedTextWidget(
+                    text: widget.title,
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
@@ -85,8 +86,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     height: 3.0,
                   ),
                   widget.body != null
-                      ? Text(
-                          widget.body!,
+                      ? TranslatedTextWidget(
+                          text: widget.body!,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         )

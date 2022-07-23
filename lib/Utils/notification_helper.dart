@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:plasma/Model/APIs/Notifications/notifications_api.dart';
+import 'package:plasma/Model/Models/notification_model.dart';
 import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Mobile/medical_results_screen.dart';
 import 'package:plasma/View/Mobile/questionnaire.dart';
+import 'package:plasma/View/Widgets/notification_widget.dart';
 
 class NotificationHelper{
   static final FirebaseMessaging _instance = FirebaseMessaging.instance;
@@ -28,7 +30,11 @@ class NotificationHelper{
       ),
     );
     //if (AuthHelper.currentUser == null) return;
-    await NotificationsApi().incrementNotifications();
+    String title = message.notification!.title!;
+    String body = message.notification!.body!;
+    NotificationType type = NotificationType.values.byName('${message.data['type']}');
+    NotificationModel model = NotificationModel(title: title, body: body, time: DateTime.now(), isOpened: false, type: type);
+    await NotificationsApi().incrementNotifications(model);
   }
 
   static void onMessageOpenedApp(BuildContext context){
@@ -38,7 +44,7 @@ class NotificationHelper{
       if (type == 'questionnaire'){
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QuestionnaireScreen()));
       }
-      if (type == 'medical result'){
+      if (type == 'medicalTestResult'){
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MedicalTestResultsScreen()));
       }
     });
