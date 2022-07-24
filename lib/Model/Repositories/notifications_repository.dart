@@ -6,4 +6,5 @@ abstract class NotificationsRepository{
   Future incrementNotifications(NotificationModel model);
   Future getNewNotifications();
   Future flushNotifications();
+  Future setNotificationTapped(int index);
 }

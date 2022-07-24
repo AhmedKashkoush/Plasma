@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plasma/Utils/locales.dart';
 import 'package:plasma/View/Widgets/translated_text_widget.dart';
+import 'package:intl/intl.dart';
 
 enum NotificationType {
   reservation,
@@ -42,9 +44,13 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final String timeFormat =
+    String? locale = LocaleHelper.currentLocale?.languageCode.substring(0, 2);
+    final int difference = DateTime.now().difference(widget.time).inHours;
+    final String date = DateFormat.yMMMd(locale)
+        .format(widget.time);
+    final String timeFormat = difference < 24?
         TimeOfDay(hour: widget.time.hour, minute: widget.time.minute)
-            .format(context);
+            .format(context):date;
     return InkWell(
       onTap: widget.onTap,
       onLongPress: () {

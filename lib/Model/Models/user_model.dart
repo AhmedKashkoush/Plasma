@@ -7,6 +7,7 @@ class UserModel {
   final String password;
   final String nationalId;
   final String? image;
+  final int donatingTimes;
   final String? bloodType;
   final Map<String, dynamic>? notifications;
   final Map<String, dynamic>? reservation;
@@ -21,6 +22,7 @@ class UserModel {
     required this.password,
     required this.nationalId,
     this.image,
+    this.donatingTimes = 0,
     this.bloodType,
     this.notifications,
     this.reservation,
@@ -37,6 +39,7 @@ class UserModel {
         nationalId: json["national_id"],
         image: json["image"] ?? '',
         bloodType: json["blood_type"]?? '',
+        donatingTimes: json["donating_times"],
         notifications: json["notifications"],
         reservation: json["reservation"],
         donorTypeModel: json["donor_type"],
@@ -51,6 +54,7 @@ class UserModel {
         'password': model.password,
         'national_id': model.nationalId,
         'image': model.image ?? '',
+        'donating_times': model.donatingTimes,
         'blood_type': model.bloodType ?? '',
         'notifications': model.notifications!,
         'reservation': model.reservation!,

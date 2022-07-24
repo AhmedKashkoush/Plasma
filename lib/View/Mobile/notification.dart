@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:plasma/Utils/auth.dart';
 import 'package:plasma/View/Mobile/medical_results_screen.dart';
 import 'package:plasma/View/Mobile/questionnaire.dart';
@@ -74,29 +75,41 @@ class _NotificationScreenState extends State<NotificationScreen> {
           elevation: 0.0,
         ),
         extendBody: true,
-        body: FutureBuilder<ConnectivityResult>(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(
-                child: BloodLoadingIndicator(),
-              );
-            else if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data != ConnectivityResult.none)
-                return ChangeNotifierProvider(
-                  create: (BuildContext context) => NotificationsViewModel(),
-                  child: NotificationsPage(),
-                );
-            }
-            return NoInternetPage(
-              onRefresh: () {
-                setState(() {
-                  _future = null;
-                });
-                _future = Connectivity().checkConnectivity();
-              },
+        body: RefreshIndicator(
+          triggerMode: RefreshIndicatorTriggerMode.anywhere,
+          onRefresh: () async {
+            await Future.delayed(
+              const Duration(seconds: 1),
             );
+            setState(() {
+              _future = null;
+            });
+            _future = Connectivity().checkConnectivity();
           },
+          child: FutureBuilder<ConnectivityResult>(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(
+                  child: BloodLoadingIndicator(),
+                );
+              else if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data != ConnectivityResult.none)
+                  return ChangeNotifierProvider(
+                    create: (BuildContext context) => NotificationsViewModel(),
+                    child: NotificationsPage(),
+                  );
+              }
+              return NoInternetPage(
+                onRefresh: () {
+                  setState(() {
+                    _future = null;
+                  });
+                  _future = Connectivity().checkConnectivity();
+                },
+              );
+            },
+          ),
         ));
   }
 }
@@ -141,11 +154,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _scrollController.addListener(() async {
       double maxScrollExtent = _scrollController.position.maxScrollExtent;
       double currentPosition = _scrollController.position.pixels;
-      int listLength = _notificationsVM.notificationsList.length;
+      int listLength = NotificationsViewModel.notificationsList.length;
       final int limit = _notificationsVM.limit;
+      if (_notificationsVM.isLoading) return;
       if (listLength >= limit) {
-        if (currentPosition >= maxScrollExtent * 0.7) {
-          await _notificationsVM.loadMoreNotifications(20);
+        if (currentPosition >= maxScrollExtent - 250) {
+           await _notificationsVM.loadMoreNotifications(20);
         }
       }
     });
@@ -160,81 +174,70 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _notificationsVM =
-        Provider.of<NotificationsViewModel>(context, listen: false);
-    return FutureBuilder(
-      future: _future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return ListView.builder(
-            itemCount: 40,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => NotificationLoadingWidget(),
-          );
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError)
-            return Container(
-              color: Colors.red,
+    // final _notificationsVM =
+    //     Provider.of<NotificationsViewModel>(context, listen: false);
+    return Consumer<NotificationsViewModel>(
+      builder: (BuildContext context, provider, Widget? child) => FutureBuilder(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return ListView.builder(
+              itemCount: 40,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => NotificationLoadingWidget(),
             );
-          int length = _notificationsVM.notificationsList.length;
-          if (length == 0)
-            return NoNotificationsPage(
-              onCall: () async {
-                await _cacheImage(
-                    AssetImage('assets/images/noNotification.png'), context);
-              },
-            );
-          return RefreshIndicator(
-            triggerMode: RefreshIndicatorTriggerMode.anywhere,
-            onRefresh: () async {
-              await Future.delayed(
-                const Duration(seconds: 1),
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError)
+              return Container(
+                color: Colors.red,
               );
-              setState(() {
-                _future = null;
-              });
-              _future = _notificationsVM.refresh();
-            },
-            child: Consumer<NotificationsViewModel>(
-              builder: (BuildContext context, provider, Widget? child) =>
-                  ListView.separated(
-                controller: _scrollController,
-                itemBuilder: (context, index) {
-                  //int _rand = Random().nextInt(_types.length);
-                  if (index < provider.notificationsList.length)
-                    return NotificationWidget(
-                      title: provider.notificationsList[index].title,
-                      //'Reminder',
-                      body: provider.notificationsList[index].body,
-                      time: provider.notificationsList[index].time,
-                      type: provider.notificationsList[index].type,
-                      isOpened: provider.notificationsList[index].isOpened,
-                      onTap: () {
-                        setState(() {
-                          provider.notificationsList[index].isOpened = true;
-                        });
-                        _goToNotificationPage(provider.notificationsList[index].type);
-                      },
-                    );
-                  return provider.isLoading
-                      ? const NotificationLoadingWidget()
-                      : const SizedBox.shrink();
-                  // return Center(
-                  //   child: Text('${provider.isLoading}'),
-                  // );
+            int length = NotificationsViewModel.notificationsList.length;
+            if (length == 0)
+              return NoNotificationsPage(
+                onCall: () async {
+                  await _cacheImage(
+                      AssetImage('assets/images/noNotification.png'), context);
                 },
-                separatorBuilder: (context, index) => const Divider(
-                  height: 0,
-                ),
-                itemCount: provider.notificationsList.length + 1,
+              );
+            return ListView.separated(
+              controller: _scrollController,
+              itemBuilder: (context, index) {
+                //int _rand = Random().nextInt(_types.length);
+                if (NotificationsViewModel.newNotifications > 0) provider.flushNotifications();
+                if (index < NotificationsViewModel.notificationsList.length)
+                  return NotificationWidget(
+                    title: NotificationsViewModel.notificationsList[index].title,
+                    //'Reminder',
+                    body: NotificationsViewModel.notificationsList[index].body,
+                    time: NotificationsViewModel.notificationsList[index].time,
+                    type: NotificationsViewModel.notificationsList[index].type,
+                    isOpened: NotificationsViewModel.notificationsList[index].isOpened,
+                    onTap: () {
+                      setState(() {
+                        NotificationsViewModel.notificationsList[index].isOpened = true;
+                        provider.setNotificationTapped(index);
+                      });
+                      _goToNotificationPage(NotificationsViewModel.notificationsList[index].type);
+                    },
+                  );
+                return provider.isLoading
+                    ? const NotificationLoadingWidget()
+                    : const SizedBox.shrink();
+                // return Center(
+                //   child: Text('${provider.isLoading}'),
+                // );
+              },
+              separatorBuilder: (context, index) => const Divider(
+                height: 0,
               ),
-            ),
+              itemCount: NotificationsViewModel.notificationsList.length + 1,
+            );
+          }
+          return Center(
+            child: Text('$_future'),
           );
-        }
-        return Center(
-          child: Text('$_future'),
-        );
-      },
+        },
+      ),
     );
   }
 

@@ -29,7 +29,8 @@ class NotificationHelper{
         appId: "1:951530390148:web:05340ef570b71e7cc038d1",
       ),
     );
-    //if (AuthHelper.currentUser == null) return;
+    await AuthHelper.getUserData();
+    if (AuthHelper.currentUser == null) return;
     String title = message.notification!.title!;
     String body = message.notification!.body!;
     NotificationType type = NotificationType.values.byName('${message.data['type']}');

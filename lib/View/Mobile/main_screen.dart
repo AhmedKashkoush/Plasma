@@ -28,6 +28,8 @@ class _MainScreenState extends State<MainScreen>{
     Icons.account_circle_rounded,
   ];
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 //   void _messageHandler(RemoteMessage message) async {
 //       RemoteNotification? notification = message.notification;
 //       AndroidNotification? android = message.notification!.android;
@@ -55,6 +57,11 @@ class _MainScreenState extends State<MainScreen>{
     final NotificationsViewModel vm = Provider.of<NotificationsViewModel>(context);
     return WillPopScope(
       onWillPop: () async {
+        bool isDrawerOpen = _scaffoldKey.currentState!.isDrawerOpen;
+        if (isDrawerOpen) {
+          Navigator.pop(context);
+          return false;
+        }
         if (_index != 1) {
           setState(() {
             _index = 1;
@@ -64,6 +71,7 @@ class _MainScreenState extends State<MainScreen>{
         return Utils.confirmExit(context);
       },
       child: Scaffold(
+        key: _scaffoldKey,
         drawer: MobileCustomDrawer(
           screenIndex: 0,
         ),
@@ -95,14 +103,14 @@ class _MainScreenState extends State<MainScreen>{
                         ? () => Scaffold.of(context).openDrawer()
                         : null,
                     child:
-                        _itemIcons.indexOf(icon) == 2 && vm.newNotifications > 0
+                        _itemIcons.indexOf(icon) == 2 && NotificationsViewModel.newNotifications > 0
                             ? Badge(
                                 animationType: BadgeAnimationType.scale,
                                 elevation: 0,
                                 animationDuration: const Duration(milliseconds: 300),
                                 position: BadgePosition.topEnd(top: -5,end: -5,),
                                 badgeContent: Text(
-                                  '${vm.newNotifications}',
+                                  '${NotificationsViewModel.newNotifications}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

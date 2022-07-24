@@ -80,4 +80,22 @@ class NotificationsApi implements NotificationsRepository {
         .doc(uid)
         .update({"notifications": _notificationsMap});
   }
+
+  @override
+  Future setNotificationTapped(int index) async{
+    final String uid = await _auth.currentUser!.uid;
+    final DocumentSnapshot<Map<String, dynamic>> _user = await _init();
+    final Map<String, dynamic> _data = _user.data()!;
+    final Map<String, dynamic> _notificationsMap = _data['notifications'];
+    final List _notificationsList =
+    _notificationsMap['notifications_list'];
+    List filteredList = _notificationsList;
+    filteredList.sort((a, b) => b['time'].compareTo(a['time']));
+    filteredList[index]['is_opened'] = true;
+    _notificationsMap['notifications_list'] = filteredList;
+    await _store
+        .collection('users')
+        .doc(uid)
+        .update({"notifications": _notificationsMap});
+  }
 }

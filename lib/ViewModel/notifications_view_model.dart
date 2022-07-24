@@ -11,9 +11,9 @@ class NotificationsViewModel extends ChangeNotifier
   bool isLoading = false;
   bool hasError = false;
   bool isDone = false;
-  int newNotifications = 0;//AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
+  static int newNotifications = 0;//AuthHelper.currentUser?.notifications?["new_notifications"] > 0? AuthHelper.currentUser?.notifications!["new_notifications"]: 0;
 
-  List<NotificationModel> notificationsList = [];
+  static List<NotificationModel> notificationsList = [];
   // final List<String> _types = [
   //   'reservation',
   //   'reminder',
@@ -80,8 +80,8 @@ class NotificationsViewModel extends ChangeNotifier
       //     );
       //   },
       // );
-      List _list = await _api.loadMoreNotifications(this.limit,notificationsList.length * _page);
-      if (_list.length < limit) isDone = true;
+      List _list = await _api.loadMoreNotifications(this.limit,this.limit * _page);
+      if (_list.length == 0) isDone = true;
       List<NotificationModel> _newList = _list.map((notification) => NotificationModel.fromJson(notification)).toList();
       notificationsList.addAll(_newList);
     } catch (e) {
@@ -102,13 +102,17 @@ class NotificationsViewModel extends ChangeNotifier
 
   Future<void> refreshOnError() async {
     hasError = false;
-    loadMoreNotifications(limit,notificationsList.length * _page);
+    loadMoreNotifications(limit,this.limit * _page);
   }
 
   @override
   Future incrementNotifications(NotificationModel model)async{
     await _api.incrementNotifications(model);
     await getNewNotifications();
+    List<NotificationModel> reversedList = notificationsList.reversed.toList();
+    reversedList.add(model);
+    notificationsList.clear();
+    notificationsList.addAll(reversedList.reversed.toList());
     notifyListeners();
   }
 
@@ -123,5 +127,10 @@ class NotificationsViewModel extends ChangeNotifier
   Future getNewNotifications() async{
     newNotifications = await _api.getNewNotifications();
     notifyListeners();
+  }
+
+  @override
+  Future setNotificationTapped(int index) async{
+    await _api.setNotificationTapped(index);
   }
 }
