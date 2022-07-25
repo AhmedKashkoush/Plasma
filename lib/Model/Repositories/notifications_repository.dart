@@ -5,6 +5,7 @@ abstract class NotificationsRepository{
   Future loadMoreNotifications(int limit,[int start = 0]);
   Future incrementNotifications(NotificationModel model);
   Future getNewNotifications();
+  Future getNotificationsList();
   Future flushNotifications();
   Future setNotificationTapped(int index);
 }

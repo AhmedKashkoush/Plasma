@@ -9,6 +9,7 @@ import 'package:plasma/View/Mobile/donation_places_screen.dart';
 import 'package:plasma/View/Mobile/information.dart';
 import 'package:plasma/View/Mobile/main_screen.dart';
 import 'package:plasma/ViewModel/notifications_view_model.dart';
+import 'package:provider/provider.dart';
 
 class MobileCustomDrawer extends StatelessWidget {
   final int screenIndex;
@@ -23,9 +24,13 @@ class MobileCustomDrawer extends StatelessWidget {
       child: Material(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: SingleChildScrollView(
-          child: DrawerContent(
-            itemSelected: screenIndex,
-            homeNotifications: NotificationsViewModel.newNotifications,
+          child: Consumer<NotificationsViewModel>(
+            builder: (context,provider,child)  {
+              return DrawerContent(
+                itemSelected: screenIndex,
+                homeNotifications: NotificationsViewModel.newNotifications,
+              );
+            }
           ),
         ),
       ),

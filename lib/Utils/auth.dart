@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plasma/Model/Models/user_model.dart';
 import 'package:plasma/Utils/notification_helper.dart';
@@ -14,7 +15,8 @@ class AuthHelper{
       await _store.collection('users').doc(_auth.currentUser?.uid).get();
       final Map<String, dynamic> data = snapshot.data()!;
       currentUser = UserModel.fromJson(data);
-      await NotificationHelper.subscribeToTopic(currentUser!.nationalId);
+      ConnectivityResult _connectivity = await Connectivity().checkConnectivity();
+      if (_connectivity != ConnectivityResult.none) await NotificationHelper.subscribeToTopic(currentUser!.nationalId);
     } catch (e) {
       currentUser = null;
     }

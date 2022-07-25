@@ -23,6 +23,14 @@ class NotificationsApi implements NotificationsRepository {
   }
 
   @override
+  Future getNotificationsList() async {
+    final DocumentSnapshot<Map<String, dynamic>> _user = await _init();
+    final Map<String, dynamic> _data = _user.data()!;
+    final List _notificationsList = _data['notifications']['notifications_list'];
+    return _notificationsList;
+  }
+
+  @override
   Future incrementNotifications(NotificationModel model) async {
     final String uid = await _auth.currentUser!.uid;
     final DocumentSnapshot<Map<String, dynamic>> _user = await _init();

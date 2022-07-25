@@ -129,8 +129,20 @@ class NotificationsViewModel extends ChangeNotifier
     notifyListeners();
   }
 
+
+
   @override
   Future setNotificationTapped(int index) async{
     await _api.setNotificationTapped(index);
+  }
+
+  @override
+  Future getNotificationsList() async{
+    newNotifications = await _api.getNewNotifications();
+    List _notifications = await _api.getNotificationsList();
+    List<NotificationModel> _notificationsList = _notifications.map((notification) => NotificationModel.fromJson(notification)).toList();
+    notificationsList.clear();
+    notificationsList.addAll(_notificationsList.reversed);
+    notifyListeners();
   }
 }

@@ -12,6 +12,7 @@ class NotificationHelper{
   static final FirebaseMessaging _instance = FirebaseMessaging.instance;
   static final String token = 'f7MyD7vrSMejWEb38VoupU:APA91bE-l-D0FTJtMuwQYb1KqD9B4vRD_YY-xcfbt5byWxTC81QJdxyOzN41_Ua49AmWOuEYFBFYwOjBR3j4zLAVbDCpS2zjy7yg3TPvyC-TeuD6U_s0-k67HkDm_192iPCjOSS7Z_QS';
 
+  static bool _subscribed = false;
   static Future<void> messageHandler() async {
     await _instance.requestPermission(announcement: true,criticalAlert: true);
     await _instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true,);
@@ -29,8 +30,8 @@ class NotificationHelper{
         appId: "1:951530390148:web:05340ef570b71e7cc038d1",
       ),
     );
-    await AuthHelper.getUserData();
-    if (AuthHelper.currentUser == null) return;
+    //await AuthHelper.getUserData();
+    //if (AuthHelper.currentUser == null) return;
     String title = message.notification!.title!;
     String body = message.notification!.body!;
     NotificationType type = NotificationType.values.byName('${message.data['type']}');
@@ -55,10 +56,14 @@ class NotificationHelper{
 
 
   static Future<void> subscribeToTopic(String topic) async{
+    if (_subscribed) return;
     await _instance.subscribeToTopic(topic);
+    _subscribed = true;
   }
 
   static Future<void> unsubscribeFromTopic(String topic) async{
+    if (!_subscribed) return;
     await _instance.unsubscribeFromTopic(topic);
+    _subscribed = false;
   }
 }

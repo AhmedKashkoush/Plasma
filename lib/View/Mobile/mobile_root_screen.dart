@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,6 +32,9 @@ class _MobileRootScreenState extends State<MobileRootScreen> with WidgetsBinding
 
   @override
   void initState() {
+    Connectivity().onConnectivityChanged.listen((connectivity) async {
+      if (connectivity != ConnectivityResult.none) await NotificationHelper.subscribeToTopic(AuthHelper.currentUser!.nationalId);
+    });
     NotificationHelper.onMessageOpenedApp(context);
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       WidgetsBinding.instance?.addObserver(this);
@@ -39,7 +43,6 @@ class _MobileRootScreenState extends State<MobileRootScreen> with WidgetsBinding
     });
     super.initState();
   }
-
   Future<void> _messageHandler(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification!.android;
@@ -65,7 +68,7 @@ class _MobileRootScreenState extends State<MobileRootScreen> with WidgetsBinding
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) vm?.getNewNotifications();
+    if (state == AppLifecycleState.resumed) vm?.getNotificationsList();
     super.didChangeAppLifecycleState(state);
   }
 }
